@@ -1,21 +1,22 @@
 import java.util.Arrays;
 import java.util.ArrayList;
+
 class Solution {
     public int[] solution(int[] numbers) {
         int[] answer = {};
-        ArrayList<Integer> list = new ArrayList<>();
+        ArrayList<Integer> list = new ArrayList<>(); //두 개를 더한 값을 저장할 array
         int i, j;
         
         for(i=0; i<numbers.length-1; i++){
             for(j=i+1; j<numbers.length; j++)
-                if(!list.contains(numbers[i]+numbers[j]))
+                if(!list.contains(numbers[i]+numbers[j])) //array에 없을 경우만 추가
                     list.add(numbers[i] + numbers[j]);
         }
 
-        answer = new int[list.size()];
+        answer = new int[list.size()]; //answer배열의 크기 정하기
         for(i=0; i<list.size(); i++)
             answer[i] = list.get(i);
-        Arrays.sort(answer);
+        Arrays.sort(answer); //정렬
         
         return answer;
     }
