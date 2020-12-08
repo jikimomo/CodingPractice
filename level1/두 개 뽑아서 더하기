@@ -1,5 +1,5 @@
-**//ArrayList를 사용하여 중복되는 값들을 간편하게 확인 가능, ArrayList<>() 주의**
-**//Arrays의 sort를 사용하여 정렬 **
+**ArrayList를 사용하여 중복되는 값들을 간편하게 확인 가능, ArrayList<>() 주의**
+**Arrays의 sort를 사용하여 정렬**
 import java.util.Arrays;
 import java.util.ArrayList;
 
