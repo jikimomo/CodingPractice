@@ -1,0 +1,30 @@
+//ArrayList관련 메소드 연습 겸 문제 풀이
+import java.util.ArrayList;
+import java.util.Arrays;
+
+class Solution {
+    public int[] solution(int[] array, int[][] commands) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int[] answer = new int[commands.length];
+        int[] result = {};
+        int i, j, k;
+        int h, l, p;
+        
+        for(h=0; h<commands.length; h++){
+            i = commands[h][0] - 1;
+            j = commands[h][1] - 1;
+            k = commands[h][2] - 1;
+            for(l=i; l<=j; l++){
+                list.add(array[l]);
+            }
+            result = new int[list.size()];
+            for(p=0; p<list.size(); p++)
+                result[p] = list.get(p);
+            Arrays.sort(result); //Arrays.sort()말고 list.sort(); 가능 -> 더 간결함
+            list.clear();
+            answer[h] = result[k];
+        }
+        
+        return answer;
+    }
+}
