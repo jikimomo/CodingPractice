@@ -1,0 +1,41 @@
+//자바 라이브러리 중 Stack을 사용하지 않고 구현한 경우
+class Solution {
+    public int solution(int[][] board, int[] moves) {
+        int answer = 0; //터진인형개수 = 인형종류*2
+        int[] result = new int[900];
+        int resultPoint = -1;
+        int value, index;
+        int i, j, tmp;
+
+        for(i=0; i<moves.length; i++){
+            /*보드에서 인형을 뽑는 과정*/
+            index = -1;
+            tmp = moves[i]-1;
+            for(j=0; j<board.length; j++){
+                if(board[j][tmp] != 0){
+                    index = j;
+                    break; //0이 아닌 위치를 찾은 후 break를 안함 -> 자꾸 바닥까지 내려감 -> break를 안해줘서 틀린 값이 나왔음
+                }
+            }
+            if(index == -1){
+                continue;
+            } else{
+                value = board[index][tmp];
+                board[index][tmp] = 0;
+            }
+
+            /*스택에 인형을 추가하는 과정*/
+            if(resultPoint<0){ //result가 비어있을 때
+                result[++resultPoint] = value;
+            } else{ //result에 인형이 있을 때
+                if(result[resultPoint] == value){//인형이 result의 최근 인형과 같을 때
+                    result[resultPoint--] = 0;
+                    answer = answer + 2;
+                } else{
+                    result[++resultPoint] = value;
+                }
+            }
+        }
+        return answer;
+    }
+}
