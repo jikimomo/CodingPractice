@@ -1,1 +1,26 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 
+class Solution {
+    public int[] solution(int[] array, int[][] commands) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int[] answer = new int[commands.length];
+        int i, j, k;
+        int h, l;
+        
+        for(h=0; h<commands.length; h++){
+            i = commands[h][0] - 1;
+            j = commands[h][1] - 1;
+            k = commands[h][2] - 1;
+            for(l=i; l<=j; l++){
+                list.add(array[l]);
+            }
+            
+            list.sort(null); //list의 sort를 
+            answer[h] = list.get(k);
+            list.clear();
+        }
+        
+        return answer;
+    }
+}
