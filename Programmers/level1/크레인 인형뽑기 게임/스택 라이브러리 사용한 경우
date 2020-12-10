@@ -1,1 +1,40 @@
-내일해야지....
+import java.util.Stack;
+
+class Solution {
+    public int solution(int[][] board, int[] moves) {
+        int answer = 0; //터진인형개수 = 인형종류*2
+        Stack<Integer> result = new Stack<>();
+        int value, index;
+        int i, j, tmp;
+
+        for(i=0; i<moves.length; i++){
+            index = -1;
+            tmp = moves[i]-1;
+            for(j=0; j<board.length; j++){
+                if(board[j][tmp] != 0){
+                    index = j;
+                    break; //0이 아닌 위치를 찾은 후 break를 안함 -> 자꾸 바닥까지 내려감
+                }
+            }
+            if(index == -1){
+                continue;
+            } else{
+                value = board[index][tmp];
+                board[index][tmp] = 0;
+            }
+            
+            if(result.empty()){ //result가 비어있을 때
+                result.push(value);
+            } else{ //result에 인형이 있을 때
+                if(result.peek() == value){//인형이 result의 최근 인형과 같을 때
+                    result.pop();
+                    answer = answer + 2;
+                } else{
+                    result.push(value);
+                }
+            }
+        }
+        
+        return answer;
+    }
+}
