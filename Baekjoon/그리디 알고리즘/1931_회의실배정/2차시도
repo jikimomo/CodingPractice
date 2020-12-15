@@ -1,1 +1,37 @@
+import java.util.Scanner;
+import java.util.Arrays;
 
+public class Main {
+	public static void main(String[] args){
+		int i, tmp, count=1;
+		int N;
+		int[][] arr = {};
+		
+		Scanner s = new Scanner(System.in);
+		N = s.nextInt();
+		arr = new int[N][2];
+		for(i=0; i<N; i++) {
+			arr[i][0] = s.nextInt();
+			arr[i][1] = s.nextInt();
+		}
+		
+		/* 이차원 배열 정렬->알아두기 */ 
+		//끝나는 시간을 기준으로 정렬을 하면 for문을 한번만 사용해도 됨 (끝나는 시간은 항상 시작시간보다 크므로)
+		Arrays.sort(arr, (t1, t2) -> { //Comparator을 변경
+			if(t1[1] == t2[1]) {
+				return Integer.compare(t1[0], t2[0]);
+			}else {
+				return Integer.compare(t1[1], t2[1]);
+			}
+		});
+
+		tmp = arr[0][1];
+		for(i=1; i<N; i++) {
+			if(tmp <= arr[i][0]) {
+				count++;
+				tmp = arr[i][1];
+			}
+		}
+		System.out.println(count);
+	}
+}
