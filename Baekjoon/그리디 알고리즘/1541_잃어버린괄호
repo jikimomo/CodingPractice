@@ -1,0 +1,25 @@
+import java.util.Scanner;
+import java.util.Arrays;
+
+public class Main {
+	public static void main(String[] args){
+		String input;
+		Scanner s = new Scanner(System.in);
+		input = s.next();
+
+		int i, j;
+		String[] arr = input.split("-");
+		int[] result = new int[arr.length];
+		for(i=0; i<arr.length; i++) {
+			String [] arrtmp = arr[i].split("\\+"); //+가 메타문자라서 \\필요!!
+			for(j=0; j<arrtmp.length; j++) {
+				result[i] += Integer.parseInt(arrtmp[j]);
+			}
+		}
+		
+		for(i=1; i<result.length; i++)
+			result[0] -= result[i];
+		System.out.println(result[0]);
+		
+	}
+}
