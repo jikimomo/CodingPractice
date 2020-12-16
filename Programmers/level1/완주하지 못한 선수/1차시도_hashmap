@@ -1,0 +1,28 @@
+//hashmap을 이용
+//마지막에 value가 1일 때 key값을 저장하는 것을 
+import java.util.HashMap;
+
+class Solution {
+    public String solution(String[] participant, String[] completion) {
+        String answer = "";
+        int i, j;
+        boolean flag = false;
+        
+        HashMap<String, Integer> hash = new HashMap<String, Integer>();
+        for(i=0; i<participant.length; i++){
+            if(hash.containsKey(participant[i]) == false)
+                hash.put(participant[i], 1);
+            else
+                hash.put(participant[i], hash.get(participant[i])+1);
+        }
+        for(i=0; i<completion.length; i++){
+            hash.put(completion[i], hash.get(completion[i])-1);
+        }
+        for(i=0; i<participant.length; i++){
+            if(hash.get(participant[i]) == 1)
+                answer = participant[i];
+        }
+            
+        return answer;
+    }
+}
