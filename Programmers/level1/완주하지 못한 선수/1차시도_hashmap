@@ -5,10 +5,9 @@ import java.util.HashMap;
 class Solution {
     public String solution(String[] participant, String[] completion) {
         String answer = "";
-        int i, j;
-        boolean flag = false;
-        
+        int i;
         HashMap<String, Integer> hash = new HashMap<String, Integer>();
+        
         for(i=0; i<participant.length; i++){
             if(hash.containsKey(participant[i]) == false)
                 hash.put(participant[i], 1);
