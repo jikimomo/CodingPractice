@@ -1,0 +1,23 @@
+//정확도는 100%지만 효율적이지 못함
+//for문이 2개라 O(N*N)
+class Solution {
+    public String solution(String[] participant, String[] completion) {
+        String answer = "";
+        int i, j;
+        boolean flag;
+        
+        for(i=0; i<participant.length; i++){
+            flag = false;
+            for(j=0; j<completion.length; j++){
+                if(participant[i].equals(completion[j])){
+                    completion[j]="";
+                    flag = true;
+                    break; //같은 경우라면 바로 break해줘야 함 -> 안 한다면 이름이 같은 경우 문제 생김
+                }
+            }
+            if(!flag)
+                    answer = participant[i];
+        }
+        return answer;
+    }
+}
