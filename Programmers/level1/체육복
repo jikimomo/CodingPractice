@@ -1,0 +1,43 @@
+import java.util.Arrays;
+
+class Solution {
+    public int solution(int n, int[] lost, int[] reserve) {
+        int i, j;
+        int answer = n-lost.length;
+        
+        //그리드이기 때문에 reserve가 항상 자신보다 왼쪽을 먼저 주거나 아님 오른쪽을 먼저 주어야 함 -> sort해야함 
+        Arrays.sort(lost);
+        Arrays.sort(reserve); 
+        
+        //여벌복이 있는 학생이 도둑맞아서 자신의 여벌복을 입는 경우
+        for(i=0; i<reserve.length; i++){
+            for(j=0; j<lost.length; j++){
+                if(reserve[i] == lost[j]){
+                    lost[j] = -1;
+                    reserve[i] = -1;
+                    answer++;
+                    break;
+                }
+            }
+        }
+        
+        for(i=0; i<reserve.length; i++){
+            for(j=0; j<lost.length; j++){
+                if(reserve[i]-1 == lost[j]){
+                    lost[j] = -1;
+                    reserve[i] = -1;
+                    answer++;
+                    break;
+                }
+                if(reserve[i]+1 == lost[j]){
+                    lost[j] = -1;
+                    reserve[i] = -1;
+                    answer++;
+                    break;
+                }
+            }
+        }
+        
+        return answer;
+    }
+}
