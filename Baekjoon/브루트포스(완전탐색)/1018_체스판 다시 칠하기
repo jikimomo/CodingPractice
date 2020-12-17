@@ -1,0 +1,81 @@
+//시작 위치의 색깔이 무엇이든 w, b 두가지 경우를 다 고려해서 확인해야 하는 문제
+//toCharArray()외우기 -> String을 char형의 배열로
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args){
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int m = s.nextInt();
+		char[][] board = new char[n][m];
+		char[][] boardTmp = new char[n][m];
+		int i, j, k, h, l;
+		int count = 64, tmp;
+		int q, w;
+		
+		s.nextLine(); //버퍼에 있는 값 처리
+		for(i=0; i<n; i++) 
+			board[i] = s.nextLine().toCharArray(); //toCharArray()외우기 -> String을 char형의 배열로
+		
+		//시작 위치 설정
+		for(i=0; i<n-7; i++) {
+			for(j=0; j<m-7; j++) {
+				//W와 B의 경우 다 확인해야 하니깐 같은 시작 위치에서 두 번 확인
+				for(l=0; l<2; l++) {
+					tmp=0;
+					//보드 초기화
+					for(q=0; q<n; q++) {
+						for(w=0; w<m; w++)
+							boardTmp[q][w] = board[q][w];
+					}
+					//처음에는 자기 자신을 바꾸고 시작
+					if(l==0) {
+						if(boardTmp[i][j] == 'B') {
+							tmp++;
+							boardTmp[i][j] = 'W';
+						}
+						else {
+							tmp++;
+							boardTmp[i][j] = 'B';
+						}
+					}
+
+					//8*8체스판
+					for(k=i; k<i+7; k++) {
+						for(h=j; h<j+7; h++) {
+							char pres = boardTmp[k][h];
+							//오른쪽확인
+							if(pres == boardTmp[k][h+1]){
+								tmp++;
+								if(pres == 'W')
+									boardTmp[k][h+1] = 'B';
+								else
+									boardTmp[k][h+1] = 'W';
+							}
+							//아래 확인
+							if(pres == boardTmp[k+1][h]){
+								tmp++;
+								if(pres == 'W')
+									boardTmp[k+1][h] = 'B';
+								else
+									boardTmp[k+1][h] = 'W';
+							}
+						}
+					}
+				
+					//마지막 칸 따로 확인
+					if(boardTmp[i+7][j+6] == boardTmp[i+7][j+7]){
+						tmp++;
+						//if(boardTmp[i+7][j+6] == 'W')
+						//	boardTmp[i+7][j+7] = 'B';
+						//else
+						//	boardTmp[i+7][j+7] = 'W';
+					}
+					if(count > tmp)
+						count = tmp;
+				}
+			}
+		}
+		System.out.println(count);
+	}
+}
