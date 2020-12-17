@@ -1,0 +1,42 @@
+//2차시도 
+//우선순위 비교하는 for문에서 우선순위배열의 크기만큼 확인해야 함
+//우선순위배열의 크기만큼 확인하면 무조건 count가 list.size보다 크기때문에 오류만 발생시킴
+import java.util.*;
+
+class Solution {
+    public int solution(int[] priorities, int location) {
+        int answer = 0;
+        int i, j, h, count=0;
+        int len = priorities.length;
+        int[] arr = new int[len]; //배열 순서대로 출력되는 순서
+        Queue<Integer> list = new LinkedList<Integer>();
+        
+        for(i=0; i<len; i++)
+            list.add(i);
+        
+        for(h=0; h<len; h++){
+            for(i=0; i<list.size(); i++){
+                count = 0;
+                //j는 len만큼 실행해야 함
+                for(j=0; j<len; j++){
+                    if(priorities[list.peek()] < priorities[j]){
+                        list.add(list.remove());
+                        break;
+                    }
+                    //else
+                    //    count++;
+                }
+                //if(count >= list.size())
+                    //break;
+            }
+            priorities[list.peek()] = 0;
+            arr[h] = list.remove();
+        }
+        for(h=0; h<len; h++){
+            if(arr[h] == location)
+                answer = h+1;
+        }
+        
+        return answer;
+    }
+}
