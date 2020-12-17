@@ -1,0 +1,19 @@
+//666이 포함됐는지를 string의 contains을 이용하여 확인
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args){
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int result = 665;
+		int rank = 0;
+		
+		while(n != rank) {
+			result++;
+			String tmp = Integer.toString(result);
+			if(tmp.contains("666"))
+				rank++;
+		}
+		System.out.println(result);
+	}
+}
