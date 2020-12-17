@@ -1,0 +1,42 @@
+import java.util.*;
+
+class Solution {
+    public int solution(int[] priorities, int location) {
+        int answer = 0;
+        int i, j, h, count=0;
+        int len = priorities.length;
+        int[] arr = new int[len]; //배열 순서대로 출력되는 순서
+        Queue<Integer> list = new LinkedList<Integer>();
+        
+        //큐에 위치 입력
+        for(i=0; i<len; i++)
+            list.add(i);
+        
+        for(h=0; h<len; h++){
+            //큐에 있는 값 중 우선순위가 가장 큰 값을 출력하기 위한 for문
+            for(i=0; i<list.size(); i++){
+                count = 0;
+                //큐의 가장 앞쪽의 있는 값보다 우선순위가 큰 값이 있는지 확인하기 위한 for문
+                for(j=0; j<list.size(); j++){
+                    if(priorities[list.peek()] < priorities[j]){ //우선순위가 큰 값이 있다면
+                        list.add(list.remove()); //가장 앞에 있는 값을 뒤로 보냄
+                        break;
+                    }
+                    else
+                        count++;
+                }
+                if(count >= list.size()) //이 경우는 우선순위가 큰 값이 없는 경우
+                    break;
+            }
+            priorities[list.peek()] = 0; 
+            arr[h] = list.remove(); //가장 앞에 있는 값(우선순위가 큰 값의 위치)을 저장
+        }
+        
+        for(h=0; h<len; h++){
+            if(arr[h] == location)
+                answer = h+1;
+        }
+        
+        return answer;
+    }
+}
