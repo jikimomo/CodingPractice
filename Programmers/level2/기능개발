@@ -1,0 +1,40 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(int[] progresses, int[] speeds) {
+        int[] answer = {};
+        int i;
+        int count, len = progresses.length; //count는 배포가능한 기능 개수
+        ArrayList<Integer> answerTmp = new ArrayList<Integer>(); //개수를 잠시 저장해 둘 arraylist
+        Queue<Integer> index = new LinkedList<Integer>(); //각 기능의 배열 위치를 저장해 둘 큐
+        
+        for(i=0; i<len; i++)
+            index.add(i);
+         
+        do{
+            count = 0;
+            for(i=index.peek(); i<len; i++){ //큐에서 최신 위치를 받아옴
+                progresses[i] += speeds[i]; //speed를 각 기능에 더함
+            }
+            for(i=index.peek(); i<len; i++){ //앞쪽부터 100프로 넘은 기능이 있나 확인
+                if(progresses[i]>=100)
+                    count++;
+                else
+                    break;
+            }
+            if(count>0){ //100넘은 기능이 있다면
+                answerTmp.add(count); //개수를 임시 저장
+                while(count>0){
+                    index.remove(); //count개수만큼 큐에서 삭제
+                    count--;
+                }
+            }
+        }while(index.size()>0); //큐에 남아있는 개수가 0이 될때까지
+        
+        answer = new int[answerTmp.size()];
+        for(i=0; i<answerTmp.size(); i++)
+            answer[i] = answerTmp.get(i);
+        
+        return answer;
+    }
+}
