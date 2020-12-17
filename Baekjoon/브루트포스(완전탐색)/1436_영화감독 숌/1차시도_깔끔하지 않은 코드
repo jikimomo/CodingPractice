@@ -1,0 +1,48 @@
+//하나씩 값을 올려가면서 종말의 숫자에 해당될 때 rank를 올리면 됨
+//종말의 숫자인지 확인하는 코드가 매우 복잡하고 지저분함
+import java.util.Scanner;
+import java.lang.Math;
+
+public class Main {
+	public static void main(String[] args){
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int tmp1 = 0, tmp2 = 0;
+		int i, j, len;
+		int num = 0, rank = 0; //num은 연속되는 6의 개수, rank는 종말의 수 순위
+		
+		//n=1인 666부터 값을 하나씩 증가하면서 종말의 숫자에 해당할 때마다 rank 증가
+		for(i=666; ; i++) {
+			tmp1 = i;
+			//result가 종말의 숫자에 해당하는지 확인
+			len = (int)Math.log10(tmp1)-1; //숫자의 길이의 -2한 값
+			for(j=0; j<len; j++) {
+				num = 0;
+				tmp2 = tmp1;
+				if(tmp2%10==6 && num == 0) {
+					num++;
+					tmp2 /= 10;
+					if(tmp2%10 == 6 && num==1) {
+						num++;
+						tmp2/=10;
+						if(tmp2%10 == 6 && num==2)
+							num++;
+						else
+							num = 0;
+					}
+					else
+						num = 0;
+				}
+				//연속으로 6이 세번 나오면
+				if(num == 3) {
+					rank++;
+					break;
+				}
+				tmp1 = tmp1/10;
+			}
+			if(rank == n)
+				break;
+		}
+		System.out.print(i);
+	}
+}
