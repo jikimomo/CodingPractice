@@ -1,0 +1,19 @@
+class Solution {
+    public String solution(int a, int b) {
+        String answer = "";
+        String[] week = {"FRI", "SAT", "SUN", "MON", "TUE", "WED", "THU"};
+        int[] day = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        int days=0;
+        int i;
+        
+        for(i=0;i<a-1;i++)
+            days += day[i];
+        days += b;
+        
+        for(i=0; i<7; i++)
+            if((days-1)%7 == i)
+                answer = week[i];
+        
+        return answer;
+    }
+}
