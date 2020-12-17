@@ -1,0 +1,42 @@
+import java.util.Scanner;
+import java.lang.Math;
+
+public class Main {
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int count = 0, diffCount = 0;
+		int i, j, len, tmp;
+		int[] arr = {};
+		int[] diff = {};
+		
+		
+		for(i=1; i<=n; i++) {
+			tmp = i;
+			if(tmp <10) {
+				count++;
+			}else {
+				len = (int)Math.log10(tmp)+1;
+				arr = new int[len];
+				diff = new int[len-1];
+				//자릿수를 구함
+				for(j=0; j<len; j++) {
+					arr[j] = tmp%10;
+					tmp = tmp/10;
+				}
+				//자릿수별로 차이를 구함
+				for(j=0; j<len-1; j++)
+					diff[j] = arr[j]-arr[j+1];
+				//차이가 모두 같으면 count
+				diffCount = 0;
+				for(j=0; j<len-2; j++)
+					if(diff[j] == diff[j+1])
+						diffCount++;
+				if(diffCount == len-2)
+					count++;
+			}
+		}
+		System.out.println(count);
+	}
+}
