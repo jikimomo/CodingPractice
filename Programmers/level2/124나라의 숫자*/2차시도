@@ -1,0 +1,20 @@
+//1차 시도때는 int+string을 이어붙여서 int를 string으로 변환하는 시간이 걸림
+//string끼리 붙이니 효율성도 
+import java.lang.Math;
+
+class Solution {
+    public String solution(int n) {
+        String answer = "";
+        int i, rest;
+        String[] list = {"4", "1", "2"};
+
+        while(n>0){
+            rest = n%3;
+            n = n/3;
+            if(rest == 0)
+                n--;
+            answer = list[rest] + answer; //String끼리 붙여주면 빠름
+        }
+        return answer;
+    }
+}
