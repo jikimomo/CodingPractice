@@ -1,0 +1,46 @@
+//초반에 1초에 트럭이 하나 들어가거나 하나 나온다는 점을 생각못하고 weight조건만으로 트럭을 add함 -> 문제 발생
+//while문을 돌면서 1초에 트럭 하나씩만 고려
+import java.util.*;
+
+class Solution {
+    public int solution(int bridge_length, int weight, int[] truck_weights) {
+        int i, count = 0; //count는 빠져나온 트럭 개수
+        int truckLen = truck_weights.length; //트럭 개수
+        int[] time = new int[truckLen]; //트럭별로 다리 위에서의 시간
+        Queue<Integer> bridge = new LinkedList<Integer>(); //다리
+        Stack<Integer> checklist = new Stack<Integer>(); //다리에 들어온 순간 stack에 저장 -> 다음 들어올 트럭 확인하는데 이용
+        int answer = 0;
+        
+        while(count<truckLen){
+            answer++; //시간 증가
+            if(bridge.size() > 0){
+                //다리 위에서 시간증가
+                for(i=bridge.peek(); i<bridge.size()+bridge.peek(); i++)
+                    time[i]++;
+                
+                //트럭이 나오는 경우 - 길이(시간)이 지나면
+                i=bridge.peek();
+                if(time[i]>=bridge_length){
+                    weight += truck_weights[i];
+                    bridge.remove();
+                    count++;
+                } 
+            }
+            
+            //트럭이 들어가는 경우
+            if(checklist.size() == truckLen) ; //트럭이 다 들어오면 아무것도 안함
+            else{
+                if(checklist.isEmpty())
+                    i=0;
+                else
+                    i=checklist.peek()+1;
+                if((weight-truck_weights[i]) >= 0){
+                    weight -= truck_weights[i];
+                    bridge.add(i);
+                    checklist.push(i);
+                }
+            }
+        }
+        return answer;
+    }
+}
