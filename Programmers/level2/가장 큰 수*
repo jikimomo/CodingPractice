@@ -1,0 +1,31 @@
+//숫자를 내림차순하여 이어붙여야겠다라는 생각은 했는데 방법을 몰라서 구글링함
+//arrays.sort()함수 사용 -> comparator을 변형 함!!
+//string의 라이브러리 중 startsWith 사용
+import java.util.Arrays;
+import java.util.Comparator;
+
+class Solution {
+    public String solution(int[] numbers) {
+        String answer = "";
+        int len = numbers.length;
+        int i;
+        String[] arr = new String[len];
+        
+        for(i=0; i<len; i++)
+            arr[i] = Integer.toString(numbers[i]);
+        
+        Arrays.sort(arr, new Comparator<String>(){
+            @Override
+            public int compare(String s1, String s2){
+                return (s2+s1).compareTo(s1+s2);
+            }
+        });
+
+        for(i=0; i<len; i++)
+            answer = answer+arr[i];
+        if(answer.startsWith("0"))
+            answer = "0";
+        
+        return answer;
+    }
+}
