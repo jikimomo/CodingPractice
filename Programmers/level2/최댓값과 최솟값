@@ -1,0 +1,22 @@
+class Solution {
+    public String solution(String s) {
+        String answer = "";
+        int i, min, max;
+        String[] arr = s.split(" ");
+        int[] num = new int[arr.length];
+        
+        for(i=0; i<arr.length; i++){
+            num[i] = Integer.parseInt(arr[i]);
+        }
+        min = num[0];
+        max = num[0];
+        for(i=1; i<arr.length; i++){
+            if(num[i]>max)
+                max = num[i];
+            if(num[i]<min)
+                min = num[i];
+        }
+        answer = min + " " + max;
+        return answer;
+    }
+}
