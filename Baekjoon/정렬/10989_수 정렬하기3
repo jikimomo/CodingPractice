@@ -1,0 +1,26 @@
+//수의 범위가 작은 경우 counting 정렬을 사용하는 것이 효율적
+//BufferedReader가 Scanner보다 훨씬 빠르게 읽어들임
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.Arrays;
+
+public class Main {
+	public static void main(String[] args) throws IOException {
+		BufferedReader b = new BufferedReader(new InputStreamReader(System.in)); //BufferedReader 알아두기
+		StringBuilder tmp = new StringBuilder();
+		int n = Integer.parseInt(b.readLine());
+		int[] arr = new int[n];
+		int i;
+		
+		for(i=0; i<n; i++)
+			arr[i] = Integer.parseInt(b.readLine());
+		
+		Arrays.sort(arr);
+		
+		for(i=0; i<n; i++)
+			tmp.append(arr[i]).append('\n');
+		
+		System.out.println(tmp);
+	}
+}
