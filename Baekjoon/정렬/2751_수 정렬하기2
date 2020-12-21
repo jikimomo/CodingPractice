@@ -1,0 +1,24 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int i, value;
+		int n = s.nextInt();
+		ArrayList<Integer> arr = new ArrayList<Integer>();
+		StringBuilder tmp = new StringBuilder();
+		
+		for(i=0; i<n; i++)
+			arr.add(s.nextInt());
+    
+		Collections.sort(arr); //arrays.sort보다 Collections.sort가 빠름
+    
+		for(i=0; i<n; i++) {
+			value = arr.get(i);
+			tmp.append(value).append('\n'); //ArrayList를 출력하는 것보다 StringBuilder로 연결하여 출력하는 것이 더 
+		}
+		System.out.println(tmp);
+	}
+}
