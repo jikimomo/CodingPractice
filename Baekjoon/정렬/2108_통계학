@@ -1,0 +1,52 @@
+import java.util.Scanner;
+import java.util.Arrays;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int[] arr = new int[n];
+		int sum = 0, mid, fre=0, min, max, diff;
+		int[] count = new int[8001];
+		int i, tmp;
+		boolean flag = false;
+		
+		for(i=0; i<n; i++) {
+			arr[i] = s.nextInt();
+		}
+		
+		//평균 구하기
+		for(i=0; i<n; i++)
+			sum += arr[i];
+		sum = (int)Math.round((double)sum/n); //반올림해야하므로 round함수 써야함
+
+		//중앙값 구하기
+		Arrays.sort(arr);
+		mid = arr[n/2];
+		
+		//범위 구하기
+		max = arr[n-1];
+		min = arr[0];
+		diff = max - min;
+
+		//최빈값 구하기 -> 최빈값이 여러개이면 두번째로 작은 값을 출력
+		tmp=0;
+		for(i=0; i<n; i++) 
+			count[arr[i]+4000]++;
+		for(i=min+4000; i<=max+4000; i++) {
+			if(tmp<count[i]) {
+				tmp = count[i];
+				fre = i-4000;
+				flag = true;
+			} else if(tmp == count[i] && flag == true){
+				fre = i-4000;
+				flag = false;
+			}
+		}
+
+		System.out.println(sum);
+		System.out.println(mid);
+		System.out.println(fre);
+		System.out.println(diff);
+	}
+}
