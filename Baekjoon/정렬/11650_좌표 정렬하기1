@@ -1,0 +1,30 @@
+import java.util.Scanner;
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int[][] pos = new int[n][2];
+		int i;
+		
+		for(i=0; i<n; i++) {
+			pos[i][0] = s.nextInt();
+			pos[i][1] = s.nextInt();
+		}
+		
+		Arrays.sort(pos, new Comparator<int[]>() { //comparator 사용
+			@Override
+			public int compare(int[] t1, int[] t2){
+				if(t1[0] == t2[0])
+					return Integer.compare(t1[1], t2[1]);
+				else
+					return Integer.compare(t1[0], t2[0]);
+			}
+		});
+		
+		for(i=0; i<pos.length; i++)
+			System.out.println(pos[i][0]+" "+pos[i][1]);
+	}
+}
