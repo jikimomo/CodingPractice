@@ -1,4 +1,4 @@
-//시간초과가 뜸 -> arr을 for문을 돌려서 프린트하는 것 때문에 시간초과가 남
+//시간초과가 뜸
 import java.util.Scanner;
 
 public class Main {
