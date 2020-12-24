@@ -1,0 +1,43 @@
+import java.util.Scanner;
+
+public class Main {
+	static int[] arr;
+	static StringBuilder sb = new StringBuilder();
+	
+	public static void dfs(int n, int m, int depth) {
+		int i, j, count=0;
+		if(depth == m) {
+			for(i=0; i<m; i++)
+				sb.append(arr[i]+" ");
+			sb.append('\n');
+			return;
+		}
+		
+		for(i=0; i<n; i++) {
+			if(depth == 0) {
+				arr[depth] = i+1;
+				dfs(n, m, depth+1);
+			}else {
+				for(j=1; j<=depth; j++) { //이전 값보다 크거나 같은지 
+					if(arr[j-1]<=i+1)
+						count++;
+				}
+				if(count == depth) {
+					arr[depth] = i+1;
+					dfs(n, m, depth+1);
+				}
+				count=0;
+			}
+		}
+			
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int m = s.nextInt();
+		
+		arr = new int[m];
+		dfs(n, m, 0);
+		System.out.println(sb);
+	}
+}
