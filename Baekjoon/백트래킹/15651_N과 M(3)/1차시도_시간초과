@@ -1,0 +1,26 @@
+//시간초과가 뜸 -> arr을 for문을 돌려서 프린트하는 것 때문에 시간초과가 남
+import java.util.Scanner;
+
+public class Main {
+	static int arr[];
+	public static void dfs(int n, int m, int depth) {
+		if(depth == m) {
+			for(int val : arr)
+				System.out.print(val+" ");
+			System.out.println();
+			return;
+		}
+		for(int i=0; i<n; i++) {
+			arr[depth] = i+1;
+			dfs(n, m, depth+1);
+		}
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int m = s.nextInt();
+		
+		arr = new int[m];
+		dfs(n, m, 0);
+	}
+}
