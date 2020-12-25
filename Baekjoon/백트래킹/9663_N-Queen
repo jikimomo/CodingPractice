@@ -1,0 +1,39 @@
+import java.util.Scanner;
+
+public class Main {
+	static int count = 0;
+	static int[] chess;
+	public static void nqueen(int n, int depth) {
+		int tmp;
+		if(depth == n) { //끝까지 도달했을 경우 count
+			count++;
+			return;
+		}
+		for(int i=0; i<n; i++) {
+			tmp = 0;
+			if(depth == 0) { //처음엔 그냥 체스를 둠
+				chess[depth] = i;
+				nqueen(n, depth+1);
+			} else {
+				chess[depth] = i;
+				for(int j=0; j<depth; j++) { //queen을 둘 수 있는지 확인하는 for문
+					if(chess[depth] == chess[j]) //같은 행에 있는 경우
+						tmp++;
+					if(Math.abs(chess[depth]-chess[j]) == Math.abs(depth-j)) //대각선에 있는 경우
+						tmp++;
+				}
+				if(tmp>0) //tmp가 0보다 크다는 것은 queen을 두면 안되는 경우가 있다는 의미
+					continue; //다음 칸을 살펴보기 위해 continue
+				nqueen(n, depth+1);
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		
+		chess = new int[n];
+		nqueen(n, 0);
+		System.out.println(count);
+	}
+}
