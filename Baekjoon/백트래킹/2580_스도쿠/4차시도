@@ -39,8 +39,9 @@ public class Main {
 						flag = false;
 				}
 			}
-			if(flag == true) //스도쿠 규칙에 어긋나지 않은 경우만 재귀함수 호출
-				sudoku(depth+1);
+			if(flag == false)
+				continue;
+			sudoku(depth+1);
 		}
 		board[x][y] = 0; //1~9까지 숫자를 다 고려했는데도 해당되는 값이 없다면 0으로 초기화
 	}
