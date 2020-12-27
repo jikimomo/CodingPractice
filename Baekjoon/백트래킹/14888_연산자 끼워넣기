@@ -1,0 +1,48 @@
+//15649의 변형
+//초반에 전체적인 틀을 못 잡고 헤맴(스도쿠보다 어렵게 느껴짐...)
+import java.util.Scanner;
+
+public class Main {
+	static int[] arr;
+	static int[] op = new int[4];
+	static int n;
+	static int min=1000000000, max=-1000000000;
+	
+	public static void dfs(int num, int index) {
+		if(index == n) {
+			if(min>num) min = num;
+			if(max<num) max = num;
+			return;
+		}
+		
+		for(int i=0; i<4; i++) {
+			if(op[i]>0) {
+				op[i]--;
+				switch(i) {
+				case 0: dfs(num+arr[index], index+1); break;
+				case 1: dfs(num-arr[index], index+1); break;
+				case 2: dfs(num*arr[index], index+1); break;
+				case 3: dfs(num/arr[index], index+1); break;
+				}
+				op[i]++;
+			}
+		}		
+	}
+	
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		arr = new int[n];
+		
+		for(int i=0; i<n; i++)
+			arr[i] = s.nextInt();
+		for(int i=0; i<4; i++) {
+			op[i] = s.nextInt();
+		}
+		
+		dfs(arr[0], 1);
+		
+		System.out.println(max);
+		System.out.println(min);
+	}
+}
