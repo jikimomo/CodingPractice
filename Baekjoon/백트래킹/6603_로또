@@ -1,0 +1,45 @@
+import java.util.Scanner;
+
+public class Main {
+	static StringBuilder result = new StringBuilder();
+	static int[] arr;
+	static int n;
+	static boolean[] check;
+	
+	public static void dfs(int index, int depth) {
+		if(depth == 6) {
+			for(int i=0; i<n; i++) {
+				if(check[i])
+					result.append(arr[i]+" ");
+			}
+			result.append("\n");
+			return;
+		}
+		for(int i=index; i<n; i++) {
+			if(!check[i]) {
+				check[i] = true;
+				dfs(i+1, depth+1);
+				check[i] = false;
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		
+		while(true) {
+			n = s.nextInt();
+			if(n == 0) {
+				System.out.println(result);
+				return;
+			}
+			arr = new int[n];
+			check = new boolean[n];
+			for(int i=0; i<n; i++)
+				arr[i] = s.nextInt();
+			
+			dfs(0, 0);
+			result.append("\n");
+		}
+	}
+}
