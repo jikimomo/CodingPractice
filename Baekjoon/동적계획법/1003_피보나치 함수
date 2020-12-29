@@ -1,0 +1,41 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+
+public class Main {
+	static long[] fiboresult = new long[41];
+	static int[][] zo = new int[41][2];
+	
+	public static long fibo(int n) {
+		if(fiboresult[n]==-1) {
+			fiboresult[n] = fibo(n-1)+fibo(n-2);
+			zo[n][0] = zo[n-1][0]+zo[n-2][0];
+			zo[n][1] = zo[n-1][1]+zo[n-2][1];
+		}
+		return fiboresult[n];
+	}
+	public static void main(String[] args) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int n = Integer.parseInt(br.readLine());
+		int[] arr = new int[n];
+		for(int i=0; i<n; i++)
+			arr[i] = Integer.parseInt(br.readLine());
+		
+		for(int i=2; i<41; i++) {
+			fiboresult[i] = -1;
+			zo[i][0] = -1;
+			zo[i][1] = -1;
+		}
+		fiboresult[0]=0;
+		zo[0][0]=1;
+		zo[0][1]=0;
+		fiboresult[1]=1;
+		zo[1][0]=0;
+		zo[1][1]=1;
+		
+		for(int i=0; i<n; i++) {
+			fibo(arr[i]);
+			System.out.println(zo[arr[i]][0]+" "+zo[arr[i]][1]);
+		}
+	}
+}
