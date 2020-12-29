@@ -1,0 +1,24 @@
+import java.util.Scanner;
+
+public class Main {
+	static long[] fiboresult;
+	
+  /*재귀함수 - TopDown*/
+	public static long fibo(int n) {
+		if(fiboresult[n]==-1)
+			fiboresult[n] = fibo(n-1)+fibo(n-2);
+		return fiboresult[n];
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		fiboresult = new long[n+1];
+		
+		for(int i=0; i<=n; i++)
+			fiboresult[i] = -1;
+		fiboresult[0] = 0;
+		fiboresult[1] = 1;
+		
+		System.out.println(fibo(n));
+	}
+}
