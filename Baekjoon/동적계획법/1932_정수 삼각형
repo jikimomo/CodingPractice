@@ -1,0 +1,39 @@
+import java.util.Scanner;
+
+public class Main {
+	static int[][] tri;
+	static long[][] maximum;
+    
+	public static long[] dp(int n) {
+		if(maximum[n][1] == -1) {
+			for(int i=1; i<=n; i++)
+				maximum[n][i] = tri[n][i] + Math.max(dp(n-1)[i-1], dp(n-1)[i]);
+		}
+		return maximum[n];
+	}
+    
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		tri = new int[n+1][n+1];
+		maximum = new long[n+1][n+1];
+		for(int i=1; i<=n; i++) {
+			for(int j=1; j<=i; j++)
+				tri[i][j] = s.nextInt();
+		}
+		
+		for(int i=1; i<=n; i++) {
+			for(int j=1; j<=i; j++)
+				maximum[i][j] = -1;
+		}
+		maximum[1][1]=tri[1][1];
+		
+		long[] tmp = dp(n);
+		long result = tmp[1];
+		for(int i=2; i<=n; i++) {
+			if(result < tmp[i])
+				result = tmp[i];
+		}
+		System.out.println(result);
+	}
+}
