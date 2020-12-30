@@ -1,0 +1,28 @@
+import java.util.Scanner;
+
+public class Main {
+	static long[] pado = new long[101];
+  
+	public static long dfs(int n) {
+		if(pado[n] == -1)
+			pado[n] = dfs(n-3) + dfs(n-2);
+		return pado[n];
+	}
+  
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int[] arr = new int[n];
+		for(int i=0; i<n; i++)
+			arr[i] = s.nextInt();
+		for(int i=0; i<=100; i++)
+			pado[i] = -1;
+		pado[0] = 1;
+		pado[1] = 1;
+		pado[2] = 1;
+		pado[3] = 1;
+		
+		for(int i=0; i<n; i++)
+			System.out.println(dfs(arr[i]));
+	}
+}
