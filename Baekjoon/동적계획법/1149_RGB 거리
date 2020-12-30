@@ -8,11 +8,11 @@ import java.util.Scanner;
 public class Main {
 	static long[][] min = new long[1001][3];
 	static int[][] arr;
-	public static long[] dfs(int n) {
+	public static long[] dp(int n) {
 		if(min[n][0] == -1) {
-			min[n][0] = arr[n][0] + Math.min(dfs(n-1)[1], dfs(n-1)[2]);
-			min[n][1] = arr[n][1] + Math.min(dfs(n-1)[0], dfs(n-1)[2]);
-			min[n][2] = arr[n][2] + Math.min(dfs(n-1)[0], dfs(n-1)[1]);
+			min[n][0] = arr[n][0] + Math.min(dp(n-1)[1], dp(n-1)[2]);
+			min[n][1] = arr[n][1] + Math.min(dp(n-1)[0], dp(n-1)[2]);
+			min[n][2] = arr[n][2] + Math.min(dp(n-1)[0], dp(n-1)[1]);
 		}	
 		return min[n];
 	}
@@ -38,7 +38,7 @@ public class Main {
 		min[1][1] = arr[1][1];
 		min[1][2] = arr[1][2];
 		
-		long[] tmp = dfs(n);
+		long[] tmp = dp(n);
 		long result = tmp[0];
 		for(int i=1; i<3; i++) {
 			if(result>tmp[i])
