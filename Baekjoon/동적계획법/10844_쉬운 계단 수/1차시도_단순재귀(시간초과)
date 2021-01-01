@@ -1,0 +1,31 @@
+//백트래킹으로 구현 -> depth가 깊어질수록 시간이 오래 걸림
+import java.util.Scanner;
+
+public class Main {
+	static long count=0;
+	static int n;
+	static int[] arr;
+	
+	public static void check(int index, int value, int depth) {
+		arr[index] = value;
+		if(n == depth) {
+			count++;
+			return;
+		}
+		if(value-1 >=0)
+			check(index+1, value-1, depth+1);
+		if(value+1<10)
+			check(index+1, value+1, depth+1);
+	}
+  
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		arr = new int[n];
+		
+		for(int i=1; i<10; i++)
+			check(0, i, 1);
+		
+		System.out.println(count%1000000000);
+	}
+}
