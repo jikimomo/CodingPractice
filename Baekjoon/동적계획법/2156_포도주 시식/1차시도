@@ -1,0 +1,31 @@
+//마지막 포도주를 꼭 마셔야 한다는 조건이 없기때문에 n과 n-1중 최대값을 선택해야 함
+//main에서 함수를 호출할 때만 n과 n-1을 고려해서 틀림 -> 매번 고려해야 함
+import java.util.Scanner;
+
+public class Main {
+	static int[] arr;
+	static Integer[] grape;
+	
+	public static int dp(int n) {
+		if(grape[n] == null) {
+			grape[n] = Math.max(dp(n-2), dp(n-3)+arr[n-1]) + arr[n];
+		}
+		return grape[n];
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		arr = new int[n+1];
+		grape = new Integer[n+1];
+		for(int i=1; i<=n; i++)
+			arr[i] = s.nextInt();
+		
+		grape[0] = 0;
+		grape[1] = arr[1];
+		if(n>=2)
+			grape[2] = arr[1] + arr[2];
+		
+		System.out.println(Math.max(dp(n), dp(n-1)));
+	}
+}
