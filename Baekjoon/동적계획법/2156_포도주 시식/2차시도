@@ -1,0 +1,30 @@
+//dp함수 안에서 n과 n-1의 경우를 모두 고려해야 함
+import java.util.Scanner;
+
+public class Main {
+	static int[] arr;
+	static Integer[] grape;
+	
+	public static int dp(int n) {
+		if(grape[n] == null) {
+			grape[n] = Math.max(Math.max(dp(n-2), dp(n-3)+arr[n-1]) + arr[n], dp(n-1));
+		}
+		return grape[n];
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		arr = new int[n+1];
+		grape = new Integer[n+1];
+		for(int i=1; i<=n; i++)
+			arr[i] = s.nextInt();
+		
+		grape[0] = 0;
+		grape[1] = arr[1];
+		if(n>=2)
+			grape[2] = arr[1] + arr[2];
+		
+		System.out.println(dp(n));
+	}
+}
