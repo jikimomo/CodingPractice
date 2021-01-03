@@ -1,0 +1,56 @@
+//증가하는 부분을 확인하는 함수와 감소하는 부분을 확인하는 함수를 따로 선언해야 함
+import java.util.Scanner;
+
+public class Main {
+	static int len;
+	static int[] arr;
+	static Integer[] lis;
+	static Integer[] lds;
+	
+	public static int dpIncre(int n) {
+		if(lis[n] == null) {
+			lis[n] = 1;
+			for(int i=n-1; i>0; i--) {
+				if(arr[i]<arr[n])
+					lis[n] = Math.max(dpIncre(i)+1, lis[n]);
+			}
+			
+		}
+		return lis[n];
+	}
+	public static int dpDecre(int n) {
+		if(lds[n] == null) {
+			lds[n] = 1;
+			for(int i=n+1; i<=len; i++) {
+				if(arr[i]<arr[n])
+					lds[n] = Math.max(dpDecre(i)+1, lds[n]);
+			}
+		}
+		return lds[n];
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		len = s.nextInt();
+		arr = new int[len+1];
+		lis = new Integer[len+1];
+		lds = new Integer[len+1];
+		for(int i=1; i<=len; i++)
+			arr[i] = s.nextInt();
+		
+		lis[0] = 0;
+		lds[0] = 0;
+		
+		for(int i=1; i<=len; i++) {
+			dpIncre(i);
+			dpDecre(i);
+		}
+		
+		int max = lis[1] + lds[1];
+		for(int i=2; i<=len; i++) {
+			if(max < lis[i]+lds[i])
+				max = lis[i]+lds[i];
+		}
+		System.out.println(max-1);
+	}
+}
