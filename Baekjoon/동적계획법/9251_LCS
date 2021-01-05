@@ -1,0 +1,32 @@
+//count배열을 이차원 배열로 선언해야 함
+import java.util.Scanner;
+
+public class Main {
+	static String[] str;
+	static Integer[][] count;
+	
+	public static int dp(int x, int y) {
+		if(x == -1 || y == -1)
+			return 0;
+		
+		if(count[x][y] == null) {
+			count[x][y] = 0;
+			if(str[0].charAt(x) == str[1].charAt(y))
+				count[x][y] = dp(x-1, y-1) + 1;
+			else
+				count[x][y] = Math.max(dp(x, y-1), dp(x-1, y));
+		}
+		return count[x][y];
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		str = new String[2];
+		str[0] = s.nextLine();
+		str[1] = s.nextLine();
+
+		count = new Integer[str[0].length()][str[1].length()];
+
+		System.out.println(dp(str[0].length()-1, str[1].length()-1));
+	}
+}
