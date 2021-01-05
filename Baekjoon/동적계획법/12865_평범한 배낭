@@ -1,0 +1,37 @@
+//maximum배열을 이차원으로 선언해야 함
+//k가 최대 무게, maximum이 이차원 배열이지만 k를 하나씩 줄이는 것이 아니라 현재 무게를 빼면서 확인해야 함
+import java.util.Scanner;
+
+public class Main {
+	static int[] weight;
+	static int[] value;
+	static Integer[][] maximum;
+	
+	public static int bag(int index, int k) {
+		if(index < 0)
+			return 0;
+		if(maximum[index][k] == null) {
+			if(weight[index] > k)
+				maximum[index][k] = bag(index-1, k);
+			else
+				maximum[index][k] = Math.max(bag(index-1, k-weight[index])+value[index], bag(index-1, k));
+		}
+		return maximum[index][k];
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int k = s.nextInt();
+		weight = new int[n];
+		value = new int[n];
+		maximum = new Integer[n][k+1];
+		
+		for(int i=0; i<n; i++) {
+			weight[i] = s.nextInt();
+			value[i] = s.nextInt();
+		}
+		
+		System.out.println(bag(n-1, k));
+	}
+}
