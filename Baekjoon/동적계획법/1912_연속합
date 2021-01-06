@@ -1,0 +1,33 @@
+//sum[i]은 arr[i]값이 들어간 경우의 최대값을 의미
+//sum[i]중 최대값이 답
+import java.util.Scanner;
+
+public class Main {
+	static int[] arr;
+	static Integer[] sum; 
+	static int max;
+	
+	public static int dp(int n) {
+		if(sum[n] == null) {
+			sum[n] = Math.max(dp(n-1)+arr[n], arr[n]);
+			max = Math.max(sum[n], max);
+		}
+		return sum[n];
+	}
+	
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		arr = new int[n+1];
+		sum = new Integer[n+1];
+		for(int i=1; i<=n; i++)
+			arr[i] = s.nextInt();
+		
+		sum[0] = 0;
+		sum[1] = arr[1];
+		max = sum[1];
+		dp(n);
+		
+		System.out.println(max);
+	}
+}
