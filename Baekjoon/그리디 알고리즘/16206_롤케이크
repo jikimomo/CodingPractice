@@ -1,0 +1,51 @@
+import java.util.Scanner;
+import java.util.Arrays;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int m = s.nextInt();
+		Integer[] arr = new Integer[n];
+		for(int i=0; i<n; i++)
+			arr[i] = s.nextInt();
+		
+		Arrays.sort(arr);
+
+    //10의 배수인 경우
+		int count = 0;
+		int tmp;
+		for(int i=0; i<n; i++) {
+			tmp = 0;
+			if(arr[i]%10 == 0) {
+				while(arr[i]>10 && m>0) {
+					tmp++;
+					arr[i] -= 10;
+					m--;
+				}
+				if(arr[i] == 10)
+					count = count + tmp + 1;
+				else
+					count = count + tmp;
+				arr[i]=0;
+			}
+		}
+
+    //10의 배수가 아닌 경우
+		for(int i=0; i<n; i++) {
+			tmp = 0;
+			if(arr[i] > 10) {
+				while(arr[i]>10 && m>0) {
+					tmp++;
+					arr[i] -= 10;
+					m--;
+				}
+				if(arr[i] == 10)
+					count = count + tmp + 1;
+				else
+					count = count + tmp;
+			}
+		}
+		System.out.println(count);
+	}
+}
