@@ -1,0 +1,32 @@
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int[] arr = new int[n];
+		for(int i=0; i<n; i++)
+			arr[i] = s.nextInt();
+		
+		int count = 0;
+		int zero = 0;
+		while(true) {
+			zero = 0;
+			for(int i=0; i<n; i++) {
+				if(arr[i]%2 == 1) {
+					arr[i] -= 1;
+					count++;
+				}
+				if(arr[i] == 0)
+					zero++;
+			}
+			if(zero == n)
+				break;
+			count++;
+			for(int i=0; i<n; i++) {
+				arr[i] /= 2;
+			}
+		}
+		System.out.println(count);
+	}
+}
