@@ -1,0 +1,55 @@
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		int i, j, h;
+		boolean flag = true;
+		StringBuilder sb = new StringBuilder();
+		Scanner s = new Scanner(System.in);
+		int x = s.nextInt();
+		int y = s.nextInt();
+		int m = s.nextInt();
+		
+		int[] enemy = new int[x+1];
+		int[] medi = new int[y+1];
+		long enemy_sum = 0;
+		long medi_sum = 0;
+		for(i=1; i<=x; i++) {
+			enemy[i] = s.nextInt();
+			enemy_sum += enemy[i];
+		}
+		for(i=1; i<=y; i++) {
+			medi[i] = s.nextInt();
+			medi_sum += medi[i];
+		}
+		
+		if(enemy_sum >= medi_sum+m) {
+			System.out.println("0");
+		}
+		else {
+			i=1; j=1;
+			while(i<=x){
+				if(enemy[i]<m) {
+					sb.append("-"+i+"\n");
+					m = m - enemy[i];
+					i++;
+				}
+				else {
+					while(enemy[i]>=m) { 
+						sb.append(j+"\n");
+						m = m + medi[j];
+						j++;
+					}
+					sb.append("-"+i+"\n");
+					m = m - enemy[i];
+					i++;
+				}
+			}
+			if(j<=y) {
+				for(h=j; h<=y; h++)
+					sb.append(h+"\n");
+			}
+			System.out.println(sb);
+		}
+	}
+}
