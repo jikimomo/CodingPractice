@@ -1,0 +1,68 @@
+//정말 복잡하게 구현... => 심지어 시간초과라 맞는지 확인도 못함
+//diff배열에 시간의 차를 저장한 뒤 diff가 작은 경우부터 n-k번만큼 group으로 묶어줌 -> 그룹일 경우 초를 한번만 킴
+import java.util.Scanner;
+import java.util.Arrays;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int k = s.nextInt();
+		int[] arr = new int[n];
+		int[] group = new int[n];
+		for(int i=0; i<n; i++) {
+			arr[i] = s.nextInt();
+			group[i] = i;
+		}
+		
+		int count = n;
+		int max = Integer.MIN_VALUE;
+		int[] diff = new int[n-1];
+
+		if(k == n) {
+			System.out.println(n);
+			return;
+		}
+		else if(k == 1){
+			System.out.println(arr[n-1]-arr[0]+1);
+			return;
+		}
+		
+		for(int i=0; i<n-1; i++) {
+			diff[i] = arr[i+1] - arr[i];
+			if(max < diff[i])
+				max = diff[i];
+		}
+		loop:
+		for(int i=1; i<=max; i++) {
+			for(int j=0; j<n-1; j++) {
+				if(i == diff[j]) {
+					group[j+1] = group[j];
+					count--;
+				}
+				if(k==count)
+					break loop; //아예 나가야 함
+			}
+		}
+		
+		int tmp = -1;
+		int start = 0;
+		int end = 0;
+		int result = 0;
+		for(int i=0; i<n; i++) {
+			if(tmp != group[i]) {
+				if(end > start)
+					result = result + end - start;
+				tmp = group[i];
+				start = arr[tmp];
+			}
+			else {
+				end = arr[i];
+			}
+		}
+		if(end > start)
+			result = result + end - start;
+		result += k;
+		System.out.println(result);
+	}
+}
