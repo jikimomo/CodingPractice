@@ -1,0 +1,40 @@
+//구글링을 통해서 해결함...
+//변수 factor를 통해서 먼저 알파벳별로 어느 자리에 몇번 나오는지 계산 -> factor를 정렬하여 높은 숫자부터 9로 배정
+import java.util.Scanner;
+import java.util.Arrays;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n= s.nextInt();
+		s.nextLine();
+		String[] arr = new String[n];
+		int[] len = new int[n];
+		for(int i=0; i<n; i++) {
+			arr[i] = s.nextLine();
+			len[i] = arr[i].length();
+		}
+		
+		int index, factor;
+		int[] alpha = new int[26];
+		for(int i=0; i<n; i++) {
+			factor = 1;
+			for(int j=len[i]-1; j>=0; j--) {
+				index = arr[i].charAt(j)-'A';
+				alpha[index] += factor;
+				factor *= 10;
+			}
+		}
+		Arrays.sort(alpha);
+		
+		int num = 9;
+		int result = 0;
+		for(int i=25; i>=0; i--) {
+			if(alpha[i] != 0) {
+				result = result + num*alpha[i];
+				num--;
+			}
+		}
+		System.out.println(result);
+	}
+}
