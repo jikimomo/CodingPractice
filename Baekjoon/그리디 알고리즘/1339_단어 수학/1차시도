@@ -1,0 +1,43 @@
+//테스트케이스 중 ABC, BCD의 경우를 고려하지 못함
+//A, B중에서 B가 9여야하는데 이 코드에서는 8로 결정됨
+import java.util.Scanner;
+import java.util.Hashtable;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n= s.nextInt();
+		s.nextLine();
+		String[] arr = new String[n];
+		int max = 0;
+		for(int i=0; i<n; i++) {
+			arr[i] = s.nextLine();
+			max = Math.max(max, arr[i].length());
+		}
+		
+		for(int i=0; i<n; i++) {
+			if(max != arr[i].length()) {
+				int tmp = max - arr[i].length();
+				for(int j=0; j<tmp; j++)
+					arr[i] = "0"+arr[i];
+			}
+		}
+		
+		Hashtable<String, Integer> ht = new Hashtable<String, Integer>();
+		int num = 9;
+		long result = 0;
+		for(int i=0; i<max; i++) {
+			for(int j=0; j<n; j++) {
+				if(arr[j].charAt(i)!='0' && !ht.containsKey(Character.toString(arr[j].charAt(i)))) {
+					ht.put(Character.toString(arr[j].charAt(i)), num);
+					result = result + num * (long)Math.pow(10.0, max-i-1);
+					num--;
+				}
+				else if(arr[j].charAt(i)!='0' && ht.containsKey(Character.toString(arr[j].charAt(i)))) {
+					result = result + ht.get(Character.toString(arr[j].charAt(i)))*(long)Math.pow(10, max-i-1);
+				}
+			}
+		}
+		System.out.println(result);
+	}
+}
