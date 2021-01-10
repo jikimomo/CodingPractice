@@ -1,0 +1,72 @@
+import java.util.Scanner;
+
+public class Main{
+	static int n, m;
+	static int[][] a, b;
+	
+	public static boolean check() {
+		boolean flag = true;
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<m; j++){
+				if(a[i][j] != b[i][j])
+					flag = false;
+			}
+		}
+		return flag;
+	}
+	
+	public static void change(int ii, int jj) {
+		for(int i=ii; i<ii+3; i++) {
+			for(int j=jj; j<jj+3; j++)
+				a[i][j] = Math.abs(a[i][j]-1);
+		}
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		m = s.nextInt();
+		a = new int[n][m];
+		b = new int[n][m];
+		
+		String[] tmp = new String[n];
+		s.nextLine();
+		for(int i=0; i<n; i++) 
+			tmp[i] = s.nextLine();
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<m; j++)
+				a[i][j] = (int)tmp[i].charAt(j)-48;
+		}
+		for(int i=0; i<n; i++) 
+			tmp[i] = s.nextLine();
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<m; j++)
+				b[i][j] = (int)tmp[i].charAt(j)-48;
+		}
+		
+		if(n<3 && m<3) {
+			if(check())
+			System.out.println("0");
+		else
+			System.out.println("-1");
+		}
+		else {
+			int result = 0;
+			boolean flag = true;
+			loop:
+			for(int i=0; i<=n-3; i++) {
+				for(int j=0; j<=m-3; j++) {
+					if(a[i][j] != b[i][j]) {
+						result++;
+						change(i, j);
+					}
+				}
+			}
+
+			if(check())
+				System.out.println(result);
+			else
+				System.out.println("-1");
+		}
+	}
+}
