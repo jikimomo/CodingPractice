@@ -1,0 +1,26 @@
+import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int[] dist = new int[n-1];
+		int[] oil = new int[n];
+		for(int i=0; i<n-1; i++)
+			dist[i] = s.nextInt();
+		for(int i=0; i<n; i++)
+			oil[i] = s.nextInt();
+		
+		Integer[] min = new Integer[n-1];
+		min[0] = oil[0];
+		long result = 0;
+    
+		for(int i=0; i<n-1; i++) {
+			if(min[i] == null) {
+				min[i] = Math.min(oil[i], min[i-1]);
+			}
+			result = result + (long)dist[i]*min[i]; //곱셈결과를 long타입으로 변환 안해서 틀림
+		}
+		System.out.println(result);
+	}
+}
