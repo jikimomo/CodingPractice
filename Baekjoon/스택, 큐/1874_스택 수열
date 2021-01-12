@@ -1,0 +1,52 @@
+import java.util.*;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int[] arr = new int[n];
+		for(int i=0; i<n; i++)
+			arr[i] = s.nextInt();
+		
+		int tmp = 0;
+		int value = 1;
+		int before = n+1;
+		boolean flag = true;
+		boolean result = true;
+		StringBuilder sb = new StringBuilder();
+		Stack<Integer> stack = new Stack<>();
+		
+		for(int i=0; i<n; i++) {
+			if(tmp < arr[i]) {
+				for(int j=0; j<(arr[i]-tmp); j++) {
+					stack.push(value++);
+					sb.append("+\n");
+				}
+				stack.pop();
+				sb.append("-\n");
+				tmp = arr[i];
+			}
+			else if(tmp > arr[i] && flag) {
+				if(stack.pop() != arr[i]) {
+					result = false;
+					break;
+				}
+				sb.append("-\n");
+			}
+			else if(tmp>arr[i] && !flag){
+				if(before<arr[i]) {
+					result = false;
+					break;
+				}
+				before = arr[i];
+				sb.append("-\n");
+			}
+			if(arr[i] == n) 
+				flag = false;
+		}
+		if(!result)
+			System.out.println("NO");
+		else
+			System.out.println(sb);
+	}
+}
