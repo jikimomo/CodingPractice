@@ -1,0 +1,22 @@
+import java.util.*;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		Queue<Integer> queue = new LinkedList<>();
+		
+		for(int i=1; i<=n; i++)
+			queue.add(i);
+		
+		int i=1;
+		while(queue.size() != 1) {
+			if(i%2 == 1)
+				queue.poll();
+			else
+				queue.add(queue.poll());
+			i++;
+		}
+		System.out.println(queue.poll());
+	}
+}
