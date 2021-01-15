@@ -1,0 +1,47 @@
+import java.util.*;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int k = s.nextInt();
+		LinkedList<Integer> queue = new LinkedList<>();
+		StringBuilder sb = new StringBuilder();
+		int rank = 0, num = 0;
+		int h = 0;
+		
+		while(h<k) {		
+			int n = s.nextInt();
+			int m = s.nextInt();
+			int[] arr = new int[n];
+			for(int i=0; i<n; i++) {
+				arr[i] = s.nextInt();
+				queue.add(i);
+			}
+			rank = 0;
+			
+			while(!queue.isEmpty()) {
+				num = 0;	
+				for(int i=0; i<queue.size(); i++) {
+					int index = queue.get(0);
+					if(arr[index] < arr[queue.get(i)]) {
+						queue.add(index);
+						queue.remove();
+						break;
+					}
+					else
+						num++;
+					
+					if(num == queue.size()) {
+						queue.remove();
+						rank++;
+						if(index == m)
+							sb.append(rank+"\n");
+					}
+				}
+			}
+			queue.clear();
+			h++;
+		}
+		System.out.println(sb);
+	}
+}
