@@ -1,0 +1,25 @@
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int sum = 0, result = 0;
+		boolean flag = false;
+		
+		for(int i=1; i<n; i++) {
+			sum = i;
+			for(int j=i; j>0; j=j/10)
+				sum = sum + (j%10);
+			if(sum == n) {
+				result = i;
+				flag = true;
+				break;
+			}
+		}
+		if(flag)
+			System.out.println(result);
+		else
+			System.out.println("0");
+	}
+}
