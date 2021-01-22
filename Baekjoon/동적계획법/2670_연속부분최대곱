@@ -1,0 +1,35 @@
+import java.util.Scanner;
+
+public class Main {
+	static double[] arr;
+	static double[] max;
+	
+	public static double dp(int n) {
+		if(max[n] == -1) {
+			max[n] = Math.max(arr[n], dp(n-1)*arr[n]);
+		}
+		return max[n];
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		arr = new double[n+1];
+		max = new double[n+1];
+		for(int i=1; i<=n; i++)
+			arr[i] = s.nextDouble();
+		
+		max[0] = 0.0;
+		max[1] = arr[1];
+		for(int i=2; i<=n; i++)
+			max[i] = -1;
+		
+		dp(n);
+		double maximum = max[1];
+		for(int i=2; i<=n; i++) {
+			if(maximum < max[i])
+				maximum = max[i];
+		}
+		System.out.printf("%.3f", maximum);
+	}
+}
