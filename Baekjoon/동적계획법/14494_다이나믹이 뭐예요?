@@ -1,0 +1,26 @@
+import java.util.Scanner;
+
+public class Main {
+	static long[][] num;
+	
+	public static long dp(int n, int m) {
+		if(num[n][m] == 0) {
+			if(n == 1 || m == 1)
+				num[n][m] = 1;
+			else
+				num[n][m] = dp(n, m-1) + dp(n-1, m) + dp(n-1, m-1);
+		}
+		return num[n][m]%1000000007;
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int m = s.nextInt();
+		num = new long[n+1][m+1];
+		
+		num[1][1] = 1;
+		
+		System.out.println(dp(n, m));
+	}
+}
