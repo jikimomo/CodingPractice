@@ -1,0 +1,35 @@
+//n이 증가하여 비트를 붙일 때 앞뒤로 붙일 수 있다 생각하여 처음에 헤매다 한쪽으로만 고정하면 된다는 글을 참고하고 다시 도전함
+//j가 0일 때는 i-1의 0부분만 확인하면 됨
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int[][][] num = new int[101][101][2];
+		
+		num[1][0][0] = 1;
+		num[1][0][1] = 1;
+		
+		for(int i=2; i<=100; i++) {
+			for(int j=0; j<100; j++) {
+				num[i][j][0] =  num[i-1][j][0] + num[i-1][j][1];
+				if(j == 0)
+					num[i][j][1] = num[i-1][j][0];
+				else
+					num[i][j][1] = num[i-1][j-1][1] + num[i-1][j][0];
+			}
+		}
+		
+		int h=0;
+		int t = s.nextInt();
+		StringBuilder sb = new StringBuilder();
+		while(h<t){
+			int n = s.nextInt();
+			int k = s.nextInt();
+			int tmp = num[n][k][0] + num[n][k][1];
+			sb.append(tmp).append("\n");
+			h++;
+		}
+		System.out.println(sb);
+	}
+}
