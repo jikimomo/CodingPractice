@@ -9,7 +9,7 @@ public class Main {
 		for(int i=0; i<n; i++)
 			num[i] = s.nextInt();
 		
-		Arrays.sort(num); //왜지...?
+		Arrays.sort(num); //정렬이 되어있지 않으면 tmp와 num[i]값을 비교해서 a와 b를 이동시킬 기준이 없음
 		
 		int count = 0;
 		for(int i=0; i<n; i++) {
