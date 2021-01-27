@@ -1,0 +1,30 @@
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int m = s.nextInt();
+		int[] num = new int[n+1];
+		int[][] list = new int[m][2];
+		for(int i=1; i<=n; i++)
+			num[i] = s.nextInt();
+		for(int i=0; i<m; i++) {
+			list[i][0] = s.nextInt();
+			list[i][1] = s.nextInt();
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		int[] psum = new int[n+1];
+		psum[0] = 0;
+		for(int i=1; i<=n; i++) {
+			psum[i] = psum[i-1] + num[i];
+		}
+		
+		for(int i=0; i<m; i++) {
+			int tmp = psum[list[i][1]] - psum[list[i][0]-1];
+			sb.append(tmp).append("\n");
+		}
+		System.out.print(sb);
+	}
+}
