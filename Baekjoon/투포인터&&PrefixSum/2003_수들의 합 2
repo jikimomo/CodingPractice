@@ -1,0 +1,30 @@
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int m = s.nextInt();
+		int[] num = new int[n+1];
+		int[] psum = new int[n+1];
+		for(int i=1; i<=n; i++)
+			num[i] = s.nextInt();
+		
+		for(int i=1; i<=n; i++)
+			psum[i] = psum[i-1] + num[i];
+		
+		int a = 0, b = 0;
+		int count = 0;
+		while(b<=n) {
+			if(psum[b]-psum[a] == m) {
+				count++;
+				b++;
+			}
+			else if(psum[b]-psum[a] < m)
+				b++;
+			else if(psum[b]-psum[a] > m)
+				a++;
+		}
+		System.out.print(count);
+	}
+}
