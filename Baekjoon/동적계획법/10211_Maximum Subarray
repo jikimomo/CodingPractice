@@ -1,0 +1,28 @@
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int h = 0;
+		StringBuilder sb = new StringBuilder();
+		
+		while(h<n) {
+			int k = s.nextInt();
+			int[] arr = new int[k];
+			int[] sum = new int[k];
+			for(int i=0; i<k; i++)
+				arr[i] = s.nextInt();
+			
+			sum[0] = arr[0];
+			int max = sum[0];
+			for(int i=1; i<k; i++) {
+				sum[i] = Math.max(sum[i-1]+arr[i], arr[i]);
+				max = Math.max(max, sum[i]);
+			}
+			sb.append(max).append("\n");
+			h++;
+		}
+		System.out.println(sb);
+	}
+}
