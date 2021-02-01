@@ -1,0 +1,44 @@
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int m = s.nextInt();
+		int[] arr = new int[m];
+		for(int i=0; i<m; i++)
+			arr[i] = s.nextInt();
+		
+		LinkedList<Integer> dq = new LinkedList<>();
+		for(int i=1; i<=n; i++)
+			dq.add(i);
+		
+		int h = 0;
+		int count = 0;
+		while(h<m) {
+			if(arr[h] == dq.peekFirst()) {
+				dq.removeFirst();
+				h++;
+			}
+			else {
+				int tmp;
+				int index = dq.indexOf(arr[h]);
+				if(index <= dq.size()/2) {
+					tmp = dq.peekFirst();
+					dq.removeFirst();
+					dq.addLast(tmp);
+					count++;
+				}
+				else {
+					tmp = dq.peekLast();
+					dq.removeLast();
+					dq.addFirst(tmp);
+					count++;
+				}
+			}
+		}
+		System.out.println(count);
+	}
+}
