@@ -1,0 +1,32 @@
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int k = s.nextInt();
+		int end = 0;
+		int[] g = new int[n];
+		int[] x = new int[n];
+		for(int i=0; i<n; i++) {
+			g[i] = s.nextInt();
+			x[i] = s.nextInt();
+			end = Math.max(end, x[i]);
+		}
+		
+		int[] weight = new int[4000001]; 
+		for(int i=0; i<n; i++) { 
+			weight[x[i]] = g[i]; 
+		}
+		
+		int[] sum = new int[4000001];
+		for(int i=0; i<2*k+1; i++)
+			sum[0] += weight[i];
+		int max = sum[0];
+		for(int i=1; i<=end-2*k; i++) {
+			sum[i] = sum[i-1] - weight[i-1] + weight[i+2*k];
+			max = Math.max(max, sum[i]);
+		}
+		System.out.println(max);
+	}
+}
