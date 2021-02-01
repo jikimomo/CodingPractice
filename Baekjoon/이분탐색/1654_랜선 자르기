@@ -1,0 +1,32 @@
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int k = s.nextInt();
+		int n = s.nextInt();
+		long[] num = new long[k];
+		long start = 1, end = 0;
+		for(int i=0; i<k; i++) {
+			num[i] = s.nextInt();
+			end += num[i];
+		}
+		
+		long mid = 0, result = 0;
+		while(start <= end) {
+			int count = 0;
+			mid = (start + end)/2;
+			for(int i=0; i<k; i++)
+				count += num[i]/mid;
+			
+			if(count >= n) {
+				start = mid + 1;
+				if(result < mid)
+					result = mid;
+			}
+			else if(count < n)
+				end = mid - 1;
+		}
+		System.out.println(result);
+	}
+}
