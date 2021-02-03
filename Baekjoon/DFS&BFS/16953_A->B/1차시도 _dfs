@@ -1,0 +1,32 @@
+import java.util.Scanner;
+
+public class Main {
+	static long a, b;
+	static int result;
+	static boolean flag;
+	
+	public static void dfs(long num, int count) {
+		if(num == b) {
+			flag = true;
+			result = count;
+			return;
+		}
+		else if(num > b) {
+			return;
+		}
+
+		dfs(num*2, count+1);
+		dfs(num*10+1, count+1);
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		a = s.nextInt();
+		b = s.nextInt();
+		
+		dfs(a, 0);
+		if(flag)
+			System.out.println(result+1);
+		else
+			System.out.println("-1");
+	}
+}
