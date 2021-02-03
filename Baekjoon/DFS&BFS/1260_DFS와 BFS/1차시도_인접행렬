@@ -1,0 +1,56 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int n, m;
+	static int[][] graph;
+	static boolean[] check;
+	
+	public static void dfs(int node) {
+		check[node] = true;
+		System.out.print(node+" ");
+		
+		for(int i=1; i<=n; i++) {
+			if(graph[node][i]==1 && !check[i])
+				dfs(i);
+		}
+	}
+	public static void bfs(int node) {
+		Queue<Integer> queue = new LinkedList<>();
+		queue.add(node);
+		check[node] = true;
+		
+		while(!queue.isEmpty()) {
+			int tmp = queue.peek();
+			System.out.print(tmp+" ");
+			queue.remove();
+			for(int i=1; i<=n; i++) {
+				if(graph[tmp][i]==1 && !check[i]) {
+					queue.add(i);
+					check[i] = true;
+				}
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		m = s.nextInt();
+		int v = s.nextInt();
+		graph = new int[n+1][n+1];
+		check = new boolean[n+1];
+		for(int i=0; i<m; i++) {
+			int x = s.nextInt();
+			int y = s.nextInt();
+			graph[x][y] = 1;
+			graph[y][x] = 1;
+		}
+		
+		dfs(v);
+		System.out.println();
+		for(int i=0; i<=n; i++)
+			check[i] = false;
+		bfs(v);
+	}
+}
