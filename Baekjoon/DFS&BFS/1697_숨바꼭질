@@ -1,0 +1,45 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int k = s.nextInt();
+		Queue<Integer> queue = new LinkedList<>();
+		int[] check = new int[100001];
+		boolean flag = false;
+		int result = 0;
+
+		queue.add(n);
+		check[n] = 1;
+		while(!queue.isEmpty()) {
+			int tmp = queue.remove();
+			if(tmp == k) {
+				result = check[tmp]-1;
+				flag = true;
+				break;
+			}
+
+			if(tmp*2<=100000 && check[tmp*2]==0) {
+				check[tmp*2] = check[tmp]+1;
+				queue.add(tmp*2);
+			}
+			if(tmp+1<=100000 && check[tmp+1]==0)
+			{
+				check[tmp+1] = check[tmp]+1;
+				queue.add(tmp+1);
+			}
+			if(tmp-1>=0 && tmp-1<=100000 && check[tmp-1]==0)
+			{
+				check[tmp-1] = check[tmp]+1;
+				queue.add(tmp-1);
+			}
+		}
+		if(flag)
+			System.out.println(result);
+		else
+			System.out.println("-1");
+	}
+}
