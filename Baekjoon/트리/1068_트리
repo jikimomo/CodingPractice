@@ -1,0 +1,56 @@
+import java.util.LinkedList;
+import java.util.Scanner;
+
+public class Main {
+	static int n, result;
+	static int[] parent;
+	static LinkedList<Integer>[] child;
+	static boolean[] check;
+	
+	public static void dfs(int node) {
+		check[node] = true;
+		if(child[node].size() == 0) {
+			result++;
+			return;
+		}
+		for(int i=0; i<child[node].size(); i++) {
+			int next = child[node].get(i);
+			if(!check[next] && parent[next]!=-1)
+				dfs(next);
+		}
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		parent = new int[n];
+		child = new LinkedList[n];
+		check = new boolean[n];
+		LinkedList<Integer> root = new LinkedList<>();
+		
+		for(int i=0; i<n; i++)
+			child[i] = new LinkedList<>();
+		
+		for(int i=0; i<n; i++) {
+			parent[i] = s.nextInt();
+			if(parent[i] != -1)
+				child[parent[i]].add(i);
+			else
+				root.add(i);
+		}
+		int remove = s.nextInt();
+	
+		if(parent[remove] != -1 && !child[parent[remove]].isEmpty()) {
+			for(int i=0; i<child[parent[remove]].size(); i++) {
+				if(child[parent[remove]].get(i) == remove)
+					child[parent[remove]].remove(i);
+			}
+		}
+		parent[remove] = -1;
+		
+		for(int i=0; i<root.size(); i++) {
+			if(remove != root.get(i)) 
+				dfs(root.get(i));
+		}
+		System.out.println(result);
+	}
+}
