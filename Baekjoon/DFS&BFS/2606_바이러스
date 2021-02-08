@@ -1,0 +1,32 @@
+import java.util.Scanner;
+
+public class Main {
+	static int n, result;
+	static int[][] conn;
+	static boolean[] check;
+	public static void dfs(int node) {
+		check[node] = true;
+		for(int i=1; i<=n; i++) {
+			if(!check[i] && conn[node][i]==1) {
+				result++;
+				dfs(i);
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		int m = s.nextInt();
+		conn = new int[n+1][n+1];
+		check = new boolean[n+1];
+		for(int i=0; i<m; i++) {
+			int t1 = s.nextInt();
+			int t2 = s.nextInt();
+			conn[t1][t2] = 1;
+			conn[t2][t1] = 1;
+		}
+		
+		dfs(1);
+		System.out.println(result);
+	}
+}
