@@ -1,0 +1,39 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		boolean[] check = new boolean[n+1];
+		int[] parent = new int[n+1];
+		LinkedList<Integer>[] graph = new LinkedList[n+1];
+		for(int i=1; i<=n; i++)
+			graph[i] = new LinkedList<>();
+		for(int i=0; i<n-1; i++) {
+			int tmp1 = s.nextInt();
+			int tmp2 = s.nextInt();
+			graph[tmp1].add(tmp2);
+			graph[tmp2].add(tmp1);
+		}
+		
+		Queue<Integer> queue = new LinkedList<>();
+		queue.add(1);
+		
+		while(!queue.isEmpty()) {
+			int node = queue.remove();
+			for(int i=0; i<graph[node].size(); i++) {
+				int tmp = graph[node].get(i);
+				if(!check[tmp]) {
+					check[tmp] = true;
+					parent[tmp] = node;
+					queue.add(tmp);
+				}
+			}
+		}	
+
+		for(int i=2; i<=n; i++)
+			System.out.println(parent[i]);
+	}
+}
