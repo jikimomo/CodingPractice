@@ -1,0 +1,52 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int n, m;
+	static int[][] miro;
+	static boolean[][] check;
+	static int[] dire1 = {-1, 1, 0, 0};
+	static int[] dire2 = {0, 0, 1, -1};
+	
+	public static void dfs(int x, int y) {
+		Queue<Integer> q1 = new LinkedList<>();
+		Queue<Integer> q2 = new LinkedList<>();
+		
+		q1.add(x);
+		q2.add(y);
+		check[x][y] = true;
+		
+		while(!q1.isEmpty() && !q2.isEmpty()) {
+			int xx = q1.remove();
+			int yy = q2.remove();
+			
+			for(int i=0; i<4; i++) {
+				int tmp1 = xx+dire1[i];
+				int tmp2 = yy+dire2[i];
+				if(tmp1>=0 && tmp2>=0 && tmp1<n && tmp2<m && !check[tmp1][tmp2] && miro[tmp1][tmp2]==1) {
+					q1.add(tmp1);
+					q2.add(tmp2);
+					check[tmp1][tmp2] = true;
+					miro[tmp1][tmp2] += miro[xx][yy];
+				}
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		m = s.nextInt();
+		miro = new int[n][m];
+		check = new boolean[n][m];
+		for(int i=0; i<n; i++) {
+			String tmp = s.next();
+			for(int j=0; j<m; j++) {
+				miro[i][j] = (int)(tmp.charAt(j)-'0');
+			}
+		}
+		
+		dfs(0, 0);
+		System.out.println(miro[n-1][m-1]);
+	}
+}
