@@ -1,0 +1,47 @@
+import java.util.Scanner;
+
+public class Main {
+	static class Node{
+		int value;
+		Node left;
+		Node right;
+		Node(int value){
+			this.value = value;
+		}
+	}
+	public static void createTree(Node root, Node node) {
+		if(root.value > node.value) {
+			if(root.left == null)
+				root.left = node;
+			else
+				createTree(root.left, node);
+		} else if(root.value < node.value) {
+			if(root.right == null)
+				root.right = node;
+			else
+				createTree(root.right, node);
+		}
+	}
+	public static void postorder(Node node) {
+		if(node.left != null)
+			postorder(node.left);
+		if(node.right != null)
+			postorder(node.right);
+		System.out.println(node.value);
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int num = s.nextInt();
+		Node root = new Node(num);
+		while(s.hasNext()) {
+			try {
+				num = s.nextInt();
+				Node node = new Node(num);
+				createTree(root, node);
+			} catch(Exception e) {
+				break;
+			}
+		}
+		postorder(root);
+	}
+}
