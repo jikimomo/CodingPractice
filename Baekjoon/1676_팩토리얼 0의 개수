@@ -1,0 +1,27 @@
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		
+		int count5 = 0;
+		int count2 = 0;
+		for(int i=1; i<=n; i++) {
+			int tmp = i;
+			while(tmp>0) {
+				if(tmp%5 == 0) {
+					count5++;
+					tmp/=5;
+				}
+				else if(tmp%2 == 0) {
+					count2++;
+					tmp/=2;
+				}
+				else
+					break;
+			}
+		}
+		System.out.println(Math.min(count2, count5));
+	}
+}
