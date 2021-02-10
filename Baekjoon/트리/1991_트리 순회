@@ -1,0 +1,53 @@
+import java.util.Scanner;
+
+public class Main {
+	static int[][] tree;
+	public static void preorder(int node) {
+		if(node == -1)
+			return;
+		System.out.print((char)(node+'A'));
+		preorder(tree[node][0]);
+		preorder(tree[node][1]);
+	}
+	public static void order(int node) {
+		if(node == -1)
+			return;
+		order(tree[node][0]);
+		System.out.print((char)(node+'A'));
+		order(tree[node][1]);
+	}
+	public static void postorder(int node) {
+		if(node == -1)
+			return;
+		postorder(tree[node][0]);
+		postorder(tree[node][1]);
+		System.out.print((char)(node+'A'));
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		tree = new int[26][2];
+		
+		s.nextLine();
+		for(int i=1; i<=n; i++) {
+			String tmp = s.nextLine();
+			int root = (int)(tmp.charAt(0)-'A');
+			char left = tmp.charAt(2);
+			char right = tmp.charAt(4);
+			if(left == '.')
+				tree[root][0] = -1;
+			else
+				tree[root][0] = (int)(left-'A');
+			if(right == '.')
+				tree[root][1] = -1;
+			else
+				tree[root][1] = (int)(right-'A');
+		}
+
+		preorder(0);
+		System.out.println();
+		order(0);
+		System.out.println();
+		postorder(0);
+	}
+}
