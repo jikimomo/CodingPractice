@@ -1,0 +1,44 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int m = s.nextInt();
+		s.nextLine();
+		ArrayList<String> list = new ArrayList<>();
+		ArrayList<String> tmp = new ArrayList<>();
+		for(int i=0; i<n; i++)
+			list.add(s.nextLine());
+		for(int i=0; i<m; i++)
+			tmp.add(s.nextLine());
+		
+		Collections.sort(list);
+		Collections.sort(tmp);
+		
+		StringBuilder sb = new StringBuilder();
+		int count = 0;
+		for(int i=0; i<m; i++) {
+			String t = tmp.get(i);
+			int start = 0, end = n-1;
+			int mid = 0;
+			while(start<=end) {
+				mid = (start+end)/2;
+				if(list.get(mid).compareTo(t) == 0) { //String 비교하는 방법
+					count++;
+					sb.append(t).append("\n");
+					break;
+				}
+				else if(list.get(mid).compareTo(t) > 0)
+					end = mid - 1;
+				else
+					start = mid + 1;
+			}
+		}
+
+		System.out.println(count);
+		System.out.println(sb);
+	}
+}
