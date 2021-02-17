@@ -1,3 +1,4 @@
+//자신보다 뒤에 나온 차량이 자신보다 숫자가 낮으면 추월한 상황이라는 것은 알고있었지만 24번째 줄처럼 구현하는 것이 생각나지 않아 다른 코드 참고함...
 import java.util.HashMap;
 import java.util.Scanner;
 
