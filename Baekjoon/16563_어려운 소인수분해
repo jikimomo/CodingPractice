@@ -1,6 +1,6 @@
+/*정수론 - 소인수분해(에라토스테네스의 체)*/
 import java.util.Scanner;
 
-/*정수론 - 소인수분해(에라토스테네스의 체)*/
 public class Main {
 	static int[] check;
 	static StringBuilder sb = new StringBuilder();
