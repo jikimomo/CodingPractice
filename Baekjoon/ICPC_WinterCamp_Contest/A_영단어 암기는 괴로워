@@ -1,0 +1,76 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.StringTokenizer;
+
+public class Main {
+	static class Dict{
+		String word;
+		Integer count;
+		public Dict(String word, Integer count) {
+			this.word = word;
+			this.count = count;
+		}
+	}
+	static class dictComp implements Comparator<Dict>{
+		public dictComp() {
+			super();
+		}
+		public int compare(Dict d1, Dict d2) {
+			Integer c1 = d1.count;
+			Integer c2 = d2.count;
+			if(c1 > c2)
+				return -1;
+			else if(c1 < c2)
+				return 1;
+			else {
+				if(d1.word.length() > d2.word.length())
+					return -1;
+				else if(d1.word.length() < d2.word.length())
+					return 1;
+				else {
+					return d1.word.compareTo(d2.word);
+				}
+			}
+		}
+	}
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+		int n = Integer.parseInt(st.nextToken());
+		int m = Integer.parseInt(st.nextToken());
+		
+		HashMap<String, Integer> map = new HashMap<>();
+		for(int i=0; i<n; i++) {
+			String input = br.readLine();
+			if(input.length() >= m) {
+				if(map.containsKey(input)) {
+					int count = map.get(input);
+					map.put(input, count+1);
+				}
+				else
+					map.put(input, 1);
+			}
+		}
+		
+		List<Dict> d = new ArrayList<Dict>();
+		for(HashMap.Entry<String, Integer> entry : map.entrySet()) {
+			d.add(new Dict(entry.getKey(), entry.getValue()));
+		}
+		
+		Collections.sort(d, new dictComp());
+		for(int j=0; j<d.size(); j++)
+			bw.write(d.get(j).word+"\n");
+		bw.flush();
+		bw.close();
+		br.close();
+	}
+}
