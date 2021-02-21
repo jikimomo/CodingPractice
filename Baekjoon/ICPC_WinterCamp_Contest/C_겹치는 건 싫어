@@ -1,0 +1,77 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int n, m;
+	static int[] num;
+	static int[] result;
+	static HashMap<Integer, Integer> map = new HashMap<>();
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+		n = Integer.parseInt(st.nextToken());
+		m = Integer.parseInt(st.nextToken());
+		
+		num = new int[n];
+		st = new StringTokenizer(br.readLine());
+		for(int i=0; i<n; i++) {
+			num[i] = Integer.parseInt(st.nextToken());
+		}
+		
+		result = new int[n];
+		result[0] = 1;
+		map.put(num[0], 1);
+		for(int i=1; i<n; i++) {
+			if(result[i] == 0) {
+				if(map.containsKey(num[i])) {
+					int tmp = map.get(num[i]);
+					if(tmp >= m) {
+						map.clear();
+						result[i] = 1; 
+						map.put(num[i], 1);
+						for(int j=i-1; j>0; j--) {
+							if(map.containsKey(num[j])) {
+								int tmp2 = map.get(num[j]);
+								if(tmp2 >= m) {
+									break;
+								}
+								else {
+									map.put(num[j], tmp2+1);
+									result[i]++;
+								}
+							}
+							else {
+								map.put(num[j], 1);
+								result[i]++;
+							}
+						}
+					}
+					else {
+						map.put(num[i], tmp+1);
+						result[i] = result[i-1]+1;
+					}
+				}
+				else {
+					map.put(num[i], 1);
+					result[i] = result[i-1]+1;
+				}	
+			}
+		}
+		
+		int max = 0;
+		for(int i=0; i<n; i++) 
+			max = Math.max(max, result[i]);
+		
+		bw.write(max+"\n");
+		bw.flush();
+		bw.close();
+		br.close();
+	}
+}
