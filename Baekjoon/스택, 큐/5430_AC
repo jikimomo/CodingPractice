@@ -1,0 +1,75 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.StringTokenizer;
+
+public class Main {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		int t = Integer.parseInt(br.readLine());
+		int h = 0;
+		
+		Deque<Integer> d = new ArrayDeque<>();
+		while(h<t) {
+			d.clear();
+			String list = br.readLine();
+			int n = Integer.parseInt(br.readLine());
+			String input = br.readLine();
+			StringTokenizer st = new StringTokenizer(input.substring(1, input.length()-1), ",");
+			for(int i=0; i<n; i++)
+				d.add(Integer.parseInt(st.nextToken()));
+			
+			boolean flag = true; //front
+			boolean error = false;
+			for(int i=0; i<list.length(); i++) {
+				if(list.charAt(i) == 'R') {
+					if(flag)
+						flag = false;
+					else
+						flag = true;
+				}
+				else {
+					if(d.isEmpty()) {
+						error = true;
+						break;
+					}
+					else {
+						if(flag)
+							d.removeFirst();
+						else
+							d.removeLast();
+					}
+				}
+			}
+			
+			if(!d.isEmpty()) {
+				int tmp = d.size();
+				bw.write("[");
+				for(int i=0; i<tmp-1; i++) {
+					if(flag) {
+						bw.write(d.removeFirst()+",");
+					}
+					else
+						bw.write(d.removeLast()+",");
+				}
+				bw.write(d.remove()+"]\n");
+			}
+			else { //d가 empty라 해서 다 error가 아님!!
+				if(error)
+					bw.write("error\n");
+				else
+					bw.write("[]\n");
+			}
+			h++;
+		}
+		
+		bw.flush();
+		bw.close();
+		br.close();
+	}
+}
