@@ -1,0 +1,50 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class Main {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int n = Integer.parseInt(st.nextToken());
+		int m = Integer.parseInt(st.nextToken());
+		int[] num = new int[n];
+		for(int i=0; i<n; i++)
+			num[i] = Integer.parseInt(br.readLine());
+		
+		Arrays.sort(num);
+		
+		int start = 1, end = num[n-1]-num[0]; //최소 길이 차이, 최대 길이 차이 
+		int mid = 0, answer = 0;
+		while(start <= end) {
+			mid = (start+end)/2;
+			int count = 1; //처음 위치에 설치되었으니 1개로 시작
+			int tmp = num[0]; //처음 위치에서 시작
+			for(int i=1; i<n; i++) {
+				int dis = num[i] - tmp; //tmp(공유기가 설치된 위치)에서 떨어진 거리 
+				if(mid <= dis) { //떨어진 거리가 mid보다 크면 공유기를 또 설치해야함
+					count++;
+					tmp = num[i];
+				}
+			}
+			
+			if(count >= m) { //설치된 공유기개수가 m보다 크면 거리를 늘려야 함 
+				answer = Math.max(mid, answer);
+				start = mid + 1;
+			}
+			else { //m보다 작으면 거리를 줄어야 함
+				end = mid - 1;
+			}
+		}
+		
+		bw.write(answer+"\n");
+		bw.flush();
+		bw.close();
+		br.close();
+	}
+}
