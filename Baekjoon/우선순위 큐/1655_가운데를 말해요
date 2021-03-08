@@ -1,0 +1,58 @@
+/*
+5 4 4 4 3 3
+max 3 3 4
+min 5 4 4
+*/
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
+public class Main {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        int n = Integer.parseInt(br.readLine());
+        
+        PriorityQueue<Integer> queueMax = new PriorityQueue<>(new Comparator<>() {
+			@Override
+			public int compare(Integer t1, Integer t2) {
+				return t2-t1;
+			}
+		});
+        PriorityQueue<Integer> queueMin = new PriorityQueue<>(new Comparator<>() {
+			@Override
+			public int compare(Integer t1, Integer t2) {
+				return t1-t2;
+			}
+		});
+        for(int h=0; h<n; h++) {
+        	int input = Integer.parseInt(br.readLine());
+        	if(queueMax.size() > queueMin.size()) { //짝수 중 작은 값이 중간값이 되므로
+        		queueMin.add(input);
+        		if(!queueMax.isEmpty() && queueMin.peek() < queueMax.peek()) { //maxQueue의 최대값이 minQueue의 최소값보다 작아야 하므로
+        			int tmp = queueMax.poll();
+        			queueMin.add(tmp);
+        			tmp = queueMin.poll();
+        			queueMax.add(tmp);
+        		}
+        	}
+        	else {
+        		queueMax.add(input);
+        		if(!queueMin.isEmpty() && queueMin.peek() < queueMax.peek()) {
+        			int tmp = queueMax.poll();
+        			queueMin.add(tmp);
+        			tmp = queueMin.poll();
+        			queueMax.add(tmp);
+        		}
+        	}
+        	bw.write(queueMax.peek()+"\n");
+        }
+        bw.flush();
+        bw.close();
+        br.close();
+	}
+}
