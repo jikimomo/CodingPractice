@@ -1,0 +1,25 @@
+class Solution {
+    public int gcd(int x, int y){
+        if(y==0)
+            return x;
+        else
+            return gcd(y, x%y);
+    }
+    public long solution(int w, int h) {
+        long answer = 1;
+        
+        if(w==h)
+            answer = (long)w*h-w;
+        else if(w==1 || h==1)
+            answer = 0;
+        else{
+            int g = gcd(Math.max(w,h), Math.min(w,h));
+            if(g == 1) //최대공배수가 1인경우
+                answer = (long)w*h - (w+h-1);
+            else{
+                answer = (long)w*h - (g*(w/g+h/g-1));
+            } 
+        }
+        return answer;
+    }
+}
