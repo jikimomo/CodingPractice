@@ -13,7 +13,6 @@ class Solution {
         dfs(n+num[depth], depth+1);
     }
     public int solution(int[] numbers, int target) {
-        //int answer = 0;
         tar = target;
         dep = numbers.length;
         num = numbers;
