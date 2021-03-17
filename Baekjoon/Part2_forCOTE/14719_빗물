@@ -1,0 +1,32 @@
+//시뮬레이션
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int height = s.nextInt();
+		int width = s.nextInt();
+		int[] block = new int[width];
+		for(int i=0; i<width; i++) {
+			block[i] = s.nextInt();
+		}
+		
+		int result = 0;
+		int j, k;
+		for(int i=1; i<width-1; i++) {
+			int left = 0, right = 0;
+			for(j=i; j>=0; j--) {
+				if(left <= block[j]) 
+					left = block[j];
+			}
+			for(k=i; k<width; k++) {
+				if(right <= block[k]) 
+					right = block[k];
+			}
+			
+			int min = Math.min(left, right);
+			result += (min-block[i]);
+		}
+		System.out.println(result);
+	}
+}
