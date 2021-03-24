@@ -1,0 +1,34 @@
+import java.util.Scanner;
+
+public class Main {
+	static int[] count;
+	static int[] coin;
+	static int n, m;
+	
+	public static int dp() {
+		for(int i=0; i<n; i++) {
+			for(int j=coin[i]; j<=m; j++)
+				count[j] += count[j-coin[i]];
+		}
+		return count[m];
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		StringBuilder sb = new StringBuilder();
+		
+		int t = s.nextInt();
+		for(int h=0; h<t; h++) {
+			n = s.nextInt();
+			coin = new int[n];
+			for(int i=0; i<n; i++)
+				coin[i] = s.nextInt();
+			m = s.nextInt();
+			
+			count = new int[m+1];
+			count[0] = 1;
+
+			sb.append(dp()+"\n");
+		}
+		System.out.println(sb);
+	}
+}
