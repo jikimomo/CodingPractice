@@ -26,7 +26,7 @@ public class Main {
 				sum -= num[left++];
 				answer = Math.min((right - left + 1), answer);
 			}
-			else if(right == n)
+			else if(right == n) //break하는 위치 중요
 				break;
 			else if(sum < s) {
 				sum += num[right++];
