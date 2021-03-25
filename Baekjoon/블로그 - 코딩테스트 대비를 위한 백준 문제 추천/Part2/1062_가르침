@@ -1,0 +1,64 @@
+//백트래킹으로 단어를 하나씩 포함시켜 k에 도달했을 때 읽을 수 있는 단어 확인
+import java.util.Scanner;
+
+public class Main {
+	static int max = 0;
+	static int n, k;
+	static boolean[] check = new boolean[26];
+	static String[] str;
+	
+	public static void back(int index, int depth) {
+		if(depth == k) {
+			int count = 0;
+			for(int i=0; i<n; i++) {
+				boolean flag = true;
+				for(int j=0; j<str[i].length(); j++) {
+					if(!check[str[i].charAt(j)-97]) {
+						flag = false;
+						break;
+					}
+				}
+				if(flag)
+					count++;
+			}
+			max = Math.max(max, count);
+			return;
+		}
+		for(int i=index; i<26; i++) {
+			if(!check[i]) {
+				check[i] = true;
+				back(i+1, depth+1);
+				check[i] = false;
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		k = s.nextInt();
+		s.nextLine();
+
+		str = new String[n];
+		for(int i=0; i<n; i++) {
+			String input = s.nextLine();
+			str[i] = input.substring(4, input.length()-4);
+		}
+		
+		int answer = 0;
+		if(k == 26) 
+			answer = n;
+		else if(k < 5)
+			answer = 0;
+		else {
+			k -= 5;
+			check['a'-97] = true;
+			check['n'-97] = true;
+			check['t'-97] = true;
+			check['i'-97] = true;
+			check['c'-97] = true;
+			back(0, 0);
+			answer = max;
+		}
+		System.out.println(answer);
+	}
+}
