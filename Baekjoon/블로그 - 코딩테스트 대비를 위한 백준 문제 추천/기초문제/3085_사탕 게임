@@ -1,0 +1,72 @@
+import java.util.Scanner;
+
+public class Main {
+	static int result = 0;
+	static int n;
+	static char[][] input;
+	
+	public static void swapHoriz(int x, int y) {
+		char tmp = input[x][y];
+		input[x][y] = input[x][y+1];
+		input[x][y+1] = tmp;
+	}
+	public static void swapVer(int x, int y) {
+		char tmp = input[x][y];
+		input[x][y] = input[x+1][y];
+		input[x+1][y] = tmp;
+	}
+	public static void count() {
+		int count = 1;
+		for(int i=0; i<n; i++) { //가로
+			count = 1;
+			for(int j=0; j<n-1; j++) {
+				if(input[i][j] == input[i][j+1]) {
+					count++;
+					result = Math.max(result, count);
+				}
+				else {
+					count = 1;
+				}
+			}
+		}
+		for(int i=0; i<n; i++) { //세로
+			count = 1;
+			for(int j=0; j<n-1; j++) {
+				if(input[j][i] == input[j+1][i]) {
+					count++;
+					result = Math.max(result, count);
+				}
+				else
+					count = 1;
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		s.nextLine();
+		
+		input = new char[n][n];
+		for(int i=0; i<n; i++) {
+			String tmp = s.nextLine();
+			for(int j=0; j<n; j++)
+				input[i][j] = tmp.charAt(j);
+		}
+		
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<n-1; j++) {
+				swapHoriz(i, j);
+				count();
+				swapHoriz(i, j);
+			}
+		}
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<n-1; j++) {
+				swapVer(j, i);
+				count();
+				swapVer(j, i);
+			}
+		}
+		System.out.println(result);
+	}
+}
