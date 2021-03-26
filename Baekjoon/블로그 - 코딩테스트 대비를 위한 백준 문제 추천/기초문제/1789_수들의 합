@@ -1,0 +1,19 @@
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		long n = s.nextLong();
+		
+		long sum = 0;
+		int num = 1;
+		int count = 0;
+		while(n > sum) {
+			sum += (num++);
+			count++;
+		}
+		if(n != sum) //n과 sum이 다를 경우 그 차에 해당하는 자연수를 빼면 됨 -> 해당하는 값은 몰라도 되고 count만 감소
+			count--;
+		System.out.println(count);
+	}
+}
