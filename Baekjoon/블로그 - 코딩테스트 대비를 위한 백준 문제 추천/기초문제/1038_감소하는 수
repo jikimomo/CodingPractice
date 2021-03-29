@@ -1,39 +1,33 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.StringTokenizer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
 
 public class Main {
-	static int n, k;
-	static int[] coin;
-	static long[] count;
-
-	public static long dp() {
-		for(int i=0; i<n; i++) {
-			for(int j=coin[i]; j<=k; j++) {
-				count[j] += count[j-coin[i]];
+	static ArrayList<Long> list;
+	public static void cal(long num, int dep) {
+		if(dep > 10) {
+			return;
+		}
+		list.add(num);
+		for(int i=0; i<10; i++) {
+			if(num%10 > i) { //num의 마지막 숫자보다 작은 수를 붙여야 하므로
+				cal(num*10+i, dep+1);
 			}
 		}
-		return count[k];
 	}
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		n = Integer.parseInt(st.nextToken());
-		k = Integer.parseInt(st.nextToken());
-		coin = new int[n];
-		for(int i=0; i<n; i++)
-			coin[i] = Integer.parseInt(br.readLine());
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
 		
-		count = new long[k+1];
-		count[0] = 1;
-		
-		bw.write(dp()+"\n");
-		bw.flush();
-		bw.close();
-		br.close();
+		list = new ArrayList<>();
+		for(int i=0; i<=9; i++) {
+			cal(i, 1);
+		}
+
+		Collections.sort(list);
+		if(n >= list.size())
+			System.out.println("-1");
+		else
+			System.out.println(list.get(n));
 	}
 }
