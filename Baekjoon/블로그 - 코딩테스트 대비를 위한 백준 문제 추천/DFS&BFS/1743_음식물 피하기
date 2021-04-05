@@ -1,0 +1,59 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int n, m;
+	static int[][] map;
+	static boolean[][] check;
+	static int[] dir1 = {1, 0, -1, 0};
+	static int[] dir2 = {0, 1, 0, -1};
+	static int max = 0;
+	
+	public static void bfs(int x, int y) {
+		Queue<Integer> q1 = new LinkedList<>();
+		Queue<Integer> q2 = new LinkedList<>();
+		q1.add(x);
+		q2.add(y);
+		check[x][y] = true;
+		
+		int count = 1;
+		while(!q1.isEmpty() && !q2.isEmpty()) {
+			int curX = q1.remove();
+			int curY = q2.remove();
+			for(int i=0; i<4; i++) {
+				int xx = curX + dir1[i];
+				int yy = curY + dir2[i];
+				if(xx>=0&&yy>=0&&xx<=n&&yy<=m && !check[xx][yy] && map[xx][yy]==1) {
+					q1.add(xx);
+					q2.add(yy);
+					check[xx][yy] = true;
+					count++;
+				}
+			}
+		}
+		max = Math.max(count, max);
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		m = s.nextInt();
+		int k = s.nextInt();
+		
+		check = new boolean[n+1][m+1];
+		map = new int[n+1][m+1];
+		for(int i=0; i<k; i++) {
+			int r = s.nextInt();
+			int c = s.nextInt();
+			map[r][c] = 1;
+		}
+		
+		for(int i=1; i<=n; i++) {
+			for(int j=1; j<=m; j++) {
+				if(!check[i][j] && map[i][j] == 1)
+					bfs(i, j);
+			}
+		}
+		System.out.println(max);
+	}
+}
