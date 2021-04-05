@@ -1,0 +1,57 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int k;
+	static int[] count = new int[100001];
+	static ArrayList<Integer> list = new ArrayList<>();
+	
+	public static void dfs(int n) {
+		Queue<Integer> queue = new LinkedList<>();
+		queue.add(n);
+		
+		while(!queue.isEmpty()) {
+			int num = queue.remove();
+			
+			if(num == k) {
+				if(!list.isEmpty()) {
+					if(list.get(0) < count[k])
+						break;
+				}
+				list.add(count[k]);
+			}
+			
+			//System.out.println(num);
+			if((num-1) >= 0 && (num-1)<=100000) {
+				if((count[num-1]==0) || count[num-1]==count[num]+1) {
+					queue.add(num-1);
+					count[num-1] = count[num]+1;
+				}
+			}
+			if((num+1)<=100000){
+				if((count[num+1]==0) || count[num+1]==count[num]+1) {
+					queue.add(num+1);
+					count[num+1] = count[num]+1;
+				}
+			}
+			if((num*2)<=100000 ) {
+				if((count[num*2]==0) || count[num*2]==count[num]+1) {
+					queue.add(num*2);
+					count[num*2] = count[num]+1;
+				}
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		k = s.nextInt();
+		
+		dfs(n);
+			
+		System.out.println(list.get(0));
+		System.out.println(list.size());
+	}
+}
