@@ -1,0 +1,62 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+import java.util.Stack;
+
+public class Main {
+	static int k;
+	static int[] count;
+	static int[] parent;
+	static int min = Integer.MAX_VALUE;
+	
+	public static void dfs(int n) {
+		Queue<Integer> queue = new LinkedList<>();
+		queue.add(n);
+		count[n] = 1;
+		
+		while(!queue.isEmpty()) {
+			int num = queue.remove();
+			
+			if(num == k) {
+				min = Math.min(min, count[num]);
+				break;
+			}
+			
+			int[] next = {num-1, num+1, num*2};
+			for(int i=0; i<3; i++) {
+				if(next[i]>=0 && next[i]<=100000) {
+					if(count[next[i]]==0 || count[next[i]]==count[num]+1) {
+						count[next[i]] = count[num]+1;
+						parent[next[i]] = num;
+						queue.add(next[i]);
+					}
+				}
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		k = s.nextInt();
+		
+		count = new int[100001];
+		parent = new int[100001];
+		dfs(n);
+		
+		Stack<Integer> stack = new Stack<>();
+		stack.push(k);
+		int index = k;
+		
+		while(index != n) {
+			stack.push(parent[index]);
+			index = parent[index];
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		while(!stack.isEmpty()) {
+			sb.append(stack.pop()+" ");
+		}
+		System.out.println(min-1);
+		System.out.println(sb);
+	}
+}
