@@ -1,0 +1,47 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int n;
+	static int[][] map;
+	static boolean[] check;
+	
+	public static void bfs(int nn) {
+		Queue<Integer> queue = new LinkedList<>();
+		queue.add(nn);
+		check[nn] = true;
+		
+		while(!queue.isEmpty()) {
+			int node = queue.remove();
+			for(int i=1; i<=n; i++) {
+				if(!check[i] && map[node][i] == 1) {
+					queue.add(i);
+					check[i] = true;
+				}
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		int m = s.nextInt();
+		map = new int[n+1][n+1];
+		for(int i=0; i<m; i++) {
+			int x = s.nextInt();
+			int y = s.nextInt();
+			map[x][y] = 1;
+			map[y][x] = 1;
+		}
+		
+		int count = 0;
+		check = new boolean[n+1];
+		for(int i=1; i<=n; i++) {
+			if(!check[i]) {
+				bfs(i);
+				count++;
+			}
+		}
+		System.out.println(count);
+	}
+}
