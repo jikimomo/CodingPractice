@@ -1,0 +1,101 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int r, c, result = 0;
+	static char[][] map;
+	static boolean[][] check;
+	static int[][] count;
+	static boolean flag;
+	static int[] dir1 = {1, 0, -1, 0};
+	static int[] dir2 = {0, 1, 0, -1};
+	
+	public static void water() {
+		ArrayList<Integer> list1 = new ArrayList<>();
+		ArrayList<Integer> list2 = new ArrayList<>();
+		for(int i=0; i<r; i++) {
+			for(int j=0; j<c; j++) {
+				if(map[i][j] == '*') {
+					list1.add(i);
+					list2.add(j);
+				}
+			}
+		}
+		for(int i=0; i<list1.size(); i++) {
+			for(int h=0; h<4; h++) {
+				int x = list1.get(i) + dir1[h];
+				int y = list2.get(i) + dir2[h];
+				if(x>=0&&x<r&&y>=0&&y<c && map[x][y] == '.')
+					map[x][y] = '*';
+			}
+		}
+	}
+	public static void bfs(int x, int y) {
+		Queue<Integer> q1 = new LinkedList<>();
+		Queue<Integer> q2 = new LinkedList<>();
+		q1.add(x);
+		q2.add(y);
+		check[x][y] = true;
+		count[x][y] = 1;
+		
+		int curValue = 0;
+		while(!q1.isEmpty() && !q2.isEmpty()) {
+			int curX = q1.remove();
+			int curY = q2.remove();
+			
+			if(map[curX][curY] == 'D') {
+				flag = true;
+				result = count[curX][curY];
+				break;
+			}
+			
+			if(count[curX][curY] != curValue) {
+				curValue = count[curX][curY];
+				water();
+			}
+			
+			for(int i=0; i<4; i++) {
+				int xx = curX + dir1[i];
+				int yy = curY + dir2[i];
+				if(xx>=0 && xx<r && yy>=0 && yy<c) {
+					if((map[xx][yy]=='.' || map[xx][yy]=='D') && !check[xx][yy]) {
+						count[xx][yy] = count[curX][curY] + 1;
+						q1.add(xx);
+						q2.add(yy);
+						check[xx][yy] = true;
+					}
+				}
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		r = s.nextInt();
+		c = s.nextInt();
+		s.nextLine();
+		
+		int x = 0, y = 0;
+		map = new char[r][c];
+		check = new boolean[r][c];
+		count = new int[r][c];
+		for(int i=0; i<r; i++) {
+			String input = s.nextLine();
+			for(int j=0; j<c; j++) {
+				map[i][j] = input.charAt(j);
+				if(map[i][j] == 'S') {
+					x = i;
+					y = j;
+				}
+			}
+		}
+		
+		bfs(x, y);
+		
+		if(flag)
+			System.out.println(result-1);
+		else
+			System.out.println("KAKTUS");
+	}
+}
