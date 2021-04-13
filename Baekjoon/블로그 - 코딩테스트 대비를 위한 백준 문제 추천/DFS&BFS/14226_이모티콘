@@ -1,0 +1,56 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int n, result = 0;
+	static boolean[][] check;
+	
+	static class emotion{
+		int board = 0;
+		int screen = 0;
+		int time = 0;
+		public emotion(int board, int screen, int time) {
+			this.board = board;
+			this.screen = screen;
+			this.time = time;
+		}
+	}
+	
+	public static void dfs(int num) {
+		Queue<emotion> queue = new LinkedList<>();
+		queue.add(new emotion(0, num, 0));
+		check[0][1] = true;
+		
+		while(!queue.isEmpty()) {
+			emotion cur = queue.remove();
+			
+			if(cur.screen == n) {
+				result = cur.time;
+				break;
+			}
+			//클립보드
+			queue.add(new emotion(cur.screen, cur.screen, cur.time+1));
+			
+			//붙여넣기
+			if(cur.board!=0 && cur.board+cur.screen<=1000 && !check[cur.board][cur.screen+cur.board]) {
+				queue.add(new emotion(cur.board, cur.screen+cur.board, cur.time+1));
+				check[cur.board][cur.screen+cur.board] = true;
+			}
+			
+			//삭제
+			if(cur.screen>0 && !check[cur.board][cur.screen-1]) {
+				queue.add(new emotion(cur.board, cur.screen-1, cur.time+1));
+				check[cur.board][cur.screen-1] = true;
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		check = new boolean[1001][1001]; //클립보드 숫자와 화면 숫자 모두 고려해야 함  
+		
+		dfs(1);
+		System.out.println(result);
+	}
+}
