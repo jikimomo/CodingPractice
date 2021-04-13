@@ -1,0 +1,56 @@
+/*5명을 한붓그리기 할 수 있는지에 관한 문제, 0~4까지 한붓그리기 아님*/
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main {
+	static ArrayList<Integer>[] list;
+	static boolean[] check;
+	static boolean flag;
+	
+	public static void dfs(int nn, int depth) {
+		if(depth == 4) {
+			flag = true;
+			return;
+		}
+		
+		for(int i=0; i<list[nn].size(); i++) {
+			int next = list[nn].get(i);
+			if(!check[next]) {
+				check[next] = true;
+				dfs(next, depth+1);
+				check[next] = false;
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int m = s.nextInt();
+		
+		check = new boolean[n];
+		list = new ArrayList[n];
+		for(int i=0; i<n; i++) {
+			list[i] = new ArrayList<>();
+		}
+		
+		for(int i=0; i<m; i++) {
+			int a = s.nextInt();
+			int b = s.nextInt();
+			list[a].add(b);
+			list[b].add(a);
+		}
+		
+		for(int i=0; i<n; i++) {
+			if(!flag) {
+				check[i] = true;
+				dfs(i, 0);
+				check[i] = false;
+			}
+		}
+		
+		if(flag)
+			System.out.println("1");
+		else
+			System.out.println("0");
+	}
+}
