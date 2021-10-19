@@ -49,8 +49,8 @@ public class Main {
 					int empty = 0;
 					
 					for(int k=0; k<4; k++) {
-						int x = dir1[k];
-						int y = dir2[k];
+						int x = i + dir1[k];
+						int y = j + dir2[k];
 						if(x>=0&&y>=0&&x<n&&y<n) {
 							if(pos[x][y] == 0)
 								empty++;
