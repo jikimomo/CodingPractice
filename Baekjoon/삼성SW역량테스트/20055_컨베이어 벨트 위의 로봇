@@ -1,0 +1,81 @@
+//문제 이해가 80%를 차지하는 문제...
+//한 step에 로봇을 한번 내리면 되는 줄 알았는데 무조건 내리는 위치에 도착만하면 내려야 함!! -> 컨베이어 이동, 로봇 이동 이후 꼭 내려야 함
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N, K;
+	static int[] input;
+	static boolean[] check;
+	static ArrayList<Integer> list;
+	
+	public static void moveRobot() { 
+		for(int i=N-2; i>=0; i--) {
+			int current = list.get(i);
+			int next = list.get(i+1);
+			if(current == 2*N)
+				next = 1;
+
+			if(check[current] && !check[next] && input[next]>0) {
+				check[current] = false;
+				check[next] = true;
+				input[next]--;
+			}
+		}
+	}
+	
+	public static void putRobot() {
+		int start = list.get(0);
+		if(!check[start] && input[start]>0) {
+			check[start] = true;
+			input[start]--;
+		}
+	}
+
+	public static void main(String[] args) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+		
+		input = new int[N*2+1];
+		st = new StringTokenizer(br.readLine());
+		for(int i=1; i<=N*2; i++)
+			input[i] = Integer.parseInt(st.nextToken());
+		
+		check = new boolean[N*2+1];
+		list = new ArrayList<>();
+		for(int i=1; i<=2*N; i++)
+			list.add(i);
+		
+		int step = 0, zeroCount = 0;
+		while(K > zeroCount) {
+			step++;
+			zeroCount = 0;
+
+			//rotate
+			int tmp = list.remove(2*N-1);
+			list.add(0, tmp);
+			
+			if(check[list.get(N-1)]) 
+				check[list.get(N-1)] = false;
+			
+			moveRobot();
+			
+			if(check[list.get(N-1)]) 
+				check[list.get(N-1)] = false;
+			
+			putRobot();
+			
+			for(int i=1; i<=2*N; i++) {
+				if(input[i] == 0)
+					zeroCount++;
+			}
+		}
+		
+		System.out.println(step);
+	}
+}
