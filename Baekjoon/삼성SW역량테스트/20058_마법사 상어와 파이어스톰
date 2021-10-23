@@ -1,0 +1,138 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N, Q;
+	static int[][] A;
+	static int[] L;
+	
+	static int length;
+	static int[] dir1 = {0, -1, 0, 1};
+	static int[] dir2 = {-1, 0, 1, 0};
+	static boolean[][] check;
+	
+	public static void rotate(int partLength) {
+		int[][] tmp = new int[length][length];
+		
+		for(int i=0; i<length; i+=partLength) { //부분 격자의 시작점
+			for(int j=0; j<length; j+=partLength) {
+				
+				for(int x=0; x<partLength; x++) {//부분 격자 for문
+					for(int y=0; y<partLength; y++) {
+						tmp[y+i][partLength-1-x+j] = A[x+i][y+j]; 
+					}
+				}
+			}
+		}
+		A = tmp;
+	}
+	
+	public static void minus() {
+		ArrayList<Integer> xList = new ArrayList<>();
+		ArrayList<Integer> yList = new ArrayList<>();
+		
+		for(int i=0; i<length; i++) {
+			for(int j=0; j<length; j++) {
+				int near = 0;
+				if(A[i][j]>0) {
+					for(int k=0; k<4; k++) {
+						int x = i + dir1[k];
+						int y = j + dir2[k];
+						if(range(x, y) && A[x][y]>0) {
+							near++;
+						}
+					}
+					if(near < 3) {
+						xList.add(i);
+						yList.add(j);
+					}
+				}
+			}
+		}
+		while(!xList.isEmpty()) {
+			int xx = xList.remove(0);
+			int yy = yList.remove(0);
+			A[xx][yy]--;
+		}
+	}
+	
+	public static boolean range(int x, int y) {
+		if(x>=0 && y>=0 && x<length && y<length)
+			return true;
+		else
+			return false;
+	}
+	
+	public static int bfs(int x, int y) {
+		int count = 0;
+		Queue<Integer> q1 = new LinkedList<>();
+		Queue<Integer> q2 = new LinkedList<>();
+		q1.add(x);
+		q2.add(y);
+		check[x][y] = true;
+		
+		while(!q1.isEmpty() && !q2.isEmpty()) {
+			int curX = q1.poll();
+			int curY = q2.poll();
+			count++;
+			
+			for(int i=0; i<4; i++) {
+				int nextX = curX + dir1[i];
+				int nextY = curY + dir2[i];
+				if(range(nextX, nextY) && !check[nextX][nextY] && A[nextX][nextY]>0) {
+					q1.add(nextX);
+					q2.add(nextY);
+					check[nextX][nextY] = true;
+				}
+			}
+		}
+		
+		return count;
+	}
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		Q = Integer.parseInt(st.nextToken());
+		
+		length = (int)Math.pow(2, N);
+		A = new int[length][length];
+		for(int i=0; i<length; i++) {
+			st = new StringTokenizer(br.readLine());
+			for(int j=0; j<length; j++)
+				A[i][j] = Integer.parseInt(st.nextToken());
+		}
+		
+		L = new int[Q];
+		st = new StringTokenizer(br.readLine());
+		for(int i=0; i<Q; i++)
+			L[i] = Integer.parseInt(st.nextToken());
+		
+		for(int i=0; i<Q; i++) {
+			rotate((int)Math.pow(2, L[i]));
+			minus();
+		}
+		
+		int sum = 0;
+		for(int i=0; i<length; i++) {
+			for(int j=0; j<length; j++)
+				sum += A[i][j]; 
+		}
+		int max = 0;
+		check = new boolean[length][length];
+		for(int i=0; i<length; i++) {
+			for(int j=0; j<length; j++) {
+				if(!check[i][j] && A[i][j]>0)
+					max = Math.max(max, bfs(i, j));
+			}
+		}
+		
+		System.out.println(sum+"\n"+max);
+	}
+}
