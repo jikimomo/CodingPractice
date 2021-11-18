@@ -1,0 +1,36 @@
+import java.util.Scanner;
+
+public class Main {
+	static String input;
+	static int result = 0;
+	
+	public static void solution(int depth, String answer) {
+		if(input.length() == depth) {
+			result++;
+			return;
+		}
+		
+		if(input.charAt(depth) == 'c') {
+			for(char i='a'; i<='z'; i++) {
+				if(depth>0 && answer.charAt(depth-1)==i)
+					continue;
+				solution(depth+1, answer+i);
+			}
+		}
+		else if(input.charAt(depth) == 'd') {
+			for(int i=0; i<=9; i++) {
+				if(depth>0 && answer.charAt(depth-1)-'0'==i)
+					continue;
+				solution(depth+1, answer+i);
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		input = s.nextLine();
+		
+		solution(0, "");
+		System.out.println(result);
+	}
+}
