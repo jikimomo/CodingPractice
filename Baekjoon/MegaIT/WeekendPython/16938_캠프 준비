@@ -1,0 +1,51 @@
+import java.util.Scanner;
+
+public class Main {
+	static int n, l, r, x;
+	static int[] a;
+	static boolean[] check;
+	static int result = 0;
+	
+	public static void solution(int depth) {
+		if(depth == n) {
+			int sum = 0;
+			int max = Integer.MIN_VALUE;
+			int min = Integer.MAX_VALUE;
+			
+			for(int i=0; i<n; i++) {
+				if(check[i]) {
+					sum += a[i];
+					if(max<a[i])
+						max = a[i];
+					if(min>a[i])
+						min = a[i];
+				}
+			}
+			if(sum>=l && sum<=r && (max-min)>=x) {
+				result++;
+			}
+			return;
+		}
+
+		check[depth] = true;
+		solution(depth+1);
+		check[depth] = false;
+		solution(depth+1);
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		l = s.nextInt();
+		r = s.nextInt();
+		x = s.nextInt();
+		
+		a = new int[n];
+		check = new boolean[n];
+		for(int i=0; i<n; i++)
+			a[i] = s.nextInt();
+		
+		solution(0);
+		System.out.println(result);
+	}
+}
