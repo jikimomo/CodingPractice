@@ -1,0 +1,21 @@
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int a = s.nextInt();
+		int b = s.nextInt();
+		int c = s.nextInt();
+		int x = s.nextInt();
+		int y = s.nextInt();
+		
+		int min = a*x + b*y;
+		for(int i=2; i<=200000; i+=2) {
+			int money = c*i + Math.max(0, a*(x-i/2)) +Math.max(0, b*(y-i/2));
+
+			if(money>0 && min > money)
+				min = money;
+		}
+		System.out.println(min);
+	}
+}
