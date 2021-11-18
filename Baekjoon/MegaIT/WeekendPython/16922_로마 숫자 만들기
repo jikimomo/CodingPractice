@@ -1,0 +1,28 @@
+import java.util.Scanner;
+
+public class Main {
+	static int n;
+	static boolean check[] = new boolean[1001];
+	
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		
+		for(int i=0; i<=n; i++) {
+			for(int j=0; j<=n-i; j++) {
+				for(int k=0; k<=n-i-j; k++) {
+					int h = n-i-j-k;
+					int num = i*1 + j*5 + k*10 + h*50;
+					check[num] = true;
+				}
+			}
+		}
+		
+		int result = 0;
+		for(int i=1; i<=1000; i++) {
+			if(check[i])
+				result++;
+		}
+		System.out.println(result);
+	}
+}
