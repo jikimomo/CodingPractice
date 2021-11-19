@@ -1,0 +1,42 @@
+import java.util.Scanner;
+
+public class Main {
+	static boolean[] check;
+	static int[] a;
+	static int b;
+	static int len;
+	static int result = -1;
+	
+	public static void solution(int depth, int num) {
+		if(depth == len) {
+			if(num<b && result<num)
+				result = num;
+			return;
+		}
+		for(int i=0; i<len; i++) {
+			if(num ==0 && a[i] == 0)
+				continue;
+			if(!check[i]) {
+				check[i] = true;
+				solution(depth+1, num*10+a[i]);
+				check[i] = false;
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		String[] input = s.nextLine().split(" ");
+		
+		len = input[0].length();
+		check = new boolean[len];
+		a = new int[len];
+		b = Integer.parseInt(input[1]);
+		for(int i=0; i<len; i++) {
+			a[i] = Character.getNumericValue(input[0].charAt(i));
+		}
+		
+		solution(0, 0);
+		System.out.println(result);
+	}
+}
