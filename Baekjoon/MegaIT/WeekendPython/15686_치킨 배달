@@ -1,0 +1,76 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main {
+	static int m;
+	static boolean[] check;
+	static ArrayList<pos> houseList, chiList;
+	static int result = Integer.MAX_VALUE;
+	
+	static class pos{
+		int x, y;
+		
+		pos(int x, int y){
+			this.x = x;
+			this.y = y;
+		}
+	}
+	
+	public static int findMin() {
+		int totalDistance = 0;
+		for(int i=0; i<houseList.size(); i++) {
+			pos house = houseList.get(i);
+			int min = Integer.MAX_VALUE;
+			
+			for(int j=0; j<chiList.size(); j++) {
+				if(check[j]) {
+					pos chicken = chiList.get(j);
+					int distance = Math.abs(chicken.x - house.x) + Math.abs(chicken.y - house.y);
+					
+					if(distance < min)
+						min = distance;
+				}
+			}
+			totalDistance += min;
+		}
+		return totalDistance;
+	}
+	
+	public static void back(int depth, int index) {
+		if(depth < m) {
+			for(int i=index; i<chiList.size(); i++) {
+				check[i] = true;
+
+				int total = findMin();
+				if(result > total)
+					result = total;
+				
+				back(depth+1, i+1);
+				check[i] = false;
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		m = s.nextInt();
+		
+		houseList = new ArrayList<>();
+		chiList = new ArrayList<>();
+		int[][] map = new int[n][n];
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<n; j++) {
+				map[i][j] = s.nextInt();
+				if(map[i][j] == 1)
+					houseList.add(new pos(i, j));
+				if(map[i][j] == 2)
+					chiList.add(new pos(i, j));
+			}
+		}
+		check = new boolean[chiList.size()];
+		
+		back(0, 0);
+		System.out.println(result);
+	}
+}
