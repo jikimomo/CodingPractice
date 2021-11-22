@@ -1,0 +1,46 @@
+import java.util.Scanner;
+
+public class Main {
+	static int[] dir1 = {1, 0, -1, 0};
+	static int[] dir2 = {0, 1, 0, -1};
+	static boolean[] check = new boolean[1000000];
+	static int[][] map;
+	
+	public static void back(int depth, int x, int y, int num) {
+		if(depth == 5) {
+			check[num] = true;
+			return;
+		}
+		for(int i=0; i<4; i++) {
+			int nextX = x + dir1[i];
+			int nextY = y + dir2[i];
+			if(nextX>=0 && nextY>=0 && nextX<5 && nextY<5)
+				back(depth+1, nextX, nextY, num*10+map[nextX][nextY]);
+		}
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		
+		map = new int[5][5];
+		for(int i=0; i<5; i++) {
+			for(int j=0; j<5; j++) {
+				int input = s.nextInt();
+				map[i][j] = input;
+			}
+		}
+		
+		for(int i=0; i<5; i++) {
+			for(int j=0; j<5; j++)
+				back(0, i, j, map[i][j]);
+		}
+		
+		int result = 0;
+		for(int i=0; i<1000000; i++) {
+			if(check[i]) {
+				result++;
+			}
+		}
+		System.out.println(result);
+	}
+}
