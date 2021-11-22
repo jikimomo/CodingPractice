@@ -1,0 +1,40 @@
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int m = s.nextInt();
+		
+		boolean friend[][] = new boolean[n+1][n+1];
+		int[] numFri = new int[n+1];
+		for(int i=0; i<m; i++) {
+			int a = s.nextInt();
+			int b = s.nextInt();
+			friend[a][b] = true;
+			friend[b][a] = true;
+			numFri[a]++;
+			numFri[b]++;
+		}
+		
+		int result = Integer.MAX_VALUE;
+		for(int i=1; i<=n-2; i++) {
+			for(int j=i+1; j<=n-1; j++) {
+				if(friend[i][j]) {
+					for(int k=j+1; k<=n; k++) {
+						if(friend[i][k] && friend[j][k]) {
+							int sum = numFri[i] + numFri[j] + numFri[k] - 6;
+							if(sum < result)
+								result = sum;
+						}
+					}
+				}
+			}
+		}
+		
+		if(result == Integer.MAX_VALUE)
+			System.out.println("-1");
+		else
+			System.out.println(result);
+	}
+}
