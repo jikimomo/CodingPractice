@@ -1,0 +1,32 @@
+import java.util.Scanner;
+
+public class Main {
+	static int n, m;
+	static int[][] map;
+	static Integer[][] dp;
+	
+	public static int solution(int x, int y) {
+		if(x<0 || y<0)
+			return 0;
+		
+		if(dp[x][y] == null) {
+			dp[x][y] = map[x][y] + Math.max(solution(x-1, y), solution(x, y-1));
+		}
+		return dp[x][y];
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		m = s.nextInt();
+		
+		dp = new Integer[n][m];
+		map = new int[n][m];
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<m; j++)
+				map[i][j] = s.nextInt();
+		}
+		
+		System.out.println(solution(n-1, m-1));
+	}
+}
