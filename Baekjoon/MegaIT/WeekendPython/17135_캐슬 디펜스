@@ -1,0 +1,117 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main {
+	static int[][] map;
+	static int n, m, d;
+	static int enemyNum;
+	static class pos{
+		int x, y;
+		public pos(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+	}
+	
+	public static int simulation(int[] archer) {
+		int killEnemy = 0;
+		int curEnemy = enemyNum;
+		int[][] turnMap = new int[n][m];
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<m; j++)
+				turnMap[i][j] = map[i][j];
+		}
+		ArrayList<pos> enemyList = new ArrayList<>();
+		
+		while(curEnemy > 0) {
+			//적 죽이기
+			for(int index=0; index<3; index++) {
+				int archX = n;
+				int archY = archer[index];
+				int enemyX = -1, enemyY = -1;
+				int minDist = Integer.MAX_VALUE;
+				
+				for(int i=n-1; i>=0; i--) {
+					for(int j=0; j<m; j++) {
+						if(turnMap[i][j] == 1) {
+							int distance = Math.abs(archX-i)+Math.abs(archY-j);
+							if(distance <= d &&minDist > distance) {
+								minDist = distance;
+								enemyX = i;
+								enemyY = j;
+							}
+							else if(minDist == distance) {
+								if(enemyY > j) {
+									enemyX = i;
+									enemyY = j;
+								}
+							}
+						}
+					}
+				}
+				if(enemyX != -1 && enemyY != -1)
+					enemyList.add(new pos(enemyX, enemyY));
+			}
+			
+			for(int i=0; i<enemyList.size(); i++) {
+				pos tmp = enemyList.get(i);
+				
+				if(turnMap[tmp.x][tmp.y] == 1) {
+					turnMap[tmp.x][tmp.y] = 0;
+					killEnemy++;
+					curEnemy--;
+				}
+			}
+			enemyList.clear();
+			
+			//이동하기
+			for(int i=0; i<m; i++) {
+				if(turnMap[n-1][i] == 1) {
+					turnMap[n-1][i] = 0;
+					curEnemy--;
+				}	
+			}
+			for(int i=n-2; i>=0; i--) {
+				for(int j=0; j<m; j++) {
+					if(turnMap[i][j] == 1) {
+						turnMap[i][j] = 0;
+						turnMap[i+1][j] = 1;
+					}
+				}
+			}
+		}
+		return killEnemy;
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		m = s.nextInt();
+		d = s.nextInt();
+		
+		enemyNum = 0;
+		map = new int[n][m];
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<m; j++) {
+				map[i][j] = s.nextInt();
+				if(map[i][j] == 1)
+					enemyNum++;
+			}
+		}
+		
+		int result = Integer.MIN_VALUE;
+		int enemy = 0;
+		for(int i=0; i<m-2; i++) {
+			for(int j=i+1; j<m-1; j++) {
+				for(int k=j+1; k<m; k++) {
+					int[] archer = {i, j, k};
+					enemy = simulation(archer);
+					if(enemy > result)
+						result = enemy;
+				}
+			}
+		}
+		
+		System.out.println(result);
+	}
+}
