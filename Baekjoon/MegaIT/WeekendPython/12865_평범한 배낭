@@ -1,0 +1,34 @@
+import java.util.Scanner;
+
+public class Main {
+	static int[] weight, value;
+	static Integer[][] maximum;
+	
+	public static int knapsack(int index, int k) {
+		if(index < 0)
+			return 0;
+		
+		if(maximum[index][k] == null) {
+			if(k - weight[index]>=0) 
+				maximum[index][k] = Math.max(knapsack(index-1, k-weight[index])+value[index], knapsack(index-1, k));
+			else
+				maximum[index][k] = knapsack(index-1, k);
+		}
+		return maximum[index][k];
+	}
+	
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int k = s.nextInt();
+		weight = new int[n];
+		value = new int[n];
+		maximum = new Integer[n][k+1];
+		
+		for(int i=0; i<n; i++) {
+			weight[i] = s.nextInt();
+			value[i] = s.nextInt();
+		}
+		System.out.println(knapsack(n-1, k));
+	}
+}
