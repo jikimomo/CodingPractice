@@ -1,0 +1,55 @@
+import java.util.Scanner;
+
+public class Main {
+	static int[] parent;
+	public static void union(int a, int b) {
+		int parentA = find(a);
+		int parentB = find(b);
+		
+		if(parentA == parentB)
+			return;
+		else{
+			if(parentA < parentB)
+				parent[parentB] = parentA;
+			else
+				parent[parentA] = parentB;
+        }
+	}
+	
+	public static int find(int x) {
+		if(parent[x] == x)
+			return x;
+		else {
+			parent[x] = find(parent[x]);
+			return parent[x];
+		}
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int m = s.nextInt();
+		StringBuilder sb = new StringBuilder();
+		
+		parent = new int[n+1];
+		for(int i=0; i<=n; i++)
+			parent[i] = i;
+		
+		for(int i=0; i<m; i++) {
+			int op = s.nextInt();
+			int a = s.nextInt();
+			int b = s.nextInt();
+			
+			if(op == 0) {
+				union(a, b);
+			}
+			else if(op == 1) {
+				if(find(a) == find(b))
+					sb.append("YES\n");
+				else
+					sb.append("NO\n");
+			}
+		}
+		System.out.println(sb);
+	}
+}
