@@ -1,0 +1,47 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int n, count = 0;
+	static boolean[] check;
+	static LinkedList<Integer>[] list;
+	
+	public static void bfs(int node) {
+		Queue<Integer> queue = new LinkedList<>();
+		check[node] = true;
+		queue.add(node);
+		
+		while(!queue.isEmpty()) {
+			int n = queue.remove();
+			for(int i=0; i<list[n].size(); i++) {
+				if(!check[list[n].get(i)]) {
+					queue.add(list[n].get(i));
+					check[list[n].get(i)] = true;
+					count++;
+				}
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		int m = s.nextInt();
+		
+		check = new boolean[n+1];
+		list = new LinkedList[n+1];
+		for(int i=0; i<=n; i++) {
+			list[i] = new LinkedList<>();
+		}
+		
+		for(int i=0; i<m; i++) {
+			int n1 = s.nextInt();
+			int n2 = s.nextInt();
+			list[n1].add(n2);
+			list[n2].add(n1);
+		}
+		
+		bfs(1);
+		System.out.println(count);
+	}
+}
