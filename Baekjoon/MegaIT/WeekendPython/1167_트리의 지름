@@ -1,0 +1,73 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int n;
+	static ArrayList<pos>[] tree;
+	static class pos{
+		int node, dist;
+		public pos(int node, int dist) {
+			this.node = node;
+			this.dist = dist;
+		}
+	}
+	
+	public static int[] maxDist(int start) {
+		Queue<Integer> q = new LinkedList<>();
+		boolean[] check = new boolean[n+1];
+		int[] distance = new int[n+1];
+		
+		check[start] = true;
+		q.add(start);
+		
+		while(!q.isEmpty()) {
+			int node = q.remove();
+			
+			for(int i=0; i<tree[node].size(); i++) {
+				int next = tree[node].get(i).node;
+				int dist = tree[node].get(i).dist;
+				if(!check[next]) {
+					distance[next] = distance[node] + dist;
+					q.add(next);
+					check[next] = true;
+				}
+			}
+		}
+		return distance;
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		tree = new ArrayList[n+1];
+		for(int i=0; i<=n; i++)
+			tree[i] = new ArrayList<>();
+		
+		for(int i=0; i<n; i++) {
+			int num = s.nextInt();
+			
+			int node = s.nextInt();
+			while(node != -1) {
+				int dist = s.nextInt();
+				tree[num].add(new pos(node, dist));
+				node = s.nextInt();
+			}
+		}
+		
+		int[] dist = maxDist(1);
+		int index = 1;
+		for(int i=2; i<=n; i++) {
+			if(dist[i] > dist[index])
+				index = i; //1에서 가장 먼 node를 구함
+		}
+		
+		dist = maxDist(index);
+		int result = dist[1];
+		for(int i=2; i<=n; i++) {
+			if(result < dist[i])
+				result = dist[i];
+		}
+		System.out.println(result);
+	}
+}
