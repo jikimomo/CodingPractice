@@ -1,0 +1,76 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int[] dir1 = {0, 1, 0, -1};
+	static int[] dir2 = {1, 0, -1, 0};
+	
+	static int n, m, k;
+	static int[][] map;
+	static int[][][] path;
+	
+	static class node{
+		int x, y, wall;
+		public node(int x, int y, int wall){
+			this.x = x;
+			this.y = y;
+			this.wall = wall;
+		}
+	}
+	
+	public static void findMin() {
+		Queue<node> queue = new LinkedList<>();
+		queue.add(new node(0, 0, 0));
+		
+		while(!queue.isEmpty()) {
+			node cur = queue.remove();
+			int curX = cur.x;
+			int curY = cur.y;
+			int curWall = cur.wall;
+			
+			for(int i=0; i<4; i++) {
+				int nextX = curX + dir1[i];
+				int nextY = curY + dir2[i];
+				if(nextX>=0&&nextY>=0&&nextX<n&&nextY<m) {
+					if(map[nextX][nextY] == 0 && path[nextX][nextY][curWall] == 0) {
+						path[nextX][nextY][curWall] = path[curX][curY][curWall] + 1;
+						queue.add(new node(nextX, nextY, curWall));
+					}
+					else if(map[nextX][nextY] == 1 && curWall < k && path[nextX][nextY][curWall] == 0) {
+						path[nextX][nextY][curWall+1] = path[curX][curY][curWall] + 1;
+						queue.add(new node(nextX, nextY, curWall+1));
+					}
+				}
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		m = s.nextInt();
+		k = s.nextInt();
+		
+		map = new int[n][m];
+		for(int i=0; i<n; i++) {
+			String input = s.next();
+			for(int j=0; j<m; j++)
+				map[i][j] = Character.getNumericValue(input.charAt(j));
+		}
+		
+		path = new int[n][m][k+1];
+		path[0][0][0] = 1;
+		
+		findMin();
+		int result = Integer.MAX_VALUE;
+		for(int i=0; i<=k; i++) {
+			if(path[n-1][m-1][i] > 0 && result > path[n-1][m-1][i])
+				result = path[n-1][m-1][i];
+		}
+		if(result == Integer.MAX_VALUE)
+			System.out.println("-1");
+		else
+			System.out.println(result);
+	}
+}
