@@ -1,0 +1,100 @@
+import java.util.Scanner;
+
+public class Main {
+	static int n;
+	static int[][] player;
+	static int[] order;
+	static boolean[] check;
+	static int result = Integer.MIN_VALUE;
+	
+	public static void makePoint() {
+		int inning = 0;
+		int playerOrder = 0;
+		int point = 0;
+		
+		while(inning < n) {
+			int out = 0;
+			int[] base = new int[4];
+			
+			while(out < 3) {
+				if(player[inning][order[playerOrder]] == 0) { //아웃
+					out++;
+				}
+				else if(player[inning][order[playerOrder]] == 1) { //1루타
+					for(int i=2; i>=0; i--) {
+						base[i+1] += base[i];
+						base[i] = 0;
+					}
+					base[0] = 1;
+				}
+				else if(player[inning][order[playerOrder]] == 2) { //2루타
+					base[3] += base[2];
+					base[2] = 0;
+					for(int i=1; i>=0; i--) {
+						base[i+2] += base[i];
+						base[i] = 0;
+					}
+					base[1] = 1;
+				}
+				else if(player[inning][order[playerOrder]] == 3) { //3루타
+					for(int i=2; i>=0; i--) {
+						base[3] += base[i];
+						base[i] = 0;
+					}
+					base[2] = 1;
+				}
+				else if(player[inning][order[playerOrder]] == 4) { //홈런
+					for(int i=2; i>=0; i--) {
+						base[3] += base[i];
+						base[i] = 0;
+					}
+					base[3] += 1;
+				}
+				playerOrder = (playerOrder + 1) % 9;
+			}
+			point += base[3];
+			inning++;
+		}
+		
+		if(result < point)
+			result = point;
+	}
+	
+	public static void makeOrder(int depth) {
+		if(depth == 9) {
+			makePoint();
+			return;
+		}
+		if(depth == 3)
+			makeOrder(depth+1);
+		else {
+			for(int i=1; i<9; i++) {
+				if(!check[i]) {
+					check[i] = true; 
+					order[depth] = i;
+					makeOrder(depth+1);
+					check[i] = false;
+				}
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		player = new int[n][9];
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<9; j++) {
+				player[i][j] = s.nextInt();
+			}
+		}
+		
+		check = new boolean[9];
+		order = new int[9];
+		order[3] = 0;
+		check[0] = true;
+		
+		makeOrder(0);
+		System.out.println(result);
+	}
+}
