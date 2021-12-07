@@ -1,0 +1,86 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int[] dir1 = {0, 0, 1, 0, -1, 0};
+	static int[] dir2 = {0, 0, 0, 1, 0, -1};
+	static int[] dir3 = {1, -1, 0, 0, 0, 0};
+	
+	static int n, m, h;
+	static class pos{
+		int x, y, z;
+		public pos(int x, int y, int z) {
+			this.x = x;
+			this.y = y;
+			this.z = z;
+		}
+	}
+	
+	public static boolean isOK(int x, int y, int z){
+		if(x>=0 && y>=0 && z>=0 && x<n && y<m && z<h)
+			return true;
+		else
+			return false;
+	}
+	
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		m = s.nextInt();
+		n = s.nextInt();
+		h = s.nextInt();
+		
+		Queue<pos> queue = new LinkedList<>();
+		int[][][] time = new int[n][m][h];
+		int[][][] tomato = tomato = new int[n][m][h];
+		
+		for(int k=0; k<h; k++) {
+			for(int i=0; i<n; i++) {
+				for(int j=0; j<m; j++) {
+					tomato[i][j][k] = s.nextInt();
+					if(tomato[i][j][k] == 1) {
+						queue.add(new pos(i, j, k));
+						time[i][j][k] = 1;
+					}
+				}
+			}
+		}
+
+		while(!queue.isEmpty()) {
+			pos cur = queue.remove();
+			int curX = cur.x;
+			int curY = cur.y;
+			int curZ = cur.z;
+			
+			for(int i=0; i<6; i++) {
+				int nextX = curX + dir1[i];
+				int nextY = curY + dir2[i];
+				int nextZ = curZ + dir3[i];
+				
+				if(isOK(nextX, nextY, nextZ)) {
+					if(tomato[nextX][nextY][nextZ] == 0) {
+						tomato[nextX][nextY][nextZ] = tomato[curX][curY][curZ] + 1;
+						queue.add(new pos(nextX, nextY, nextZ));
+					}
+				}
+			}
+		}
+		
+		boolean flag = true;
+		int result = 0;
+		for(int k=0; k<h; k++) {
+			for(int i=0; i<n; i++) {
+				for(int j=0; j<m; j++) {
+					if(tomato[i][j][k] == 0)
+						flag = false;
+					else if(result < tomato[i][j][k])
+						result = tomato[i][j][k];						
+				}
+			}
+		}
+		if(flag)
+			System.out.println(result-1);
+		else
+			System.out.println("-1");
+	}
+}
