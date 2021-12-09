@@ -1,0 +1,49 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int m = s.nextInt();
+		
+		boolean[][] farm = new boolean[n+1][n+1];
+		for(int i=0; i<m; i++) {
+			int a = s.nextInt();
+			int b = s.nextInt();
+			farm[a][b] = true;
+			farm[b][a] = true;
+		}
+		
+		int[] distance = new int[n+1];
+		Queue<Integer> queue = new LinkedList<>();
+		queue.add(1);
+		distance[1] = 1;
+		
+		while(!queue.isEmpty()) {
+			int cur = queue.remove();
+			for(int i=1; i<=n; i++) {
+				if(farm[cur][i] && distance[i] == 0) {
+					queue.add(i);
+					distance[i] = distance[cur] + 1;
+				}
+			}
+		}
+		
+		int max = 0;
+		for(int i=2; i<=n; i++) {
+			if(distance[i] > max) 
+				max = distance[i];
+		}
+		int index = 0, count = 0;
+		for(int i=n; i>1; i--) {
+			if(max == distance[i]) {
+				index = i;
+				count++;
+			}
+		}
+		max--;
+		System.out.println(index+" "+max+" "+count);
+	}
+}
