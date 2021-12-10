@@ -1,0 +1,58 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int n;
+	static boolean[][] check;
+	static int result = 0;
+	
+	static class emotion{
+		int board, screen, time;
+		
+		public emotion(int board, int screen, int time) {
+			this.board = board;
+			this.screen = screen;
+			this.time = time;
+		}
+	}
+	
+	public static void bfs(int num) {
+		Queue<emotion> queue = new LinkedList<>();
+		queue.add(new emotion(0, num, 1));
+		check[0][num] = true;
+		
+		while(!queue.isEmpty()) {
+			emotion cur = queue.remove();
+			
+			if(cur.screen == n) {
+				result = cur.time - 1;
+				break;
+			}
+			
+			//clipboard
+			queue.add(new emotion(cur.screen, cur.screen, cur.time+1));
+			
+			//paste
+			if(cur.board != 0 && cur.board+cur.screen<=1000 && !check[cur.board][cur.board+cur.screen]) {
+				queue.add(new emotion(cur.board, cur.board+cur.screen, cur.time+1)); //복사했다고 클립보드가 사라라지 않음 -> 복사만 여러번할 수 있음!!
+				check[cur.board][cur.board+cur.screen] = true;
+			}
+			
+			//delete
+			if(cur.screen > 0 && !check[cur.board][cur.screen-1]) {
+				queue.add(new emotion(cur.board, cur.screen - 1, cur.time+1));
+				check[cur.board][cur.screen-1] = true;
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		check = new boolean[1001][1001];
+		
+		bfs(1);
+		System.out.println(result);
+	}
+}
