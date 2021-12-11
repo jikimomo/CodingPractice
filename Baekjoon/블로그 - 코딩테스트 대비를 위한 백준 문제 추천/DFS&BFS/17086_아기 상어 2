@@ -1,0 +1,71 @@
+package blog_DFSBFS;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class bj17086 {
+	static int n, m;
+	static int[][] map;
+	static ArrayList<pos> list;
+	
+	static int[][] r;
+	
+	static int[] dir1 = {0, 1, 0, -1, 1, 1, -1, -1};
+	static int[] dir2 = {1, 0, -1, 0, 1, -1, 1, -1};
+	
+	static class pos{
+		int x, y;
+		public pos(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+	}
+	
+	public static int simulation() {
+		int result = 0;
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<m; j++) {
+				if(map[i][j] == 0) {
+					int dist = Integer.MAX_VALUE;
+					for(int k=0; k<list.size(); k++) {
+						pos tmp = list.get(k);
+						int dd = Math.min(Math.abs(tmp.x-i), Math.abs(tmp.y-j)) + Math.abs((tmp.x-i)-(tmp.y-j));
+						if(dist > dd)
+							dist = dd;
+						if(i==1 && j==1)
+							System.out.println("dist "+dist+", dd "+dd);
+					}
+					r[i][j] = dist;
+					if(result < dist)
+						result = dist;
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		m = s.nextInt();
+		
+		list = new ArrayList<>();
+		map = new int[n][m];
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<m; j++) {
+				map[i][j] = s.nextInt();
+				if(map[i][j] == 1)
+					list.add(new pos(i, j));
+			}
+		}
+		
+		r = new int[n][m];
+		System.out.println(simulation());
+		
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<m; j++) {
+				System.out.print(r[i][j]+" ");
+			}
+			System.out.println();
+		}
+	}
+}
