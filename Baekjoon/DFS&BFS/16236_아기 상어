@@ -1,0 +1,67 @@
+package blog_DFSBFS;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class bj16236 {
+	static int n;
+	static int[][] map;
+	static pos shark;	
+	
+	static int[] dir1 = {0, 1, 0, -1};
+	static int[] dir2 = {1, 0, -1, 0};
+	
+	static class pos{
+		int x, y;
+		int size;
+		
+		public pos(int x, int y, int size) {
+			this.x = x;
+			this.y = y;
+			this.size = size;
+		}
+	}
+	
+	public static int simulation() {
+		int dist = 0;
+		
+		Queue<pos> list = new LinkedList<>();
+		list.add(shark);
+		while(!list.isEmpty()) {
+			pos cur = list.remove();
+			
+			Queue<pos> listTmp = new LinkedList<>();
+			boolean[][] check = new boolean[n][n];
+			check[cur.x][cur.y] = true;
+			
+			for(int i=0; i<4; i++) {
+				int nextX = cur.x + dir1[i];
+				int nextY = cur.y + dir2[i];
+				
+				if(nextX>=0&&nextY>=0&&nextX<n&&nextY<n && map[nextX][nextY]<=cur.size) {
+					
+				}
+			}
+		}
+		
+		return dist;
+	}
+	
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		
+		shark = null;
+		
+		map = new int[n][n];
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<n; j++) {
+				map[i][j] = s.nextInt();
+				if(map[i][j] == 9)
+					shark = new pos(i, j, 2);
+			}
+		}
+		
+		System.out.println(simulation());
+	}
+}
