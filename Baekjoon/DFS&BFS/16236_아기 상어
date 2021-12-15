@@ -1,9 +1,10 @@
-package blog_DFSBFS;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Scanner;
 
-public class bj16236 {
+public class Main {
 	static int n;
 	static int[][] map;
 	static pos shark;	
@@ -11,40 +12,90 @@ public class bj16236 {
 	static int[] dir1 = {0, 1, 0, -1};
 	static int[] dir2 = {1, 0, -1, 0};
 	
-	static class pos{
+	static class pos implements Comparable<pos>{
 		int x, y;
 		int size;
+		int distance;
 		
 		public pos(int x, int y, int size) {
 			this.x = x;
 			this.y = y;
 			this.size = size;
 		}
+		
+		public pos(int x, int y, int size, int distance) {
+			this.x = x;
+			this.y = y;
+			this.size = size;
+			this.distance = distance;
+		}
+		
+		@Override
+		public int compareTo(pos p) {
+			if(this.distance == p.distance) {
+				if(this.x == p.x)
+					return this.y - p.y;
+				else
+					return this.x - p.x;
+			}
+			else
+				return this.distance - p.distance;
+		}
 	}
 	
 	public static int simulation() {
-		int dist = 0;
+		int totalDist = 0;
+		int eatFishCount = 0;
 		
-		Queue<pos> list = new LinkedList<>();
+		Queue<pos> list = new LinkedList<>(); //상어 위치
 		list.add(shark);
 		while(!list.isEmpty()) {
-			pos cur = list.remove();
+			pos curShark = list.remove(); //현재 상어 위치
+
+			Queue<pos> listTmp = new LinkedList<>(); //상어가 움직일 수 있는 위치 후보
+			int[][] check = new int[n][n];
+			PriorityQueue<pos> queue = new PriorityQueue<>(); //상어가 먹을 수 있는 물고기 후보
 			
-			Queue<pos> listTmp = new LinkedList<>();
-			boolean[][] check = new boolean[n][n];
-			check[cur.x][cur.y] = true;
-			
-			for(int i=0; i<4; i++) {
-				int nextX = cur.x + dir1[i];
-				int nextY = cur.y + dir2[i];
+			listTmp.add(curShark);
+			check[curShark.x][curShark.y] = 1;
+			while(!listTmp.isEmpty()) {
+				pos cur = listTmp.remove();
 				
-				if(nextX>=0&&nextY>=0&&nextX<n&&nextY<n && map[nextX][nextY]<=cur.size) {
-					
+				for(int i=0; i<4; i++) {
+					int nextX = cur.x + dir1[i];
+					int nextY = cur.y + dir2[i];
+				
+					if(nextX>=0&&nextY>=0&&nextX<n&&nextY<n && map[nextX][nextY]<=curShark.size && check[nextX][nextY] == 0) {
+						if(map[nextX][nextY] < curShark.size && map[nextX][nextY] > 0) {
+							queue.add(new pos(nextX, nextY, map[nextX][nextY], check[cur.x][cur.y] + 1)); //먹을 물고기
+						}
+						listTmp.add(new pos(nextX, nextY, map[nextX][nextY])); //다음 위치
+						check[nextX][nextY] = check[cur.x][cur.y] + 1;
+					}
 				}
 			}
+			
+			if(queue.size() > 0) {
+				pos fish = queue.poll();
+				eatFishCount++;
+				
+				if(eatFishCount == curShark.size) {
+					list.add(new pos(fish.x, fish.y, curShark.size+1));
+					eatFishCount = 0;
+				}
+				else
+					list.add(new pos(fish.x, fish.y, curShark.size));
+				map[fish.x][fish.y] = 9;
+				map[curShark.x][curShark.y] = 0;
+				totalDist = totalDist + check[fish.x][fish.y] - 1;
+			}
+			listTmp.clear();
+			queue.clear();
+			for(int i=0; i<n; i++)
+				Arrays.fill(check[i], 0);
 		}
 		
-		return dist;
+		return totalDist;
 	}
 	
 	public static void main(String[] args) {
@@ -52,7 +103,6 @@ public class bj16236 {
 		n = s.nextInt();
 		
 		shark = null;
-		
 		map = new int[n][n];
 		for(int i=0; i<n; i++) {
 			for(int j=0; j<n; j++) {
