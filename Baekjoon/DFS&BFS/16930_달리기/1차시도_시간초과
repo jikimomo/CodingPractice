@@ -1,0 +1,83 @@
+//97% 시간초과
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int n, m, k;
+	static int[][] map;
+	static int[][] time;
+	static pos start, end;
+	static int INF = 100000000;
+	
+	static int[] dir1 = {0, 1, 0, -1};
+	static int[] dir2 = {1, 0, -1, 0};
+	
+	static class pos{
+		int x, y;
+		public pos(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+	}
+	
+	public static void bfs() {
+		Queue<pos> queue = new LinkedList<>();
+		queue.add(start);
+		time[start.x][start.y] = 0;
+		
+		while(!queue.isEmpty()) {
+			pos cur = queue.remove();
+			
+			for(int d=0; d<4; d++) {
+				for(int step=1; step<=k; step++) {
+					int nextX = cur.x + dir1[d]*step;
+					int nextY = cur.y + dir2[d]*step;
+					
+					if(nextX>=0&&nextY>=0&&nextX<n&&nextY<m && map[nextX][nextY] == 0) {
+						if(time[nextX][nextY]>time[cur.x][cur.y]+1) {
+							queue.add(new pos(nextX, nextY));
+							time[nextX][nextY] = time[cur.x][cur.y] + 1;
+						}
+					}
+					else
+						break;
+				}
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		m = s.nextInt();
+		k = s.nextInt();
+		
+		s.nextLine();
+		map = new int[n][m];
+		for(int i=0; i<n; i++) {
+			String input = s.nextLine();
+			for(int j=0; j<m; j++) {
+				if(input.charAt(j) == '#')
+					map[i][j] = 1;
+			}
+		}
+		int a1 = s.nextInt();
+		int a2 = s.nextInt();
+		int b1 = s.nextInt();
+		int b2 = s.nextInt();
+		start = new pos(a1-1, a2-1);
+		end = new pos(b1-1, b2-1);
+		
+		time = new int[n][m];
+		for(int i=0; i<n; i++)
+			Arrays.fill(time[i], INF);
+		
+		bfs();
+		
+		if(time[end.x][end.y] == INF)
+			System.out.println("-1");
+		else
+			System.out.println(time[end.x][end.y]);
+	}
+}
