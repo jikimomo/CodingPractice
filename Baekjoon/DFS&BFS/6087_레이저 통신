@@ -1,16 +1,16 @@
-package DFS_BFS;
-
+//check[][]를 update할 때, 현재 check의 값과 비교하는 것이 아닌 현재 위치의 count값과 비교해야함
+//현재 check값은 어떤 방향에서 온 값인지 모르기때문에 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
-public class bj6087 {
+public class Main {
 	static int h, w;
 	static char[][] map;
-	static int[][] count;
+	static int[][] check;
 	static pos[] pointer;
-	static int INF = 100000000;
+	static int INF = Integer.MAX_VALUE;
 	
 	static int[] dir1 = {0, 1, 0, -1};
 	static int[] dir2 = {1, 0, -1, 0};
@@ -18,21 +18,29 @@ public class bj6087 {
 	static class pos{
 		int x, y;
 		int dir;
-		public pos(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-		public pos(int x, int y, int dir) {
+		int count;
+		public pos(int x, int y, int dir, int count) {
 			this.x = x;
 			this.y = y;
 			this.dir = dir;
+			this.count = count;
 		}
 	}
 	
 	public static void bfs() {
 		Queue<pos> queue = new LinkedList<>();
-		queue.add(new pos(pointer[0].x, pointer[0].y, -1));
-		count[pointer[0].x][pointer[0].y] = 1;
+		int startX = pointer[0].x;
+		int startY = pointer[0].y;
+		check[startX][startY] = 0;
+		for(int i=0; i<4; i++) {
+			int nextX = startX + dir1[i];
+			int nextY = startY + dir2[i];
+			
+			if(nextX>=0&&nextY>=0&&nextX<h&&nextY<w && map[nextX][nextY]!='*') {
+				queue.add(new pos(nextX, nextY, i, 0));
+				check[nextX][nextY] = 0;
+			}
+		}
 		
 		while(!queue.isEmpty()) {
 			pos cur = queue.remove();
@@ -41,15 +49,16 @@ public class bj6087 {
 				int nextX = cur.x + dir1[i];
 				int nextY = cur.y + dir2[i];
 				
-				if(nextX>=0&&nextY>=0&&nextX<h&&nextY<w && map[nextX][nextY]!='*' && count[nextX][nextY] >= count[cur.x][cur.y]+1) {
+				if(nextX>=0&&nextY>=0&&nextX<h&&nextY<w && map[nextX][nextY]!='*') {
+					int nextCount = 0;
 					if(i != cur.dir)
-						count[nextX][nextY] = count[cur.x][cur.y] + 1;
+						nextCount = cur.count + 1; //check[cur.x][cur.y]를 더하는 것이 아닌 cur.count를 더해야 함!!!
 					else
-						count[nextX][nextY] = count[cur.x][cur.y];
-					queue.add(new pos(nextX, nextY, i));
+						nextCount = cur.count;
 					
-					if(map[nextX][nextY]=='C' && pointer[1].x==nextX && pointer[1].y==nextY) {
-						return;
+					if(check[nextX][nextY] >= nextCount) {
+						queue.add(new pos(nextX, nextY, i, nextCount));
+						check[nextX][nextY] = nextCount;
 					}
 				}
 			}
@@ -61,7 +70,7 @@ public class bj6087 {
 		w = s.nextInt();
 		h = s.nextInt();
 		map = new char[h][w];
-		count = new int[h][w];
+		check = new int[h][w];
 		pointer = new pos[2];
 		int tmp = 0;
 		
@@ -71,23 +80,15 @@ public class bj6087 {
 			for(int j=0; j<w; j++) {
 				map[i][j] = input.charAt(j);
 				if(map[i][j] == 'C') {
-					pointer[tmp++] = new pos(i, j);
+					pointer[tmp++] = new pos(i, j, -1, 0);
 				}
 			}
 		}
 		
-		for(int i=0; i<2; i++)
-			System.out.println(pointer[i].x+" "+pointer[i].y);
-		
 		for(int i=0; i<h; i++)
-			Arrays.fill(count[i], INF);
+			Arrays.fill(check[i], INF);
 		bfs();
 		
-		for(int i=0; i<h; i++) {
-			for(int j=0; j<w; j++)
-				System.out.print(count[i][j]+" ");
-			System.out.println();
-		}
-		System.out.println(count[pointer[1].x][pointer[1].y]-2);
+		System.out.println(check[pointer[1].x][pointer[1].y]);
 	}
 }
