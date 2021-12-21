@@ -56,7 +56,7 @@ public class Main {
 					else
 						nextCount = cur.count;
 					
-					if(check[nextX][nextY] >= nextCount) {
+					if(check[nextX][nextY] >= nextCount) { //이 if문의 위치가 중요! 이 부분때문에 한참 헤맴
 						queue.add(new pos(nextX, nextY, i, nextCount));
 						check[nextX][nextY] = nextCount;
 					}
