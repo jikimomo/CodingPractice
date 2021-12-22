@@ -1,0 +1,58 @@
+import java.util.Scanner;
+
+public class Main {
+	static int[] parent;
+    
+	public static void union(int a, int b) {
+		int parentA = find(a);
+		int parentB = find(b);
+		
+		if(parentA != parentB) {
+			if(parentA < parentB)
+				parent[parentB] = parentA;
+			else
+				parent[parentA] = parentB;
+		}
+	}
+	public static int find(int node) {
+		if(node != parent[node]) {
+			parent[node] = find(parent[node]);
+		}
+		return parent[node];
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int m = s.nextInt();
+		
+		parent = new int[n+1];
+		for(int i=1; i<=n; i++)
+			parent[i] = i;
+
+		for(int i=1; i<=n; i++) {
+			for(int j=1; j<=n; j++) {
+				int input = s.nextInt();
+				if(input == 1) {
+					union(i, j);
+				}
+			}
+		}
+		
+		int[] city = new int[m];
+		for(int i=0; i<m; i++) 
+			city[i] = s.nextInt();
+		
+		boolean flag = true;
+		for(int i=0; i<m-1; i++) {
+			for(int j=i+1; j<m; j++) {
+				if(find(city[i]) != find(city[j]))
+					flag = false;
+			}
+		}
+		if(flag)
+			System.out.println("YES");
+		else
+			System.out.println("NO");
+	}
+}
