@@ -1,0 +1,68 @@
+//거리에 대한 비용을 기준으로 접근
+import java.util.*;
+
+class pos{
+    int x, y;
+    int dir;
+    int line, corner;
+    public pos(int x, int y, int dir, int line, int corner){
+        this.x = x;
+        this.y = y;
+        this.dir = dir;
+        this.line = line;
+        this.corner = corner;
+    }
+}
+
+class Solution {
+    public boolean isOK(int x, int y, int len){
+        if(x>=0 && y>=0 && x<len && y<len)
+            return true;
+        else
+            return false;
+    }
+    public int solution(int[][] board) {
+        int INF = Integer.MAX_VALUE;
+        int len = board.length;
+        int[] dir1 = {0, 1, 0, -1};
+        int[] dir2 = {1, 0, -1, 0};
+        
+        int[][] cost = new int[len][len];
+        for(int i=0; i<len; i++)
+            Arrays.fill(cost[i], INF);
+        
+        Queue<pos> queue = new LinkedList<>();
+        queue.add(new pos(0, 1, 0, 1, 0));
+        queue.add(new pos(1, 0, 1, 1, 0));
+        cost[0][0] = 0;
+        cost[0][1] = 100;
+        cost[1][0] = 100;
+        
+        while(!queue.isEmpty()){
+            pos cur = queue.remove();
+            
+            for(int i=0; i<4; i++){
+                int nextX = cur.x + dir1[i];
+                int nextY = cur.y + dir2[i];
+                
+                if(isOK(nextX, nextY, len) && board[nextX][nextY]==0){
+                    int nextCost = (cur.line+1) * 100;
+                    int nextCorner = cur.corner;
+                    if(cur.dir != i){
+                        nextCorner += 1;
+                        nextCost += nextCorner * 500;
+                    }
+                    else
+                        nextCost += nextCorner * 500;
+                    
+                    if(cost[nextX][nextY] >= nextCost){
+                        queue.add(new pos(nextX, nextY, i, cur.line+1, nextCorner));
+                        cost[nextX][nextY] = nextCost;
+                    }
+                }
+            }
+        }
+        int answer = cost[len-1][len-1];
+        return answer;
+    }
+}
