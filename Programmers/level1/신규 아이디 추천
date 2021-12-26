@@ -1,0 +1,56 @@
+def solution(new_id):
+    
+    #step1
+    new_id = new_id.lower()
+            
+    #step2
+    id = ""
+    for ch in new_id:
+        if 97<=ord(ch)<=122 or 48<=ord(ch)<=57 or ch=='.' or ch=='-' or ch=='_':
+            id += ch
+    new_id = id
+    
+    #step3
+    id = ""
+    flag = False
+    for ch in new_id:
+        if ch != '.':
+            id += ch
+            flag = False
+        elif ch == '.' and flag == False:
+            id += ch
+            flag = True
+    new_id = id
+    
+    #step4
+    id = ""
+    for i in range(len(new_id)):
+        if (i == 0 or i == len(new_id)-1) and new_id[i] == '.':
+            continue
+        else:
+            id += new_id[i]
+    new_id = id   
+    
+    #step5
+    if new_id == "":
+        new_id = "a"
+    
+    #step6
+    id = ""
+    if len(new_id) > 15:
+        for i in range(len(new_id)):
+            if i == 15 or (i == 14 and new_id[i] == '.'):
+                break
+            else:
+                id += new_id[i]
+        new_id = id
+    
+    #step7
+    id = new_id
+    if len(new_id) < 3:
+        for i in range(3-len(new_id)):
+            id += new_id[len(new_id)-1]
+        new_id = id
+    
+    answer = new_id
+    return answer
