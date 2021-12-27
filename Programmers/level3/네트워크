@@ -1,0 +1,39 @@
+import java.util.*;
+
+class Solution {
+    static boolean[] check;
+    static int[][] computer;
+    static int len;
+    
+    public void bfs(int node){
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(node);
+        check[node] = true;
+        
+        while(!queue.isEmpty()){
+            int cur = queue.remove();
+            for(int i=0; i<len; i++){
+                if(computer[cur][i]==1 && !check[i]){
+                    check[i] = true;
+                    queue.add(i);
+                }
+            }
+        }
+    }
+    public int solution(int n, int[][] computers)
+    {
+        int answer = 0;
+        check = new boolean[n];
+        len = n;
+        computer = computers;
+        
+        for(int i=0; i<n; i++){
+            if(!check[i]){
+                answer++;
+                bfs(i);
+            }
+        }
+        
+        return answer;
+    }
+}
