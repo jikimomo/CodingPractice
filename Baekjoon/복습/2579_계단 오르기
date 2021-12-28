@@ -1,0 +1,30 @@
+import java.util.Scanner;
+
+public class Main {
+	static int n;
+	static int[] step;
+	static Integer[] dp;
+	
+	public static int getMax(int num) {
+		if(num < 0)
+			return 0;
+		if(dp[num] == null) {
+			dp[num] = Math.max(getMax(num-2), step[num-1]+getMax(num-3))+step[num];
+		}
+		return dp[num];
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		step = new int[n+1];
+		for(int i=1; i<=n; i++)
+			step[i] = s.nextInt();
+		
+		dp = new Integer[n+1];
+		dp[0] = 0;
+		getMax(n);
+		
+		System.out.println(dp[n]);
+	}
+}
