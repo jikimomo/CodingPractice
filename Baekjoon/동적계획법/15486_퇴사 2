@@ -1,0 +1,35 @@
+//top-down방식만 생각하다 못 풀고 결국 다른 코드 보면서 힌트얻음
+import java.util.Scanner;
+
+public class Main {
+	static int n;
+	static int[] t, p;
+	static int[] profit;
+	static int max = 0;
+	
+	public static void findMax(int num) {
+		for(int i=1; i<=n; i++) {
+			max = Math.max(max, profit[i]);
+			if(i+t[i] <= n+1) 
+				profit[i+t[i]] = Math.max(profit[i+t[i]], max+p[i]);
+		}
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		t = new int[n+1];
+		p = new int[n+1];
+		
+		for(int i=1; i<=n; i++) {
+			t[i] = s.nextInt();
+			p[i] = s.nextInt();
+		}
+		
+		profit = new int[n+2];
+		findMax(1);
+		
+		max = Math.max(max, profit[n+1]);
+		System.out.println(max);
+	}
+}
