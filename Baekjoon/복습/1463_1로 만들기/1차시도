@@ -1,0 +1,33 @@
+//n/3, n/2, n-1의 경우를 다 받아와서 비교 -> 시간초과
+import java.util.Scanner;
+
+public class Main {
+	static int n;
+	static Integer[] dp;
+	
+	public static int getCount(int num) {
+		if(dp[num] == null) {
+			int preCount = getCount(num-1) + 1;
+			if(num % 3 == 0)
+				preCount = Math.min(preCount, getCount(num/3)+1);
+			if(num % 2 == 0)
+				preCount = Math.min(preCount, getCount(num/2)+1);
+			dp[num] = preCount;
+		}
+		return dp[num];
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		dp = new Integer[n+1];
+		dp[0] = 0;
+		dp[1] = 0;
+		dp[2] = 1;
+		if(n > 2)
+			dp[3] = 1;
+		
+		getCount(n);
+		System.out.println(dp[n]);
+	}
+}
