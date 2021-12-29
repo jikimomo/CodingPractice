@@ -1,0 +1,33 @@
+//조건을 좀 더 구체적으로 나눠서 구하니깐 시간초과 안남
+import java.util.Scanner;
+
+public class Main {
+	static int n;
+	static Integer[] dp;
+	
+	public static int getCount(int num) {
+		if(dp[num] == null) {
+			if(num%3 == 0 && num%2 == 0)
+				dp[num] = Math.min(getCount(num/2), getCount(num/3)) + 1;
+			else if(num % 3 == 0)
+				dp[num] = Math.min(getCount(num/3), getCount(num-1)) + 1;
+			else if(num % 2 == 0)
+				dp[num] = Math.min(getCount(num/2), getCount(num-1)) + 1;
+			else
+				dp[num] = getCount(num-1) + 1;
+		}
+		return dp[num];
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		dp = new Integer[n+3];
+		dp[0] = 0;
+		dp[1] = 0;
+		dp[2] = 1;
+        dp[3] = 1;
+		
+		System.out.println(getCount(n));
+	}
+}
