@@ -1,0 +1,91 @@
+import java.util.*;
+
+class Solution {
+    static int answer = 0;
+    static String beginWord;
+    static String[] wordList;
+    static int targetIndex;
+    static int wordCount, wordLength;
+    static LinkedList<Integer>[] graph;
+    
+    static class node{
+        int num, depth;
+        public node(int num, int depth){
+            this.num = num;
+            this.depth = depth;
+        }
+    }
+    
+    public static void bfs(){
+        Queue<node> queue = new LinkedList<>();
+        boolean[] check = new boolean[wordCount];
+
+        for(int i=0; i<wordCount; i++){
+            String tmp = wordList[i];
+            int diff = 0;
+            for(int k=0; k<wordLength; k++){
+                if(beginWord.charAt(k) != tmp.charAt(k)){
+                    diff++;             
+                }
+            }
+            if(diff == 1){
+                queue.add(new node(i, 1));
+                check[i] = true;
+            }
+        }
+        
+        while(!queue.isEmpty()){
+            node current = queue.remove();
+            if(current.num == targetIndex){
+                answer = current.depth;
+                System.out.println(current.num);
+                break;
+            }
+            for(int i=0; i<graph[current.num].size(); i++){
+                int next = graph[current.num].get(i);
+                if(!check[next]){
+                    queue.add(new node(next, current.depth+1));
+                    check[next] = true;
+                }
+            }
+        }
+    }
+    
+    public int solution(String begin, String target, String[] words) {
+        beginWord = begin;
+        wordList = words;
+        wordCount = words.length;
+        wordLength = begin.length();
+        
+        graph = new LinkedList[wordCount];
+        for(int i=0; i<wordCount; i++)
+            graph[i] = new LinkedList<>();
+        
+        for(int w=0; w<wordCount; w++){
+            String word = words[w];
+            for(int i=w+1; i<wordCount; i++){
+                String tmp = words[i];
+                int diff = 0;
+                for(int k=0; k<wordLength; k++){
+                    if(word.charAt(k) != tmp.charAt(k))
+                        diff++;                    
+                }
+                if(diff == 1){
+                    graph[w].add(i);
+                    graph[i].add(w);
+                }
+            }
+        }
+
+        targetIndex = -1;
+        for(int i=0; i<wordCount; i++){
+            if(target.equals(words[i])){
+                targetIndex = i;
+            }
+        }
+        
+        if(targetIndex != -1)
+            bfs();
+        return answer;
+    }
+}
