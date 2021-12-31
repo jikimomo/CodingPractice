@@ -1,0 +1,62 @@
+import java.util.*;
+
+class Solution {
+    static int len;
+    static char[] num;
+    static boolean[] check;
+    
+    static String result = "";
+    static boolean[] resultCheck = new boolean[10000000];
+    
+    static boolean[] primeCheck = new boolean[10000000];
+    public void primeNumber(){
+        Arrays.fill(primeCheck, true);
+        primeCheck[0] = false;
+        primeCheck[1] = false;
+        for(int i=2; i<10000000; i++){
+            if(primeCheck[i]){
+                for(int j=2; j*i<10000000; j++){
+                    primeCheck[i*j] = false;
+                }
+            }
+        }
+    }
+    
+    public void back(int depth, String tmp){
+        if(depth > len){
+            return;
+        }
+        else{
+            if(depth > 0){
+                int result = Integer.parseInt(tmp);
+                resultCheck[result] = true;
+            }
+            
+            for(int i=0; i<len; i++){
+                if(!check[i]){
+                    check[i] = true;
+                    back(depth+1, tmp+num[i]);
+                    check[i] = false;
+                }
+            }
+        }
+    }
+    public int solution(String numbers) {
+        int answer = 0;
+        len = numbers.length();
+        num = new char[len];
+        check = new boolean[len];
+        for(int i=0; i<len; i++)
+            num[i] = numbers.charAt(i);
+        
+        back(0, "");
+        primeNumber();
+        for(int i=0; i<10000000; i++){
+            if(resultCheck[i] && primeCheck[i]){
+                answer++;
+            }
+        }
+        
+        return answer;
+    }
+}
