@@ -1,0 +1,57 @@
+import java.util.Scanner;
+
+public class Main {
+	static int n;
+	static int[] input;
+	static Integer[] incre, decre;
+	
+	public static int getIncre(int num) {
+		if(incre[num] == null) {
+			incre[num] = 1;
+			for(int i=num-1; i>0; i--) {
+				if(input[num] > input[i])
+					incre[num] = Math.max(incre[num], getIncre(i)+1);
+			}
+		}
+		return incre[num];
+	}
+	
+	public static int getDecre(int num) {
+		if(decre[num] == null) {
+			decre[num] = 1;
+			for(int i=num+1; i<=n; i++) {
+				if(input[num] > input[i]) {
+					decre[num] = Math.max(decre[num], getDecre(i)+1);
+				}
+			}
+		}
+		return decre[num];
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		input = new int[n+1];
+		for(int i=1; i<=n; i++)
+			input[i] = s.nextInt();
+		
+		incre = new Integer[n+1];
+		decre = new Integer[n+1];
+		incre[0] = 0;
+		incre[1] = 1;
+		decre[0] = 0;
+		decre[n] = 1;
+		
+		for(int i=1; i<=n; i++) {
+			getIncre(i);
+			getDecre(i);
+		}
+		
+		int max = incre[1] + decre[1];
+		for(int i=1; i<=n; i++) {
+			if(max < incre[i]+decre[i])
+				max = incre[i] + decre[i];
+		}
+		System.out.println(max-1);
+	}
+}
