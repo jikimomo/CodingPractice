@@ -1,0 +1,55 @@
+class Solution {
+    public int solution(String s) {
+        int answer = s.length();
+        int len = s.length();
+        if(len == 1)
+            answer = 1;
+        
+        for(int unit=1; unit<=len/2; unit++){
+            int count = 1;
+            int standard = 0;
+            int resultLen = 0;
+            String result = "";
+            String unitStr = s.substring(standard, standard+unit);
+            
+            for(int index=standard+unit; index+unit<=len; index+=unit){
+                String tmpStr = s.substring(index, index+unit);
+                if(unitStr.equals(tmpStr)){
+                    count++;
+                    continue;
+                }
+                    
+                //result update
+                if(count > 1)
+                    result += Integer.toString(count);
+                result += unitStr;
+                resultLen += unitStr.length() * count;
+                    
+                //count, standard update
+                count = 1;
+                standard = index;
+                    
+                //unitStr update
+                unitStr = s.substring(standard, standard+unit);
+                
+            }
+            if(count > 1){
+                result += Integer.toString(count);
+                result += unitStr;
+                resultLen += unitStr.length() * count;
+            }
+            else{
+                result += s.substring(standard, len);
+                resultLen += s.substring(standard, len).length();
+            }
+            
+            //이 부분은 다른 코드 참고함...
+            if(resultLen != len && len%unit != 0){
+                result += s.substring(len-len%unit, len);
+            }
+            
+            answer = Math.min(result.length(), answer);
+        }
+        return answer;
+    }
+}
