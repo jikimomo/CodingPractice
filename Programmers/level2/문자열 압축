@@ -44,7 +44,7 @@ class Solution {
             }
             
             //이 부분은 다른 코드 참고함...
-            if(resultLen != len && len%unit != 0){
+            if(resultLen != len){
                 result += s.substring(len-len%unit, len);
             }
             
