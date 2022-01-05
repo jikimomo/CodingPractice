@@ -1,0 +1,47 @@
+import java.util.*;
+
+class Solution {
+    static class inout{
+        String id = "";
+        int io; //0:enter 1:leave
+        
+        public inout(String id, int io){
+            this.id = id;
+            this.io = io;
+        }
+    }
+    
+    public String[] solution(String[] record) {
+        String[] answer = {};
+        ArrayList<inout> inoutRecord = new ArrayList<>();
+        HashMap<String, String> idNick = new HashMap();
+        
+        for(int i=0; i<record.length; i++){
+            String[] input = record[i].split(" ");
+            
+            if(input[0].charAt(0) == 'E'){
+                inoutRecord.add(new inout(input[1], 0));
+                idNick.put(input[1], input[2]);
+            }
+            if(input[0].charAt(0) == 'L'){
+                inoutRecord.add(new inout(input[1], 1));
+            }
+            if(input[0].charAt(0) == 'C'){
+                idNick.put(input[1], input[2]);
+            }
+        }
+        
+        answer = new String[inoutRecord.size()];
+        for(int i=0; i<inoutRecord.size(); i++){
+            inout current = inoutRecord.get(i);
+            if(current.io == 0){
+                answer[i] = idNick.get(current.id)+"님이 들어왔습니다.";
+            }
+            else{
+                answer[i] = idNick.get(current.id)+"님이 나갔습니다.";
+            }
+        }
+        
+        return answer;
+    }
+}
