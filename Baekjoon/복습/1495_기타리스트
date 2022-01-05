@@ -1,0 +1,43 @@
+import java.util.Scanner;
+
+public class Main {
+	static int n, m;
+	static boolean[][] dp;
+	static int[] volume;
+	
+	public static void setVolume() {
+		for(int i=1; i<=n; i++) {
+			for(int j=0; j<=m; j++) {
+				if(dp[i-1][j]) {
+					if(j-volume[i] >= 0)
+						dp[i][j-volume[i]] = true;
+					if(j+volume[i] <= m)
+						dp[i][j+volume[i]] = true;
+				}
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		n = sc.nextInt();
+		int s = sc.nextInt();
+		m = sc.nextInt();
+		
+		volume = new int[n+1];
+		for(int i=1; i<=n; i++)
+			volume[i] = sc.nextInt();
+		
+		dp = new boolean[n+1][m+1];
+		dp[0][s] = true;
+		
+		setVolume();
+		
+		int answer = -1;
+		for(int i=0; i<=m; i++) {
+			if(dp[n][i])
+				answer = i;
+		}
+		System.out.println(answer);
+	}
+}
