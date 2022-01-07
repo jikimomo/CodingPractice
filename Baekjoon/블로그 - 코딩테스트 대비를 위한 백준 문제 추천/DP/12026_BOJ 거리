@@ -1,0 +1,58 @@
+import java.util.Scanner;
+
+public class Main {
+	static boolean flag = false;
+	static int n;
+	static int len;
+	static String input;
+	static Integer[] dp;
+	
+	public static int solution(int num) {
+		if(num == 0)
+			flag = true;
+		
+		if(dp[num] == null) {
+			dp[num] = 100000000;
+			if(input.charAt(num) == 'B') {
+				for(int i=num-1; i>=0; i--) {
+					if(input.charAt(i) == 'J') {
+						dp[num] = Math.min(dp[num], solution(i)+(num-i)*(num-i));
+					}
+				}
+			}
+			else if(input.charAt(num) == 'O') {
+				for(int i=num-1; i>=0; i--) {
+					if(input.charAt(i) == 'B') {
+						dp[num] = Math.min(dp[num], solution(i)+(num-i)*(num-i));
+					}
+				}
+			}
+			else if(input.charAt(num) == 'J') {
+				for(int i=num-1; i>=0; i--) {
+					if(input.charAt(i) == 'O') {
+						dp[num] = Math.min(dp[num], solution(i)+(num-i)*(num-i));
+					}
+				}
+			}
+		}
+		return dp[num];
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		s.nextLine();
+		input = s.nextLine();
+		
+		len = input.length();
+		dp = new Integer[len];
+		dp[0] = 0;
+		
+		solution(len-1);
+        if(flag)
+		    System.out.println(dp[len-1]);
+        else
+            System.out.println("-1");
+	}
+}
