@@ -1,5 +1,5 @@
 //1차 시도때는 int+string을 이어붙여서 int를 string으로 변환하는 시간이 걸림
-//string끼리 붙이니 효율성도 
+//string끼리 붙이니 효율성도 통과
 import java.lang.Math;
 
 class Solution {
