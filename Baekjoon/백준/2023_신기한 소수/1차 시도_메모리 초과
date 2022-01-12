@@ -1,0 +1,52 @@
+//소수 에라토스테네스의 체를 이용해서 소수를 구해 배열에 저장 -> 메모리 초과 
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+	static int n;
+	static int INF = 100000001;
+	static boolean[] prime;
+	
+	public static void checkPrime() {
+		for(int i=2; i<INF; i++) {
+			if(prime[i]) {
+				for(int j=2; i*j<INF; j++) {
+					prime[i*j] = false;
+				}
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		prime = new boolean[INF];
+		
+		Arrays.fill(prime, true);
+		prime[0] = false;
+		prime[1] = false;
+		checkPrime();
+		
+		int low = (int)Math.pow(10, n-1);
+		int high = (int)Math.pow(10, n);
+		
+		StringBuilder sb = new StringBuilder();
+		for(int i=low; i<high; i++) {
+			if(prime[i]) {
+				int num = i;
+				boolean flag = true;
+				for(int j=0; j<3; j++) {
+					num /= 10;
+					if(!prime[num]) {
+						flag = false;
+						break;
+					}
+				}
+				
+				if(flag)
+					sb.append(i+"\n");
+			}
+		}
+		System.out.println(sb);
+	}
+}
