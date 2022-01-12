@@ -1,0 +1,35 @@
+//백트래킹으로 하나씩 소수를 구함
+import java.util.Scanner;
+
+public class Main {
+	static int n;
+	
+	public static void solution(int depth, int num) {
+		if(depth == n) {
+			System.out.println(num);
+			return;
+		}
+		
+		for(int i=1; i<=9; i++) {
+			int nextNum = num*10 + i;
+			
+			boolean flag = true;
+			for(int j=2; j<nextNum; j++) {
+				if(nextNum % j == 0) {
+					flag = false;
+					break;
+				}
+			}
+			if(nextNum != 1 && flag) {
+				solution(depth+1, nextNum);
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		
+		solution(0, 0);
+	}
+}
