@@ -1,0 +1,80 @@
+import java.util.*;
+import java.util.Map.Entry;
+
+/*
+각 course의 조합 개수 최대값만 선택
+-> course == 2일 때 조합의 최대값이 4이므로 4인 ac만 저장
+-> course == 3일 때 조합의 최대값이 3이르로 3인 cde만 저장
+-> course == 4일 때 조합의 최대값이 2이므로 2인 acde, bcfg만 저장 
+*/
+class Solution {
+    static int n;
+    static String order;
+    static boolean[] check;
+    static HashMap<String, Integer> result;
+    
+    public void combination(int depth, int index, String res){
+        if(depth == n){
+            if(result.containsKey(res)){
+                int count = result.get(res);
+                result.put(res, count+1);
+            }
+            else{
+                result.put(res, 1);
+            }
+        }
+        for(int i=index; i<order.length(); i++){
+            if(!check[i]){
+                check[i] = true;
+                combination(depth+1, i+1, res+order.charAt(i));
+                check[i] = false;
+            }
+        }
+    }
+    
+    public String[] solution(String[] orders, int[] course) {
+        String[] answer = {};
+        ArrayList<String> ansList = new ArrayList<>();
+        
+         /*string을 char 배열로 변환 후 정렬*/
+        for(int i=0; i<orders.length; i++){
+            char[] tmp = orders[i].toCharArray();
+            Arrays.sort(tmp);
+            orders[i] = new String(tmp);
+        }
+        
+        for(int i=0; i<course.length; i++){
+            n = course[i];
+            result = new HashMap();
+            
+            for(int j=0; j<orders.length; j++){
+                order = new String(orders[j]);
+                check = new boolean[order.length()];
+                combination(0, 0, "");
+            }
+            
+            int max = Integer.MIN_VALUE;
+            for(String key : result.keySet()){
+                Integer count = result.get(key);
+                if(max < count){
+                    max = count;
+                }
+            }
+            
+            if(max >= 2){
+                for(Entry<String, Integer> entry : result.entrySet()){
+                    if(entry.getValue() == max){
+                        ansList.add(entry.getKey());
+                    }
+                }
+            }
+        }
+        
+        answer = new String[ansList.size()];
+        Collections.sort(ansList);
+        for(int i=0; i<ansList.size(); i++)
+            answer[i] = ansList.get(i);
+        
+        return answer;
+    }
+}
