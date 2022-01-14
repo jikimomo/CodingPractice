@@ -1,0 +1,117 @@
+//1차 시도때 check를 2차원 배열 2개(동전별로 따로 체크)로 했다가 틀림
+//똑같은 위치를 가더라도 다른 동전의 위치가 다르면 또 방문할 수 있어야 하므로 check를 4차원 배열로 선언!!
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int[] dir1 = {0, 1, 0, -1};
+	static int[] dir2 = {1, 0, -1, 0};
+	
+	static int n, m;
+	static int[][] map;
+	static boolean[][][][] check;
+	static int answer = -1;
+	
+	static class pos{
+		int x1, y1, x2, y2;
+		int but;
+		public pos(int x1, int y1, int x2, int y2, int but) {
+			this.x1 = x1;
+			this.y1 = y1;
+			this.x2 = x2;
+			this.y2 = y2;
+			this.but = but;
+		}
+		
+		public pos(int x1, int y1) {
+			this.x1 = x1;
+			this.y1 = y1;
+		}
+	}
+	
+	public static boolean checkDrop(int x, int y) {
+		if(x>=0 && y>=0 && x<n && y<m)
+			return true;
+		else
+			return false;
+	}
+	
+	public static void solution(pos[] coin) {
+		Queue<pos> queue = new LinkedList<>();
+		queue.add(new pos(coin[0].x1, coin[0].y1, coin[1].x1, coin[1].y1, 0));
+		check[coin[0].x1][coin[0].y1][coin[1].x1][coin[1].y1] = true;
+		
+		while(!queue.isEmpty()) {
+			pos cur = queue.remove();
+			if(cur.but >= 10)
+				return;
+		
+			for(int i=0; i<4; i++) {
+				int nX1 = cur.x1 + dir1[i];
+				int nY1 = cur.y1 + dir2[i];
+				int nX2 = cur.x2 + dir1[i];
+				int nY2 = cur.y2 + dir2[i];
+				
+				//아무것도 안 떨어진 경우
+				if(checkDrop(nX1, nY1) && checkDrop(nX2, nY2)) {
+					if(map[nX1][nY1]==0 && map[nX2][nY2]==0 && !check[nX1][nY1][nX2][nY2]) {
+						queue.add(new pos(nX1, nY1, nX2, nY2, cur.but+1));
+						check[nX1][nY1][nX2][nY2] = true;
+                    }
+					else if(map[nX1][nY1]==0 && map[nX2][nY2]==-1 && !check[nX1][nY1][cur.x2][cur.y2]) {
+						queue.add(new pos(nX1, nY1, cur.x2, cur.y2, cur.but+1));
+						check[nX1][nY1][cur.x2][cur.y2] = true;
+					}
+					else if(map[nX1][nY1]==-1 && map[nX2][nY2]==0 && !check[cur.x1][cur.y1][nX2][nY2]) {
+						queue.add(new pos(cur.x1, cur.y1, nX2, nY2, cur.but+1));
+						check[cur.x1][cur.y1][nX2][nY2] = true;
+					}
+				}
+				//하나만 떨어진 경우
+				else if(!checkDrop(nX1, nY1)&&checkDrop(nX2, nY2)) {
+					if((map[nX2][nY2]==0||map[nX2][nY2]==-1)) {
+						answer = cur.but + 1;
+						return;
+					}
+				}
+				else if(checkDrop(nX1, nY1)&&!checkDrop(nX2, nY2)) {
+					if((map[nX1][nY1]==0||map[nX1][nY1]==-1)) {
+						answer = cur.but + 1;
+						return;
+					}
+				}
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		m = s.nextInt();
+		map = new int[n][m];
+		check = new boolean[n][m][n][m];
+		
+		pos[] coin = new pos[2];
+		int tmp = 0;
+		
+		s.nextLine();
+		for(int i=0; i<n; i++) {
+			String input = s.nextLine();
+			for(int j=0; j<m; j++) {
+				if(input.charAt(j) == 'o') {
+					map[i][j] = 0;
+					coin[tmp++] = new pos(i, j);
+				}
+				else if(input.charAt(j) == '.')
+					map[i][j] = 0;
+				else
+					map[i][j] = -1;
+				
+			}
+		}
+		
+		solution(coin);
+		System.out.println(answer);
+	}
+}
