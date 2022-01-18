@@ -1,0 +1,39 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(String[] info, String[] query) {
+        int[] answer = new int[query.length];
+        int appliCount = info.length;
+        String[][] appliInfo = new String[appliCount][5];
+        
+        for(int i=0; i<appliCount; i++){
+            appliInfo[i] = info[i].split(" ");
+        }
+        
+        for(int i=0; i<query.length; i++){
+            int count = 0;
+            String[] que = query[i].split(" "); //0 2 4 6 7
+            
+            for(int j=0; j<appliCount; j++){
+                boolean flag = true;
+                for(int k=0; k<4; k++){
+                    if(que[2*k].equals("-") || appliInfo[j][k].equals(que[2*k])){
+                        flag = true;
+                    }
+                    else{
+                        flag = false;
+                        break;
+                    }
+                }
+                if(flag){ //점수 비교
+                    if(Integer.parseInt(appliInfo[j][4]) >= Integer.parseInt(que[7]))
+                        count++;
+                }
+            }
+            
+            answer[i] = count;
+        }
+        
+        return answer;
+    }
+}
