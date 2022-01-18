@@ -1,0 +1,89 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int m, p;
+	static ArrayList<Integer>[] graph, strah;
+	static int[] indegree;
+	
+	public static int solution() {
+		int result = 0;
+		Queue<Integer> queue = new LinkedList<>();
+		
+		for(int i=1; i<=m; i++) {
+			if(indegree[i] == 0) {
+				queue.add(i);
+				strah[i].add(1);
+			}
+		}
+		
+		while(!queue.isEmpty()) {
+			int cur = queue.remove();
+			int curStrah = strah[cur].get(0);
+			if(result < curStrah)
+				result = curStrah;
+			
+			for(int i=0; i<graph[cur].size(); i++) {
+				int con = graph[cur].get(i);
+				indegree[con]--;
+				
+				if(strah[con].size() == 0)
+					strah[con].add(curStrah);
+				else {
+					if(strah[con].get(0) == curStrah)
+						strah[con].add(curStrah);
+					else if(strah[con].get(0) < curStrah) {
+						strah[con].clear();
+						strah[con].add(curStrah);
+					}
+				}
+				
+				if(indegree[con] == 0) {
+					queue.add(con);
+					if(strah[con].size() > 1) {
+						int tmp = strah[con].get(0);
+						strah[con].clear();
+						strah[con].add(tmp+1);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int t = s.nextInt();
+		int tmp = 0;
+		
+		StringBuilder sb = new StringBuilder();
+		while(t > tmp) {
+			int k = s.nextInt();
+			m = s.nextInt();
+			p = s.nextInt();
+			
+			graph = new ArrayList[m+1];
+			strah = new ArrayList[m+1];
+			for(int i=0; i<=m; i++) {
+				graph[i] = new ArrayList<>();
+				strah[i] = new ArrayList<>();
+			}
+			
+			indegree = new int[m+1];
+			
+			for(int i=0; i<p; i++) {
+				int a = s.nextInt();
+				int b = s.nextInt();
+				
+				graph[a].add(b);
+				indegree[b]++;
+			}
+			
+			sb.append(k+" "+solution()+"\n");
+			tmp++;
+		}
+		System.out.println(sb);
+	}
+}
