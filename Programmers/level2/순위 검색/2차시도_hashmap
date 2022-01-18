@@ -1,0 +1,52 @@
+//각 info별로 경우의 수를 확인하여 hashmap에 저장
+//그래도 시간초과 발생 -> 조건에 해당되는 점수의 개수를 찾을 때 이진탐색으로 해야 함...
+import java.util.*;
+
+class Solution {
+    static HashMap<String, ArrayList<Integer>> map = new HashMap<>();
+    
+    
+    public void getCombi(String[] input, int depth, String key){
+        if(depth == 4){
+            int score = Integer.parseInt(input[4]);
+            if(map.containsKey(key)){
+                ArrayList<Integer> tmp = map.get(key);
+                tmp.add(score);
+                map.put(key, tmp);
+            }
+            else{
+                ArrayList<Integer> tmp = new ArrayList<>();
+                tmp.add(score);
+                map.put(key, tmp);
+            }
+            return;
+        }
+        getCombi(input, depth+1, key+input[depth]);
+        getCombi(input, depth+1, key+"-");
+    }
+    
+    public int[] solution(String[] info, String[] query) {
+        int[] answer = new int[query.length];
+        
+        for(int i=0; i<info.length; i++){
+            String[] input = info[i].split(" ");
+            getCombi(input, 0, "");
+        }
+    
+        for(int i=0; i<query.length; i++){
+            String[] que = query[i].split(" ");
+            String key = que[0]+que[2]+que[4]+que[6];
+            
+            if(map.containsKey(key)){
+                ArrayList<Integer> scoreList = map.get(key);
+                
+                for(int j=0; j<scoreList.size(); j++){
+                    if(scoreList.get(j) >= Integer.parseInt(que[7]))
+                        answer[i]++;
+                }
+            }
+        }
+
+        return answer;
+    }
+}
