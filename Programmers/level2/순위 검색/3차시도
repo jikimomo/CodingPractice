@@ -1,0 +1,63 @@
+//이진탐색으로 조건에 해당하는 점수 개수를 세기 전에 list 정렬을 solution함수에서 해야 함!
+import java.util.*;
+
+class Solution {
+    static HashMap<String, ArrayList<Integer>> map = new HashMap<>();
+    
+    public void getCombi(String[] input, int depth, String key){
+        if(depth == 4){
+            int score = Integer.parseInt(input[4]);
+            if(map.containsKey(key)){
+                map.get(key).add(score);
+            }
+            else{
+                ArrayList<Integer> tmp = new ArrayList<>();
+                tmp.add(score);
+                map.put(key, tmp);
+            }
+            return;
+        }
+        getCombi(input, depth+1, key+input[depth]);
+        getCombi(input, depth+1, key+"-");
+    }
+    
+    public int getCount(String key, int score){
+        if(!map.containsKey(key))
+            return 0;
+        
+        ArrayList<Integer> list = map.get(key);
+        int start = 0, end = list.size()-1;
+        while(start <= end){
+            int mid = (start + end)/2;
+            if(list.get(mid) >= score)
+                end = mid - 1;
+            else
+                start = mid + 1;
+        }
+        
+        return list.size() - start;
+    }
+    
+    public int[] solution(String[] info, String[] query) {
+        int[] answer = new int[query.length];
+        
+        for(int i=0; i<info.length; i++){
+            String[] input = info[i].split(" ");
+            getCombi(input, 0, "");
+        }
+    
+        /*각 key별로 list를 정렬하는 것을 getCount에서 하면 시간초과...!!*/
+        for(String key : map.keySet()){
+            Collections.sort(map.get(key));
+        }
+        
+        for(int i=0; i<query.length; i++){
+            String tmp = query[i].replace(" and ", "");
+            String[] que = tmp.split(" ");
+            
+            answer[i] = getCount(que[0], Integer.parseInt(que[1]));
+        }
+
+        return answer;
+    }
+}
