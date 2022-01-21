@@ -1,0 +1,91 @@
+import java.util.*;
+
+class Solution {
+    static int answer = 0;
+    static int countCol, countRow;
+    static boolean[] check;
+    static String[][] rel;
+    static ArrayList<ArrayList<Integer>> minCheck = new ArrayList<>();
+    
+    public void checkKey(ArrayList<Integer> list){
+        HashMap<String, Integer> map = new HashMap();
+        
+        for(int i=0; i<countRow; i++){
+            String key = new String();
+            for(int j=0; j<list.size(); j++){
+                key += rel[i][list.get(j)];
+            }
+            
+            if(map.containsKey(key)){
+                int tmp = map.get(key);
+                map.put(key, tmp+1);
+            }
+            else
+                map.put(key, 1);
+        }
+        
+        boolean flag = true;
+        for(String key : map.keySet()){
+            if(map.get(key) > 1)
+                flag = false;
+        }
+        
+        if(flag){
+            if(list.size() == 1){
+                minCheck.add(list);
+                answer++;
+            }
+            else{
+                boolean flagDupli = true;
+                for(int i=0; i<minCheck.size(); i++){
+                    ArrayList<Integer> key = minCheck.get(i);
+                    int dupliCount = 0;
+                    for(int j=0; j<key.size(); j++){
+                        if(list.contains(key.get(j)))
+                            dupliCount++;
+                    }
+                    
+                    if(dupliCount == key.size()){
+                        flagDupli = false;
+                    }
+                }
+                if(flagDupli){
+                    minCheck.add(list);
+                    answer++;
+                }
+            }
+        }
+    }
+    
+    public void selectCol(int n, int depth, int index){
+        if(n == depth){
+            ArrayList<Integer> list = new ArrayList<>();
+            for(int i=0; i<countCol; i++){
+                if(check[i])
+                    list.add(i);
+            }
+            checkKey(list);
+            return;
+        }
+        for(int i=index; i<countCol; i++){
+            if(!check[i]){
+                check[i] = true;
+                selectCol(n, depth+1, i+1);
+                check[i] = false;
+            }
+        }
+    }
+    
+    public int solution(String[][] relation) {
+        countCol = relation[0].length;
+        countRow = relation.length;
+        rel = relation;
+        
+        for(int i=1; i<=countCol; i++){
+            check = new boolean[countCol];
+            selectCol(i, 0, 0);
+        }
+        
+        return answer;
+    }
+}
