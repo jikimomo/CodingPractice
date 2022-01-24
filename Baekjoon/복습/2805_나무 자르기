@@ -1,0 +1,35 @@
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		int m = s.nextInt();
+		int[] tree = new int[n];
+		for(int i=0; i<n; i++) {
+			tree[i] = s.nextInt();
+		}
+		
+		long answer = 0;
+		long start = 0, end = 1000000000;
+		long mid = 0;
+		while(start <= end) {
+			mid = (start + end)/2;
+			
+			long sum = 0;
+			for(int i=0; i<n; i++) {
+				if(tree[i] - mid > 0)
+					sum += (tree[i]-mid);
+			}
+			
+			if(sum < m) {
+				end = mid - 1;
+			}
+			else {
+				start = mid + 1;
+				answer = Math.max(answer, mid);
+			}
+		}
+		System.out.println(answer);
+	}
+}
