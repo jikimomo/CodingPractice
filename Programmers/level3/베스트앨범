@@ -1,0 +1,73 @@
+import java.util.*;
+
+class Solution {
+    static class node implements Comparable<node>{
+        int play, index;
+        public node(int play, int index){
+            this.play = play;
+            this.index = index;
+        }
+        
+        @Override
+        public int compareTo(node n){
+            if(this.play == n.play){
+                return this.index - n.index;
+            } else {
+                return n.play - this.play;
+            }
+        }
+    }
+    
+    public int[] solution(String[] genres, int[] plays) {
+        int[] answer = {};
+        
+        int tmpIndex = 0;
+        HashMap<String, Integer> genreInd = new HashMap();
+        HashMap<String, Integer> genreSum = new HashMap();
+        for(int i=0; i<genres.length; i++){
+            if(!genreInd.containsKey(genres[i])){
+                genreInd.put(genres[i], tmpIndex++);
+            }
+            
+            if(genreSum.containsKey(genres[i])){
+                int sum = genreSum.get(genres[i]);
+                genreSum.put(genres[i], sum+plays[i]);
+            }
+            else{
+                genreSum.put(genres[i], plays[i]);
+            }
+        }
+        
+        LinkedList<Map.Entry<String, Integer>> entryList = new LinkedList<>(genreSum.entrySet());
+        entryList.sort(new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2){
+                return e2.getValue() - e1.getValue();
+            }
+        });
+        
+        PriorityQueue<node>[] queue = new PriorityQueue[genreInd.size()];
+        for(int i=0; i<genreInd.size(); i++){
+            queue[i] = new PriorityQueue<>();
+        }
+        for(int i=0; i<genres.length; i++){
+            int index = genreInd.get(genres[i]);
+            queue[index].add(new node(plays[i], i));
+        }
+
+        ArrayList<Integer> answerList = new ArrayList<>();
+        for(Map.Entry<String, Integer> entry : entryList){
+            String genre = entry.getKey();
+            int index = genreInd.get(genre);
+            for(int i=0; i<2; i++){
+                if(!queue[index].isEmpty())
+                    answerList.add(queue[index].remove().index);
+            }
+        }
+        answer = new int[answerList.size()];
+        for(int i=0; i<answerList.size(); i++)
+            answer[i] = answerList.get(i);
+        
+        return answer;
+    }
+}
