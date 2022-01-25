@@ -1,0 +1,21 @@
+class Solution {
+    public int[] solution(int brown, int yellow) {
+        int[] answer = new int[2];
+        int total = brown + yellow;
+        
+        for(int row=3; row<total; row++){
+            if(total%row == 0){
+                int col = total / row;
+                if(col >= row){
+                    int border = (col+row)*2 - 4;
+                    if(border == brown){
+                        answer[0] = col;
+                        answer[1] = row;
+                        break;
+                    }
+                }
+            }
+        }
+        return answer;
+    }
+}
