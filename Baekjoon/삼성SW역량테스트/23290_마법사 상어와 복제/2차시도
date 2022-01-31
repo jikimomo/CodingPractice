@@ -1,0 +1,202 @@
+/*
+< 이전코드에서 변경된 부분 >
+1. Scanner -> BufferedReader
+2. fishList삭제 -> map을 ArrayList로 구현하여 방향만 저장
+
+<문제가 되었던 부분>
+상어가 이동하 때 fishList를 다 돌면서 해당 위치를 물고기를 제거한 부분
+어차피 map이 4*4밖에 안되기 때문에 fishList를 확인하는 것보다 map을 돌면서 제거하는 것이 빠름
+*/
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+public class Main {
+	static pos shark;
+	static ArrayList<pos> copy;
+	static int[][] smellMap; //물고기 냄새 저장
+	static ArrayList<Integer>[][] map;
+	
+	static int[] dFish1 = {0, 0, -1, -1, -1, 0, 1, 1, 1};
+	static int[] dFish2 = {0, -1, -1, 0, 1, 1, 1, 0, -1};
+	
+	static int[] dShark1 = {0, -1, 0, 1, 0};
+	static int[] dShark2 = {0, 0, -1, 0, 1};
+	
+	static class pos{
+		int x, y, d;
+		pos(int x, int y, int d){
+			this.x = x;
+			this.y = y;
+			this.d = d;
+		}
+		pos(int x, int y){
+			this.x = x;
+			this.y = y;
+		}
+	}
+	
+	public static boolean isOK(int x, int y) {
+		if(x>0 && y>0 && x<=4 && y<=4) {
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	public static void sharkMove() {
+		//상어가 움직이는 경로 선택
+		boolean flag = false;
+		int max = 0;
+		ArrayList<pos> maxList = new ArrayList<>();
+		
+		
+		for(int i=1; i<=4; i++) {
+			int eatingCount = 0;
+			int x1 = shark.x + dShark1[i];
+			int y1 = shark.y + dShark2[i];
+			
+			if(isOK(x1, y1)) {
+				for(int j=1; j<=4; j++) {
+					int x2 = x1 + dShark1[j];
+					int y2 = y1 + dShark2[j];
+					
+					if(isOK(x2, y2)) {
+						for(int k=1; k<=4; k++) {
+							int x3 = x2 + dShark1[k];
+							int y3 = y2 + dShark2[k];
+							if(isOK(x3, y3)) {
+								eatingCount = map[x1][y1].size() + map[x2][y2].size();
+								if(!(x1==x3 && y1==y3))
+									eatingCount += map[x3][y3].size();
+
+								if(!flag || max < eatingCount) {
+									flag = true;
+									max = eatingCount;
+									maxList.clear();
+									maxList.add(new pos(x1, y1));
+									maxList.add(new pos(x2, y2));
+									maxList.add(new pos(x3, y3));
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		//경로를 따라 물고기 제거 및 냄새 남기기
+		for(int i=0; i<3; i++) {
+			pos cur = maxList.get(i);
+			
+			if(map[cur.x][cur.y].size() > 0) {
+				smellMap[cur.x][cur.y] = 3;
+				map[cur.x][cur.y].clear();
+			}
+		}
+		shark = new pos(maxList.get(2).x, maxList.get(2).y);
+	}
+	
+	public static void fishMove() {
+		//원래 자리 저장 및 물고기 위치 clear
+		copy = new ArrayList<>();
+		for(int i=1; i<=4; i++) {
+			for(int j=1; j<=4; j++) {
+				for(int k=0; k<map[i][j].size(); k++) {
+					copy.add(new pos(i, j, map[i][j].get(k)));
+				}
+				map[i][j].clear();
+			}
+		}
+		
+		//이동
+		for(int k=0; k<copy.size(); k++) {
+			pos cur = copy.get(k);
+			
+			boolean moveFlag = false;
+			for(int dd=cur.d, time=0; time<8; dd=(dd-1)%8, time++) {
+				if(dd == 0)
+					dd = 8;
+				int nextX = cur.x + dFish1[dd];
+				int nextY = cur.y + dFish2[dd];
+				
+				if(isOK(nextX, nextY)) {
+					if(nextX==shark.x&&nextY==shark.y || smellMap[nextX][nextY]>0)
+						continue;
+					else {
+						map[nextX][nextY].add(dd);
+						moveFlag = true;
+						break;
+					}
+				}
+			}
+			if(!moveFlag) {
+				map[cur.x][cur.y].add(cur.d);
+			}
+		}
+	}
+	public static void main(String[] args) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int m = Integer.parseInt(st.nextToken());
+		int s = Integer.parseInt(st.nextToken());
+		
+		smellMap = new int[5][5];
+		map = new ArrayList[5][5];
+		for(int i=0; i<=4; i++) {
+			for(int j=0; j<=4; j++)
+				map[i][j] = new ArrayList<>();
+		}
+		for(int i=0; i<m; i++) {
+			st = new StringTokenizer(br.readLine());
+			int x = Integer.parseInt(st.nextToken());
+			int y = Integer.parseInt(st.nextToken());
+			int d = Integer.parseInt(st.nextToken());
+			map[x][y].add(d);
+		}
+		
+		st = new StringTokenizer(br.readLine());
+		int tmpX = Integer.parseInt(st.nextToken());
+		int tmpY = Integer.parseInt(st.nextToken());
+		shark = new pos(tmpX, tmpY);
+		
+		int time = 0;
+		while(time < s) {
+			//물고기 복제 및 이동
+			fishMove();
+			
+      //상어 이동
+			sharkMove();
+			
+			//냄새가 하나 줄어듦
+			for(int i=1; i<=4; i++) {
+				for(int j=1; j<=4; j++) {
+					if(smellMap[i][j] > 0)
+						smellMap[i][j]--;
+				}
+			}
+			
+			//물고기 복제 완료
+			for(int i=0; i<copy.size(); i++) {
+				pos co = copy.get(i);
+				map[co.x][co.y].add(co.d);
+			}
+			
+			time++;
+		}
+		int answer = 0;
+		for(int i=1; i<=4; i++) {
+			for(int j=1; j<=4; j++) {
+				answer += map[i][j].size();
+			}
+		}
+		bw.write(answer+"\n");
+		bw.flush();
+		bw.close();
+	}
+}
