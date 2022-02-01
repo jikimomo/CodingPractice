@@ -1,5 +1,5 @@
 //b[k]는 k보다 항상 작다는 것과 mid보다 작거나 같은 값의 개수를 구하는 방법이 이 문제의 핵심!!
-//초기에 end의 값을 n*n으로 설정해서 틀림...
+//문제 조건을 확인 안하고 초기에 end의 값을 n*n으로 설정해서 틀림...
 import java.util.Scanner;
 
 public class Main {
