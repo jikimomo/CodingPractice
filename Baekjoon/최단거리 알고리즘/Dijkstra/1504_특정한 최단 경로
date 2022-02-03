@@ -1,0 +1,92 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int n;
+	static int v1, v2;
+	static int INF = 200000000;
+	
+	static ArrayList<Node>[] graph;
+	static int[] dist;
+	
+	static class Node implements Comparable<Node>{
+		int end, weight;
+		public Node(int end, int weight){
+			this.end = end;
+			this.weight = weight;
+		}
+		
+		@Override
+		public int compareTo(Node node) {
+			return this.weight - node.weight;
+		}
+	}
+	
+	public static int dijkstra(int start, int end) {
+		Arrays.fill(dist, INF);
+		boolean[] check = new boolean[n+1];
+		PriorityQueue<Node> queue = new PriorityQueue<>();
+		dist[start] = 0;
+		queue.add(new Node(start, 0));
+			
+		while(!queue.isEmpty()) {
+			Node cur = queue.remove();
+			
+			if(!check[cur.end]) {
+				check[cur.end] = true;
+			
+				for(int j=0; j<graph[cur.end].size(); j++) {
+					Node next = graph[cur.end].get(j);
+					if(dist[next.end] > dist[cur.end]+next.weight) {
+						dist[next.end] = dist[cur.end]+next.weight;
+						queue.add(new Node(next.end, dist[next.end]));
+					}
+				}
+			}
+		}
+		
+		return dist[end];
+	}
+	public static void main(String[] args) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		n = Integer.parseInt(st.nextToken());
+		int e = Integer.parseInt(st.nextToken());
+		
+		dist = new int[n+1];
+		graph = new ArrayList[n+1];
+		for(int i=0; i<=n; i++) {
+			graph[i] = new ArrayList<>();
+		}
+		for(int i=0; i<e; i++) {
+			st = new StringTokenizer(br.readLine());
+			int start = Integer.parseInt(st.nextToken());
+			int end = Integer.parseInt(st.nextToken());
+			int weight = Integer.parseInt(st.nextToken());
+			graph[start].add(new Node(end, weight));
+			graph[end].add(new Node(start, weight));
+		}
+		
+		st = new StringTokenizer(br.readLine());
+		v1 = Integer.parseInt(st.nextToken());
+		v2 = Integer.parseInt(st.nextToken());
+		
+		int answer1 = dijkstra(1, v1);
+		answer1 += dijkstra(v1, v2);
+		answer1 += dijkstra(v2, n);
+		
+		int answer2 = dijkstra(1, v2);
+		answer2 += dijkstra(v2, v1);
+		answer2 += dijkstra(v1, n);
+	
+		if(answer1>=INF && answer2>=INF)
+			System.out.println("-1");
+		else
+			System.out.println(Math.min(answer1, answer2));
+	}
+}
