@@ -1,0 +1,81 @@
+import java.util.*;
+
+class Solution {
+    static int num;
+    static int INF = 100000;
+    static int[] dist;
+    static ArrayList<Node>[] graph;
+        
+    static class Node implements Comparable<Node>{
+        int end, weight;
+        public Node(int end, int weight){
+            this.end = end;
+            this.weight = weight;
+        }
+        
+        @Override
+        public int compareTo(Node node){
+            return this.weight - node.weight;
+        }
+    }  
+    
+    public void dijkstra(){
+        PriorityQueue<Node> queue = new PriorityQueue<>();
+        boolean[] check = new boolean[num+1];
+        queue.add(new Node(1, 0));
+        dist[1] = 0;
+        
+        while(!queue.isEmpty()){
+            Node cur = queue.remove();
+            
+            if(!check[cur.end]){
+                check[cur.end] = true;
+                for(int i=0; i<graph[cur.end].size(); i++){
+                    Node next = graph[cur.end].get(i);
+                    if(dist[next.end] > dist[cur.end] + next.weight){
+                        dist[next.end] = dist[cur.end] + next.weight;
+                        queue.add(new Node(next.end, dist[next.end]));
+                    }
+                }
+            }
+        }
+    }
+    public int solution(int n, int[][] edge) {
+        int answer = 0;
+        num = n;
+        graph = new ArrayList[n+1];
+        for(int i=0; i<=n; i++){
+            graph[i] = new ArrayList<>();
+        }
+        for(int i=0; i<edge.length; i++){
+            graph[edge[i][0]].add(new Node(edge[i][1], 1));
+            graph[edge[i][1]].add(new Node(edge[i][0], 1));
+        }
+        
+        dist = new int[n+1];
+        Arrays.fill(dist, INF);
+        
+        dijkstra();
+        
+        Arrays.sort(dist);
+        
+        int index = 0;
+        int max = 0;
+        for(int i=n; i>0; i--){
+            if(dist[i] != INF){
+                max = dist[i];
+                index = i;
+                break;
+            }
+        }
+        for(int i=index; i>0; i--){
+            if(dist[i] == max){
+                answer++;
+            }
+            else
+                break;
+        }
+        
+        return answer;
+    }
+}
