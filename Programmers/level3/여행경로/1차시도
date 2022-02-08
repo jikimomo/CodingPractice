@@ -1,0 +1,65 @@
+//모든 항공권을 다 사용해야 한다는 조건을 고려하지 않은 풀이
+import java.util.*;
+
+class Solution {
+    static boolean[] check;
+    static ArrayList<String> ansList;
+    static ArrayList<String>[] list;
+    static HashMap<String, Integer> city, tick;
+    
+    public static void dfs(int node){
+        for(int i=0; i<list[node].size(); i++){
+            String ticket = Integer.toString(node)+city.get(list[node].get(i));
+            if(!check[tick.get(ticket)]){
+                check[tick.get(ticket)] = true;
+                ansList.add(list[node].get(i));
+                dfs(city.get(list[node].get(i)));
+            }
+        }
+    }
+    
+    public String[] solution(String[][] tickets) {
+        String[] answer = {};
+        city = new HashMap();
+        tick = new HashMap();
+        
+        int tmp = 0;
+        for(int i=0; i<tickets.length; i++){
+            for(int j=0; j<tickets[i].length; j++){
+                if(!city.containsKey(tickets[i][j])){
+                    city.put(tickets[i][j], tmp++);
+                }
+            }
+        }
+        tmp = 0;
+        for(int i=0; i<tickets.length; i++){
+            String keyTmp = Integer.toString(city.get(tickets[i][0]))+Integer.toString(city.get(tickets[i][1]));
+            if(!tick.containsKey(keyTmp)){
+                tick.put(keyTmp, tmp++);
+            }
+        }
+        
+        list = new ArrayList[city.size()];
+        for(int i=0; i<city.size(); i++){
+            list[i] = new ArrayList<>();
+        }
+        for(int i=0; i<tickets.length; i++){
+            int start = city.get(tickets[i][0]);
+            list[start].add(tickets[i][1]);
+        }
+        for(int i=0; i<list.length; i++){
+            Collections.sort(list[i]);
+        }
+        
+        ansList = new ArrayList<>();
+        check = new boolean[tick.size()];
+        ansList.add("ICN");
+        dfs(city.get("ICN"));
+
+        answer = new String[ansList.size()];
+        for(int i=0; i<ansList.size(); i++)
+            answer[i] = ansList.get(i);
+        
+        return answer;
+    }
+}
