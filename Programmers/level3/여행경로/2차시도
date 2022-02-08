@@ -1,0 +1,39 @@
+//다른 사람 코드 참고하여 풀이함...
+//dfs가 아닌 backtracking으로 접근하여 가능한 모든 경로를 탐색한 뒤 알파벳 순으로 정렬하여 답을 구함
+import java.util.*;
+
+class Solution {
+    static String[][] tck;
+    static ArrayList<String> ansList;
+    static boolean[] check;
+    
+    public void back(int depth, String city, String ans){
+        if(depth == tck.length){
+            ansList.add(ans);
+            return;
+        }
+        for(int i=0; i<tck.length; i++){
+            if(city.equals(tck[i][0])){
+                if(!check[i]){
+                    check[i] = true;
+                    back(depth+1, tck[i][1], ans+" "+tck[i][1]);
+                    check[i] = false;
+                }
+            }
+        }
+    }
+    
+    public String[] solution(String[][] tickets) {
+        String[] answer = {};
+        tck = tickets;
+        ansList = new ArrayList<>();
+        check = new boolean[tickets.length];
+        
+        back(0, "ICN", "ICN");
+        
+        Collections.sort(ansList);
+        answer = ansList.get(0).split(" ");
+        
+        return answer;
+    }
+}
