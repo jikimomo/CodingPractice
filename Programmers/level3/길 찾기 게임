@@ -1,0 +1,83 @@
+//이진탐색트리의 insertNode를 참고함
+import java.util.*;
+
+class Solution {
+    static int index;
+    static int[][] answer;
+    static node root;
+    static ArrayList<node> treeList;
+    
+    static class node implements Comparable<node>{
+        int num, x, y;
+        node left, right;
+        public node(int num, int x, int y){
+            this.num = num;
+            this.x = x;
+            this.y = y;
+        }
+        
+        @Override
+        public int compareTo(node n){
+            return n.y - this.y;
+        }
+    }
+    
+    public static void insertNode(node cur){
+        node parent = root;
+        
+        while(true){
+            if(parent.x > cur.x){ //left
+                if(parent.left == null){
+                    parent.left = cur;
+                    break;
+                }
+                else
+                    parent = parent.left;
+            }
+            else{ //right
+                if(parent.right == null){
+                    parent.right = cur;
+                    break;
+                }
+                else
+                    parent = parent.right;
+            }
+        }
+    }
+    
+    public static void preOrder(node cur){
+        answer[0][index++] = cur.num;
+        if(cur.left != null)
+            preOrder(cur.left);
+        if(cur.right != null)
+            preOrder(cur.right);
+    }
+    
+    public static void postOrder(node cur){
+        if(cur.left != null)
+            postOrder(cur.left);
+        if(cur.right != null)
+            postOrder(cur.right);
+        answer[1][index++] = cur.num;
+    }
+    
+    public int[][] solution(int[][] nodeinfo) {
+        treeList = new ArrayList<>();
+        for(int i=0; i<nodeinfo.length; i++){
+            treeList.add(new node(i+1, nodeinfo[i][0], nodeinfo[i][1]));
+        }
+        Collections.sort(treeList);
+        root = treeList.get(0);
+        for(int i=1; i<treeList.size(); i++){
+            insertNode(treeList.get(i));
+        }
+        
+        answer = new int[2][nodeinfo.length];
+        index = 0;
+        preOrder(root);
+        index = 0;
+        postOrder(root);
+        
+        return answer;
+    }
+}
