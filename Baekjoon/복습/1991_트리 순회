@@ -1,0 +1,53 @@
+import java.util.Scanner;
+
+public class Main {
+	static int[][] tree;
+	static char[] alpha = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+	
+	public static void preOrder(int node) {
+		System.out.print(alpha[node]);
+		if(tree[node][0] >= 0)
+			preOrder(tree[node][0]);
+		if(tree[node][1] >= 0)
+			preOrder(tree[node][1]);
+	}
+	
+	public static void inOrder(int node) {
+		if(tree[node][0] >= 0)
+			inOrder(tree[node][0]);
+		System.out.print(alpha[node]);
+		if(tree[node][1] >= 0)
+			inOrder(tree[node][1]);
+	}
+	
+	public static void postOrder(int node) {
+		if(tree[node][0] >= 0)
+			postOrder(tree[node][0]);
+		if(tree[node][1] >= 0)
+			postOrder(tree[node][1]);
+		System.out.print(alpha[node]);
+	}
+	
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		s.nextLine();
+		
+		tree = new int[n][2];
+		for(int i=0; i<n; i++) {
+			String input = s.nextLine();
+			int cur = input.charAt(0)-'A';
+			int left = input.charAt(2)-'A';
+			int right = input.charAt(4)-'A';
+			
+			tree[cur][0] = left;
+			tree[cur][1] = right;
+		}
+		
+		preOrder(0);
+		System.out.println();
+		inOrder(0);
+		System.out.println();
+		postOrder(0);
+	}
+}
