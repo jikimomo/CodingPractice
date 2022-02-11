@@ -1,0 +1,93 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int h, w;
+	static Node[] point = new Node[2];
+	static int[][] count, map;
+	
+	static int[] dir1 = {0, 0, 1, 0, -1};
+	static int[] dir2 = {0, 1, 0, -1, 0};
+	
+	static class Node{
+		int x, y;
+		int dir, count;
+		public Node(int x, int y, int dir, int count) {
+			this.x = x;
+			this.y = y;
+			this.dir = dir;
+			this.count = count;
+		}
+	}
+	
+	public static boolean isOK(int x, int y) {
+		if(x>=0 && y>=0 && x<h && y<w && map[x][y]!=-1) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	public static int solution() {
+		Queue<Node> queue = new LinkedList<>();
+		for(int i=1; i<=4; i++) {
+			int initX = point[0].x + dir1[i];
+			int initY = point[0].y + dir2[i];
+			if(isOK(initX, initY)) {
+				queue.add(new Node(initX, initY, i, 0));
+				count[initX][initY] = 0;
+			}
+		}
+		
+		while(!queue.isEmpty()) {
+			Node cur = queue.remove();
+			
+			for(int i=1; i<=4; i++) {
+				int nextX = cur.x + dir1[i];
+				int nextY = cur.y + dir2[i];
+				
+				if(isOK(nextX, nextY)) {
+					int nextCount = cur.count;
+					if(cur.dir != i)
+						nextCount++;
+					
+					if(count[nextX][nextY] >= nextCount) {
+						count[nextX][nextY] = nextCount;
+						queue.add(new Node(nextX, nextY, i, nextCount));
+					}
+				}
+			}
+		}
+		
+		return count[point[1].x][point[1].y];
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		w = s.nextInt();
+		h = s.nextInt();
+		s.nextLine();
+		
+		int tmpInd = 0;
+		map = new int[h][w];
+		count = new int[h][w];
+		for(int i=0; i<h; i++) {
+			String input = s.nextLine();
+			for(int j=0; j<w; j++) {
+				if(input.charAt(j)=='*')
+					map[i][j] = -1;
+				else if(input.charAt(j)=='.') {
+					map[i][j] = 0;
+					count[i][j] = Integer.MAX_VALUE;
+				}
+				else if(input.charAt(j)=='C') {
+					map[i][j] = 1;
+					count[i][j] = Integer.MAX_VALUE;
+					point[tmpInd++] = new Node(i, j, 0, 0);
+				}
+			}
+		}
+		
+		System.out.println(solution());
+	}
+}
