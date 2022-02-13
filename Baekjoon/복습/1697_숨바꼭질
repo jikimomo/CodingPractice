@@ -1,0 +1,53 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int result = 0;
+	static int k;
+	
+	static class node{
+		int num, count;
+		public node(int num, int count) {
+			this.num = num;
+			this.count = count;
+		}
+	}
+	
+	public static void solution(int num) {
+		Queue<node> queue = new LinkedList<>();
+		boolean[] check = new boolean[100001];
+		queue.add(new node(num, 0));
+		check[num] = true;
+		
+		while(!queue.isEmpty()) {
+			node cur = queue.remove();
+			if(cur.num == k) {
+				result = cur.count;
+				break;
+			}
+			
+			if(cur.num+1<=100000 && cur.num+1>=0 && !check[cur.num+1]) {
+				queue.add(new node(cur.num+1, cur.count+1));
+				check[cur.num+1] = true;
+			}
+			if(cur.num-1<=100000 && cur.num-1>=0 && !check[cur.num-1]) {
+				queue.add(new node(cur.num-1, cur.count+1));
+				check[cur.num-1] = true;
+			}
+			if(cur.num*2<=100000 && cur.num*2>=0 && !check[cur.num*2]) {
+				queue.add(new node(cur.num*2, cur.count+1));
+				check[cur.num*2] = true;
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		k = s.nextInt();
+		
+		solution(n);
+		System.out.println(result);
+	}
+}
