@@ -1,0 +1,91 @@
+package DFS_BFS;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class bj17836 {
+	static int n, m;
+	static int[][] map;
+	static int[][][] count;
+	static boolean[][] check;
+	
+	static int[] dir1 = {0, 1, 0, -1};
+	static int[] dir2 = {1, 0, -1, 0};
+	
+	public static void solution() {
+		Queue<Integer> q1 = new LinkedList<>();
+		Queue<Integer> q2 = new LinkedList<>();
+		q1.add(0);
+		q2.add(0);
+		count[0][0][0] = 0;
+		check[0][0] = true;
+		int sword = 0;
+		
+		while(!q1.isEmpty()) {
+			int curX = q1.remove();
+			int curY = q2.remove();
+			
+			for(int i=0; i<4; i++) {
+				int nextX = curX + dir1[i];
+				int nextY = curY + dir2[i];
+				
+				if(nextX>=0&&nextY>=0&&nextX<n&&nextY<m) {
+					if(map[nextX][nextY]==0 && !check[nextX][nextY]) {
+						count[nextX][nextY][sword] = count[curX][curY][sword] + 1;
+						q1.add(nextX);
+						q2.add(nextY);
+						check[nextX][nextY] = true;
+					}
+					else if(map[nextX][nextY]==2 && sword==0 && !check[nextX][nextY]){
+						count[nextX][nextY][sword+1] = count[curX][curY][sword] + 1;
+						sword++;
+						q1.add(nextX);
+						q2.add(nextY);
+						check[nextX][nextY] = true;
+					}
+					else if(map[nextX][nextY]==1 && sword==1 && !check[nextX][nextY]){
+						count[nextX][nextY][sword] = count[curX][curY][sword] + 1;
+						q1.add(nextX);
+						q2.add(nextY);
+						check[nextX][nextY] = true;
+					}
+				}
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		m = s.nextInt();
+		int t = s.nextInt();
+		
+		check = new boolean[n][m];
+		map = new int[n][m];
+		count = new int[n][m][2];
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<n; j++) {
+				map[i][j] = s.nextInt();
+				count[i][j][0] = -1;
+				count[i][j][1] = -1;
+			}
+		}
+		
+		solution();
+		
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<m; j++) {
+				System.out.print(count[i][j][0]+" ");
+			}
+			System.out.println();
+		}
+		System.out.println();
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<m; j++) {
+				System.out.print(count[i][j][1]+" ");
+			}
+			System.out.println();
+		}
+		
+	}
+}
