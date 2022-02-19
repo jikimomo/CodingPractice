@@ -1,53 +1,48 @@
-package DFS_BFS;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
-public class bj17836 {
+public class Main {
 	static int n, m;
 	static int[][] map;
 	static int[][][] count;
-	static boolean[][] check;
 	
 	static int[] dir1 = {0, 1, 0, -1};
 	static int[] dir2 = {1, 0, -1, 0};
 	
+	static class node{
+		int x, y, sword;
+		public node(int x, int y, int sword) {
+			this.x = x;
+			this.y = y;
+			this.sword = sword;
+		}
+	}
+	
 	public static void solution() {
-		Queue<Integer> q1 = new LinkedList<>();
-		Queue<Integer> q2 = new LinkedList<>();
-		q1.add(0);
-		q2.add(0);
+		Queue<node> queue = new LinkedList<>();
+		queue.add(new node(0, 0, 0));
 		count[0][0][0] = 0;
-		check[0][0] = true;
-		int sword = 0;
 		
-		while(!q1.isEmpty()) {
-			int curX = q1.remove();
-			int curY = q2.remove();
+		while(!queue.isEmpty()) {
+			node cur = queue.remove();
 			
 			for(int i=0; i<4; i++) {
-				int nextX = curX + dir1[i];
-				int nextY = curY + dir2[i];
+				int nextX = cur.x + dir1[i];
+				int nextY = cur.y + dir2[i];
 				
 				if(nextX>=0&&nextY>=0&&nextX<n&&nextY<m) {
-					if(map[nextX][nextY]==0 && !check[nextX][nextY]) {
-						count[nextX][nextY][sword] = count[curX][curY][sword] + 1;
-						q1.add(nextX);
-						q2.add(nextY);
-						check[nextX][nextY] = true;
+					if(map[nextX][nextY]==0 && count[nextX][nextY][cur.sword]==0) {
+						count[nextX][nextY][cur.sword] = count[cur.x][cur.y][cur.sword] + 1;
+						queue.add(new node(nextX, nextY, cur.sword));
 					}
-					else if(map[nextX][nextY]==2 && sword==0 && !check[nextX][nextY]){
-						count[nextX][nextY][sword+1] = count[curX][curY][sword] + 1;
-						sword++;
-						q1.add(nextX);
-						q2.add(nextY);
-						check[nextX][nextY] = true;
+					else if(map[nextX][nextY]==2 && cur.sword==0 && count[nextX][nextY][cur.sword+1]==0){
+						count[nextX][nextY][cur.sword+1] = count[cur.x][cur.y][cur.sword] + 1;
+						queue.add(new node(nextX, nextY, cur.sword+1));
 					}
-					else if(map[nextX][nextY]==1 && sword==1 && !check[nextX][nextY]){
-						count[nextX][nextY][sword] = count[curX][curY][sword] + 1;
-						q1.add(nextX);
-						q2.add(nextY);
-						check[nextX][nextY] = true;
+					else if(map[nextX][nextY]==1 && cur.sword==1 && count[nextX][nextY][cur.sword]==0) {
+						count[nextX][nextY][cur.sword] = count[cur.x][cur.y][cur.sword] + 1;
+						queue.add(new node(nextX, nextY, cur.sword));
 					}
 				}
 			}
@@ -60,32 +55,36 @@ public class bj17836 {
 		m = s.nextInt();
 		int t = s.nextInt();
 		
-		check = new boolean[n][m];
 		map = new int[n][m];
 		count = new int[n][m][2];
 		for(int i=0; i<n; i++) {
-			for(int j=0; j<n; j++) {
+			for(int j=0; j<m; j++) {
 				map[i][j] = s.nextInt();
-				count[i][j][0] = -1;
-				count[i][j][1] = -1;
 			}
 		}
 		
 		solution();
 		
-		for(int i=0; i<n; i++) {
-			for(int j=0; j<m; j++) {
-				System.out.print(count[i][j][0]+" ");
-			}
-			System.out.println();
+		if(count[n-1][m-1][0]==0 && count[n-1][m-1][1]==0)
+			System.out.println("Fail");
+		else if(count[n-1][m-1][0]!=0 && count[n-1][m-1][1]==0){
+			if(count[n-1][m-1][0] <= t)
+				System.out.println(count[n-1][m-1][0]);
+			else
+				System.out.println("Fail");
 		}
-		System.out.println();
-		for(int i=0; i<n; i++) {
-			for(int j=0; j<m; j++) {
-				System.out.print(count[i][j][1]+" ");
-			}
-			System.out.println();
+		else if(count[n-1][m-1][0]==0 && count[n-1][m-1][1]!=0) {
+			if(count[n-1][m-1][1] <= t)
+				System.out.println(count[n-1][m-1][1]);
+			else
+				System.out.println("Fail");
 		}
-		
+		else {
+			int min = Math.min(count[n-1][m-1][0], count[n-1][m-1][1]);
+			if(min <= t)
+				System.out.println(min);
+			else
+				System.out.println("Fail");
+		}
 	}
 }
