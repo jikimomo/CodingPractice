@@ -1,0 +1,71 @@
+//node에 alpha를 다 선언해서 메모리초과가 발생한 것 같음...
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int r, c;
+	static int[][] map;
+	
+	static int[] dir1 = {0, 1, 0, -1};
+	static int[] dir2 = {1, 0, -1, 0};
+	
+	static class Node{
+		int x, y, count;
+		boolean[] alpha;
+		public Node(int x, int y, int count, boolean[] alpha) {
+			this.x = x;
+			this.y = y;
+			this.count = count;
+			this.alpha = alpha;
+		}
+	}
+	
+	public static int solution() {
+		Queue<Node> queue = new LinkedList<>();
+		boolean[] init = new boolean[26];
+		init[map[0][0]] = true;
+		queue.add(new Node(0, 0, 1, init));
+		
+		int result = 0;
+		while(!queue.isEmpty()) {
+			Node cur = queue.remove();
+			result = Math.max(result, cur.count);
+			
+			for(int i=0; i<4; i++) {
+				int nextX = cur.x + dir1[i];
+				int nextY = cur.y + dir2[i];
+
+				if(nextX>=0 && nextY>=0 && nextX<r && nextY<c) {
+					boolean[] curAlpha = new boolean[26];
+					for(int j=0; j<26; j++) {
+						curAlpha[j] = cur.alpha[j];
+					}
+					if(!curAlpha[map[nextX][nextY]]) {
+						curAlpha[map[nextX][nextY]] = true;
+						queue.add(new Node(nextX, nextY, cur.count+1, curAlpha));
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		r = s.nextInt();
+		c = s.nextInt();
+		s.nextLine();
+		
+		map = new int[r][c];
+		for(int i=0; i<r; i++) {
+			String input = s.nextLine();
+			for(int j=0; j<c; j++) {
+				map[i][j] = input.charAt(j) - 'A';
+			}
+		}
+		
+		System.out.println(solution());
+	}
+}
