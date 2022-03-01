@@ -1,0 +1,65 @@
+import java.util.Scanner;
+
+public class Main {
+	static int answer = 0;
+	static int r, c;
+	static char[][] map;
+	
+	static int[] dir1 = {0, 1, 0, -1};
+	static int[] dir2 = {1, 0, -1, 0};
+	
+	static class Node{
+		int x, y;
+		String alpha;
+		public Node(int x, int y, String alpha) {
+			this.x = x;
+			this.y = y;
+			this.alpha = alpha;
+		}
+	}
+	
+	public static void dfs(int x, int y, String alpha) {
+		if(alpha.length() == 26) {
+			answer = alpha.length();
+			return;
+		}
+		else {
+			answer = Math.max(answer, alpha.length());
+		}
+		for(int i=0; i<4; i++) {
+			int nextX = x + dir1[i];
+			int nextY = y + dir2[i];
+
+			if(nextX>=0 && nextY>=0 && nextX<r && nextY<c) {
+				boolean flag = true;
+				for(int j=0; j<alpha.length(); j++) {
+					if(alpha.charAt(j) == map[nextX][nextY]) {
+						flag = false;
+						break;
+					}
+				}
+				if(flag){
+					dfs(nextX, nextY, alpha+map[nextX][nextY]);
+				}
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		r = s.nextInt();
+		c = s.nextInt();
+		s.nextLine();
+		
+		map = new char[r][c];
+		for(int i=0; i<r; i++) {
+			String input = s.nextLine();
+			for(int j=0; j<c; j++) {
+				map[i][j] = input.charAt(j);
+			}
+		}
+		
+		dfs(0, 0, Character.toString(map[0][0]));
+		System.out.println(answer);
+	}
+}
