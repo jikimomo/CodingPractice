@@ -1,0 +1,102 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int answer = 0, wallCount = 3;
+	static int n, m;
+	static int[][] map;
+	static boolean[][] check;
+	static ArrayList<node> virus = new ArrayList<>();
+	static node[] wall = new node[3];
+	
+	static int[] dir1 = {0, 1, 0, -1};
+	static int[] dir2 = {1, 0, -1, 0};
+	
+	static class node{
+		int x, y;
+		public node(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+	}
+	
+	public static void selectThree(int depth, int x, int y) {
+		if(depth == 3) {
+			int[][] modMap = map;
+			for(int i=0; i<3; i++) {
+				map[wall[i].x][wall[i].y] = 1;
+			}
+			int safety = n*m - wallCount - solution(modMap);
+			answer = Math.max(safety, answer);
+			for(int i=0; i<3; i++) {
+				map[wall[i].x][wall[i].y] = 0;
+			}
+			return;
+		}
+		
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<m; j++) {
+				if(map[i][j] == 0 && !check[i][j]) {
+					check[i][j] = true;
+					wall[depth] = new node(i, j);
+					selectThree(depth+1, i, j);
+					check[i][j] = false;
+				}
+			}
+		}
+	}
+	
+	public static int solution(int[][] modMap) {
+		int count = 0;
+		boolean[][] walls = new boolean[n][m];
+		Queue<node> queue = new LinkedList<>();
+		for(int i=0; i<virus.size(); i++) {
+			queue.add(virus.get(i));
+			walls[virus.get(i).x][virus.get(i).y] = true;
+			count++;
+		}
+		
+		while(!queue.isEmpty()) {
+			node cur = queue.remove();
+			
+			for(int i=0; i<4; i++) {
+				int nextX = cur.x + dir1[i];
+				int nextY = cur.y + dir2[i];
+				
+				if(nextX>=0 && nextY>=0 && nextX<n && nextY<m) {
+					if(modMap[nextX][nextY] == 0 && !walls[nextX][nextY]) {
+						walls[nextX][nextY] = true;
+						count++;
+						queue.add(new node(nextX, nextY));
+					}
+				}
+			}
+		}
+		return count;
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		m = s.nextInt();
+		map = new int[n][m];
+		check = new boolean[n][m];
+		
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<m; j++) {
+				map[i][j] = s.nextInt();
+				if(map[i][j] == 2) {
+					virus.add(new node(i, j));
+				}
+				else if(map[i][j] == 1) {
+					wallCount++;
+				}
+			}
+		}
+		
+		selectThree(0, 0, 0);
+		System.out.println(answer);
+	}
+}
