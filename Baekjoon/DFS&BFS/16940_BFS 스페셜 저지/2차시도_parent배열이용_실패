@@ -1,0 +1,95 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	static int n;
+	static int[] path, parent, count;
+	static ArrayList<Integer>[] graph;
+	
+	public static boolean isBFS() {
+		boolean flag = true;
+		Queue<Integer> queue = new LinkedList<>();
+		for(int i=1; i<=n; i++)
+			queue.add(path[i]);
+		
+		int curParent = queue.remove();
+		for(int i=2; i<=n; i++) {
+			if(parent[path[i]] != curParent || count[curParent] <= 0) {
+				flag = false;
+				break;
+			}
+			else {
+				count[curParent]--;
+			}
+			if(count[curParent] == 0) {
+				curParent = queue.remove();
+			}
+		}
+		
+		
+		return flag;
+	}
+	
+	public static void bfs() {
+		Queue<Integer> queue = new LinkedList<>();
+		boolean[] check = new boolean[n+1];
+		
+		queue.add(1);
+		check[1] = true;
+		
+		while(!queue.isEmpty()) {
+			int cur = queue.remove();
+			
+			for(int i=0; i<graph[cur].size(); i++) {
+				int next = graph[cur].get(i);
+				if(!check[next]) {
+					queue.add(next);
+					check[next] = true;
+					parent[next] = cur;
+					count[cur]++;
+				}
+			}
+		}
+	}
+	
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		graph = new ArrayList[n+1];
+		for(int i=0; i<=n; i++) {
+			graph[i] = new ArrayList<>();
+		}
+		
+		for(int i=0; i<n-1; i++) {
+			int a = s.nextInt();
+			int b = s.nextInt();
+			graph[a].add(b);
+			graph[b].add(a);
+		}
+		
+		count = new int[n+1];
+		parent = new int[n+1];
+		path = new int[n+1];
+		for(int i=1; i<=n; i++) {
+			path[i] = s.nextInt();
+		}
+
+		boolean flag = true;
+		if(path[1] != 1) {
+			flag = false;
+		}
+		else {
+			bfs();
+			flag = isBFS();
+		}
+		
+		if(flag)
+			System.out.println("1");
+		else
+			System.out.println("0");
+		
+	}
+}
