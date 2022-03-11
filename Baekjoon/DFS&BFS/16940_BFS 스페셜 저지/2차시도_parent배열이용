@@ -8,30 +8,38 @@ public class Main {
 	static int[] path, parent, count;
 	static ArrayList<Integer>[] graph;
 	
+	//BFS 방문 순서가 맞는지 확인하는 함수  
 	public static boolean isBFS() {
 		boolean flag = true;
 		Queue<Integer> queue = new LinkedList<>();
-		for(int i=1; i<=n; i++)
-			queue.add(path[i]);
-		
-		int curParent = queue.remove();
-		for(int i=2; i<=n; i++) {
-			if(parent[path[i]] != curParent || count[curParent] <= 0) {
-				flag = false;
-				break;
-			}
-			else {
-				count[curParent]--;
-			}
-			if(count[curParent] == 0) {
-				curParent = queue.remove();
+		for(int i=1; i<=n; i++) {
+			if(count[path[i]] > 0) {
+				queue.add(path[i]); //자식 노드가 있는 부모 노드를 큐에 저장
 			}
 		}
 		
+		if(!queue.isEmpty()) {
+			int curParent = queue.remove(); //현재 부모 노드여야 하는 값
+			for(int i=2; i<=n; i++) {
+				if(parent[path[i]] != curParent) { //현재 부모 노드와 현재 노드의 부모가 같지 않으면 틀림
+					flag = false;
+					break;
+				}
+				else { //같으면 현재 부모 노드의 자식 개수를 줄임
+					count[curParent]--;
+				}
+				if(count[curParent] == 0) { //현재 부모 노드의 자식 개수가 0이고
+					if(!queue.isEmpty()) { //큐에 값이 있으면 현재 부모 노드 업데이트
+						curParent = queue.remove();
+					}
+				}
+			}
+		}
 		
 		return flag;
 	}
 	
+	//각 노드의 부모 노드와 자식 노드의 개수를 구하는 함수
 	public static void bfs() {
 		Queue<Integer> queue = new LinkedList<>();
 		boolean[] check = new boolean[n+1];
@@ -54,7 +62,6 @@ public class Main {
 		}
 	}
 	
-
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
 		n = s.nextInt();
@@ -70,9 +77,9 @@ public class Main {
 			graph[b].add(a);
 		}
 		
-		count = new int[n+1];
-		parent = new int[n+1];
-		path = new int[n+1];
+		count = new int[n+1]; //각 노드의 자식 노드 개수
+		parent = new int[n+1]; //각 노드의 부모 노드
+		path = new int[n+1]; //방문 순서
 		for(int i=1; i<=n; i++) {
 			path[i] = s.nextInt();
 		}
@@ -90,6 +97,5 @@ public class Main {
 			System.out.println("1");
 		else
 			System.out.println("0");
-		
 	}
 }
