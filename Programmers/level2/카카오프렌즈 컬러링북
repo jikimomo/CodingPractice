@@ -1,0 +1,74 @@
+import java.util.*;
+
+class Solution {
+    static int[] dir1 = {0, 1, 0, -1};
+    static int[] dir2 = {1, 0, -1, 0};
+    
+    static int m, n;
+    static int[][] picture;
+    static boolean[][] check;
+    
+    static class Node{
+        int x, y;
+        public Node(int x, int y){
+            this.x = x;
+            this.y = y;
+        }
+    }
+    
+    public boolean isOK(int x, int y){
+        if(x>=0 && y>=0 && x<m && y<n)
+            return true;
+        else
+            return false;
+    }
+    
+    public int checkArea(Node node){
+        int count = 0;
+        Queue<Node> queue = new LinkedList<>();
+        
+        queue.add(node);
+        check[node.x][node.y] = true;
+        count++;
+        
+        while(!queue.isEmpty()){
+            Node cur = queue.remove();
+            
+            for(int i=0; i<4; i++){
+                int nextX = cur.x + dir1[i];
+                int nextY = cur.y + dir2[i];
+                
+                if(isOK(nextX, nextY) && !check[nextX][nextY] && picture[cur.x][cur.y]==picture[nextX][nextY]){
+                    check[nextX][nextY] = true;
+                    queue.add(new Node(nextX, nextY));
+                    count++;
+                }
+            }
+        }
+        
+        return count;
+    }
+    public int[] solution(int m, int n, int[][] picture) {
+        int numberOfArea = 0;
+        int maxSizeOfOneArea = 0;
+        
+        this.m = m;
+        this.n = n;
+        this.picture = picture;
+        check = new boolean[m][n];
+        
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(picture[i][j]!=0 && !check[i][j]){
+                    numberOfArea++;
+                    maxSizeOfOneArea = Math.max(maxSizeOfOneArea, checkArea(new Node(i, j)));
+                }
+            }
+        }
+
+        int[] answer = new int[2];
+        answer[0] = numberOfArea;
+        answer[1] = maxSizeOfOneArea;
+        return answer;
+    }
+}
