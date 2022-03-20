@@ -1,0 +1,45 @@
+class Solution {
+    static int n, m;
+    static int[][] map;
+    static Integer[][] count;
+    
+    static int[] dir1 = {0, 1};
+    static int[] dir2 = {1, 0};
+    
+    public int dfs(int x, int y) {
+        if(x == (n-1) && y == (m-1)) {
+            return 1;
+        }
+        
+        if(count[x][y] == null){
+            count[x][y] = 0;
+            int nextX = x, nextY = y;
+            for(int i=0; i<2; i++) {
+                nextX = x + dir1[i];
+                nextY = y + dir2[i];
+
+                if(nextX>=0&&nextY>=0&&nextX<n&&nextY<m && map[nextX][nextY]!=-1) {
+                    count[x][y] += dfs(nextX, nextY);
+                }
+            }
+        }
+        return count[x][y];
+    }
+
+    
+    public int solution(int m, int n, int[][] puddles) {
+        this.n = n;
+        this.m = m;
+        
+        count = new Integer[n][m];
+        map = new int[n][m];
+        for(int i=0; i<puddles.length; i++) {
+            map[puddles[i][1]-1][puddles[i][0]-1] = -1; //웅덩이 좌표의 x,y가 반대로 주어져 있어서 틀렸음....
+        }
+        
+        dfs(0, 0);
+        
+        int answer = count[0][0];
+        return answer%1000000007;
+    }
+}
