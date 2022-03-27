@@ -1,0 +1,40 @@
+import java.util.Scanner;
+
+public class Main {
+	static int count = 0;
+	static int[] chess;
+	
+	public static void nqueen(int n, int depth) {
+		int tmp;
+		if(depth == n) {
+			count++;
+			return;
+		}
+		for(int i=0; i<n; i++) {
+			tmp = 0;
+			if(depth == 0) {
+				chess[depth] = i;
+				nqueen(n, depth+1);
+			} else {
+				chess[depth] = i;
+				for(int j=0; j<depth; j++) {
+					if(chess[depth] == chess[j])
+						tmp++;
+					if(Math.abs(chess[depth]-chess[j]) == Math.abs(depth-j)) 
+						tmp++;
+				}
+				if(tmp>0)
+					continue;
+				nqueen(n, depth+1);
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+		
+		chess = new int[n];
+		nqueen(n, 0);
+		System.out.println(count);
+	}
+}
