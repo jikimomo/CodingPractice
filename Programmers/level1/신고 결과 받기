@@ -1,0 +1,33 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(String[] id_list, String[] report, int k) {
+        int num = id_list.length;
+        Map<String, Integer> map = new HashMap();
+        for(int i=0; i<num; i++){
+            map.put(id_list[i], i); //mu, fro, ape, neo
+        }
+        
+        List<String>[] list = new ArrayList[num];
+        for(int i=0; i<num; i++){
+            list[i] = new ArrayList<>();
+        }
+        
+        for(int i=0; i<report.length; i++){
+            String[] ids = report[i].split(" ");
+            if(!list[map.get(ids[1])].contains(ids[0]))
+                list[map.get(ids[1])].add(ids[0]);
+        }
+        
+        int[] answer = new int[num];
+        for(int i=0; i<num; i++){
+            if(k <= list[i].size()){
+                for(int j=0; j<list[i].size(); j++){
+                    String id = list[i].get(j);
+                    answer[map.get(id)]++;
+                }
+            }
+        }
+        return answer;
+    }
+}
