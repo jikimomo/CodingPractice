@@ -1,0 +1,48 @@
+import java.util.*;
+
+class Solution {
+    public String[] solution(int n, int[] arr1, int[] arr2) {
+        int[][] map1 = new int[n][n];
+        for(int i=0; i<n; i++){
+            int num = arr1[i];
+            int tmp = n-1;
+            while(num>0){
+                map1[i][tmp--] = (num%2);
+                num = num/2;
+            }
+        }
+        int[][] map2 = new int[n][n];
+        for(int i=0; i<n; i++){
+            int num = arr2[i];
+            int tmp = n-1;
+            while(num>0){
+                map2[i][tmp--] = (num%2);
+                num = num/2;
+            }
+        }
+
+        int[][] resultMap = new int[n][n];
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                if(map1[i][j]==0 && map2[i][j]==0)
+                    continue;
+                else
+                    resultMap[i][j] = 1;
+            }
+        }
+        
+        String[] answer = new String[n];
+        for(int i=0; i<n; i++){
+            answer[i] = "";
+            for(int j=0; j<n; j++){
+                if(resultMap[i][j]==1){
+                    answer[i] +="#";
+                }
+                else
+                    answer[i] +=" ";
+            }
+        }
+        
+        return answer;
+    }
+}
