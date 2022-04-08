@@ -1,0 +1,42 @@
+import java.util.Scanner;
+
+//개미수열 문제!
+public class Main {
+	static int n;
+	static String[] dp; 
+	
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		n = s.nextInt();
+		dp = new String[n+1];
+		dp[0] = "1";
+		dp[1] = "1";
+		
+		for(int i=2; i<=n; i++) {
+			String before = dp[i-1];
+			String cur = "";
+			
+			char tmp = before.charAt(0);
+			int count = 1;
+			
+			for(int j=1; j<before.length(); j++) {
+				if(before.charAt(j) == tmp) {
+					count++;
+				}
+				else {
+					cur += tmp;
+					cur += count;
+					tmp = before.charAt(j);
+					count = 1;
+				}
+			}
+			cur += tmp;
+			cur += count;
+			
+			dp[i] = cur;
+		}
+		
+		for(int i=1; i<=n; i++)
+			System.out.println(dp[i]);
+	}
+}
