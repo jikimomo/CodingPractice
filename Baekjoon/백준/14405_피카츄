@@ -1,0 +1,57 @@
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		String input = s.nextLine();
+		String answer = "YES";
+		
+		for(int i=0; i<input.length(); i++) {
+			String word = new String();
+			
+			if(input.charAt(i) == 'p') {
+				if(i+1 >= input.length()) {
+					answer = "NO";
+					break;
+				}
+				word = input.substring(i, i+2);
+				i++;
+				if(!word.equals("pi")) {
+					answer = "NO";
+					break;
+				}
+			}
+			else if(input.charAt(i) == 'k') {
+				if(i+1 >= input.length()) {
+					answer = "NO";
+					break;
+				}
+				word = input.substring(i, i+2);
+				i++;
+				if(!word.equals("ka")) {
+					answer = "NO";
+					break;
+				}
+				
+			}
+			else if(input.charAt(i) == 'c'){
+				if(i+2 >= input.length()) {
+					answer = "NO";
+					break;
+				}
+				word = input.substring(i, i+3);
+				i+=2;
+				if(!word.equals("chu")) {
+					answer = "NO";
+					break;
+				}
+			}
+			else {
+				answer = "NO";
+				break;
+			}
+		}
+		
+		System.out.println(answer);
+	}
+}
