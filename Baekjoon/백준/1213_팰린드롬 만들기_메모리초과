@@ -1,0 +1,69 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+	static int len;
+	static int[] num;
+	static boolean[] check;
+	static List<Character> alpha;
+	static String palin = "I'm Sorry Hansoo";
+	
+	public static boolean checkPalin(String str) {
+		boolean flag = true;
+		int a = 0;
+		int b = str.length()-1;
+		
+		while(a<=b) {
+			if(str.charAt(a) == str.charAt(b)) {
+				a++;
+				b--;
+			}
+			else {
+				flag = false;
+				break;
+			}
+		}
+		return flag;
+	}
+	
+	public static void back(int depth) {
+		if(depth == len) {
+			String str = new String();
+			for(int i=0; i<len; i++) {
+				str = str + alpha.get(num[i]);
+			}
+			if(checkPalin(str) && palin.equals("I'm Sorry Hansoo")) {
+				palin = str;
+				return;
+			}
+		}
+		for(int i=0; i<len; i++) {
+			if(!check[i]) {
+				check[i] = true;
+				num[depth] = i;
+				back(depth+1);
+				check[i] = false;
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		String input = s.nextLine();
+		len = input.length();
+		num = new int[len];
+		check = new boolean[len];
+		
+		alpha = new ArrayList<>();
+		for(int i=0; i<len; i++) {
+			alpha.add(input.charAt(i));
+		}
+		Collections.sort(alpha);
+		
+		back(0);
+		
+		System.out.println(palin);
+	}
+}
