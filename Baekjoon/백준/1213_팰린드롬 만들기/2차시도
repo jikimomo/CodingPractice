@@ -1,0 +1,65 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		String input = s.nextLine();
+		int len = input.length();
+		int[] count = new int[26];
+		
+		for(int i=0; i<len; i++) {
+			count[input.charAt(i)-'A']++;
+		}
+		
+		boolean flag = true;
+		if(len%2 == 0) { //짝수
+			for(int i=0; i<26; i++) {
+				if(count[i]%2 != 0) {
+					flag = false;
+					break;
+				}
+			}
+		}
+		else{//홀수
+			int oddCount = 0;
+			for(int i=0; i<26; i++) {
+				if(count[i]%2 != 0) {
+					oddCount++;
+					if(oddCount>1) {
+						flag = false;
+						break;
+					}
+				}
+			}
+		}
+		
+		char[] alpha = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+		List<Character> palin = new ArrayList<>();
+		if(flag) { //make palin
+			int index = 0;
+			char center = ' ';
+			for(int i=0; i<26; i++) {
+				while(count[i]>=2) {
+					count[i] -= 2;
+					palin.add(index, alpha[i]);
+					palin.add(index+1, alpha[i]);
+					index++;
+				}
+				if(count[i]==1) { //가운데 알파벳
+					center = alpha[i];
+				}
+			}
+			if(center != ' ') {
+				palin.add(index, center);
+			}
+			for(int i=0; i<palin.size(); i++) {
+				System.out.print(palin.get(i));
+			}
+		}
+		else {
+			System.out.println("I'm Sorry Hansoo");
+		}
+	}
+}
