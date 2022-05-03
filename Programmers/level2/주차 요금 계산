@@ -1,0 +1,74 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(int[] fees, String[] records) {
+        
+        Map<String, Integer> time = new HashMap<>();
+        Map<String, String> inOut = new HashMap<>();
+        for(int i=0; i<records.length; i++){
+            String[] data = records[i].split(" ");
+            if(!inOut.containsKey(data[1])){
+                inOut.put(data[1], data[0]);
+            }
+            else{
+                String[] in = inOut.get(data[1]).split(":");
+                String[] out = data[0].split(":");
+                
+                int minute = Integer.parseInt(out[1])-Integer.parseInt(in[1]);
+                int hour = 0;
+                if(minute < 0){
+                    minute += 60;
+                    hour = (Integer.parseInt(out[0])-Integer.parseInt(in[0])-1) * 60;
+                }
+                else{
+                    hour = (Integer.parseInt(out[0])-Integer.parseInt(in[0])) * 60;
+                }
+                
+                if(!time.containsKey(data[1])) {
+                    time.put(data[1], hour+minute);
+                }
+                else {
+                    int preTime = time.get(data[1]);
+                    time.put(data[1], hour+minute+preTime);
+                }
+                inOut.remove(data[1]);
+            }
+        }
+        for(String key : inOut.keySet()){
+            String[] in = inOut.get(key).split(":");
+            int minute = 59 - Integer.parseInt(in[1]);
+            int hour = (23 - Integer.parseInt(in[0])) * 60;
+            if(!time.containsKey(key)) {
+                time.put(key, hour+minute);
+            }
+            else {
+                int preTime = time.get(key);
+                time.put(key, hour+minute+preTime);
+            }
+        }
+        
+        int[] car = new int[10000];
+        boolean[] check = new boolean[10000];
+        for(String key : time.keySet()){
+            int price = fees[1];
+            if(time.get(key)-fees[0] > 0){
+                price += (time.get(key) - fees[0]) / fees[2] * fees[3];
+                if((time.get(key) - fees[0]) % fees[2] > 0){
+                    price += fees[3];
+                }
+            }
+            
+            car[Integer.parseInt(key)] = price;
+            check[Integer.parseInt(key)] = true;
+        }
+        
+        int[] answer = new int[time.size()];
+        int index = 0;
+        for(int i=0; i<10000; i++){
+            if(check[i]){
+                answer[index++] = car[i];
+            }
+        }
+        return answer;
+    }
+}
