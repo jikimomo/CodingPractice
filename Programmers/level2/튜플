@@ -1,0 +1,59 @@
+import java.util.*;
+
+class Solution {
+    static class Node implements Comparable<Node>{
+        List<Integer> number = new ArrayList<>();
+        
+        @Override
+        public int compareTo(Node node){
+            return this.number.size() - node.number.size();
+        }
+        
+    }
+    public int[] solution(String s) {
+        PriorityQueue<Node> queue = new PriorityQueue();
+        
+        String numTmp = new String();
+        Node node = null;
+        for(int i=1; i<s.length()-1; i++){
+            
+            if(s.charAt(i) == '{'){
+                node = new Node();
+            }
+            else if(s.charAt(i) == '}'){
+                if(numTmp.length()>0){
+                    node.number.add(Integer.parseInt(numTmp));
+                    numTmp = new String();
+                }
+                if(node != null)
+                    queue.add(node);
+            }
+            else if(s.charAt(i) == ','){
+                if(numTmp.length()>0){
+                    node.number.add(Integer.parseInt(numTmp));
+                    numTmp = new String();
+                }
+            }
+            else{
+                numTmp += s.charAt(i);
+            }
+        }
+        
+        int size = queue.size();
+        List<Integer> answerTMP = new ArrayList<>();
+        for(int i=0; i<size; i++){
+            Node cur = queue.remove();
+            for(int j=0; j<cur.number.size(); j++){
+                if(!answerTMP.contains(cur.number.get(j))){
+                    answerTMP.add(cur.number.get(j));
+                }
+            }
+        }
+        
+        int[] answer = new int[size];
+        for(int i=0; i<answerTMP.size(); i++){
+            answer[i] = answerTMP.get(i);
+        }
+        return answer;
+    }
+}
