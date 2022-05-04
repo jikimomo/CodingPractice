@@ -1,0 +1,57 @@
+import java.util.*;
+
+class Solution {
+    
+    public boolean isPrime(long num){
+        boolean result = true;
+        if(num == 0 || num == 1){
+            return false;
+        }
+        for(int i=2; i<=Math.sqrt(num); i++){
+            if(num%i == 0){
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+    
+    public String makeKNum(int n, int k){
+        String kNum = new String();
+        long num = n;
+        long ten = 1;
+        
+        while(num>0){
+            kNum = num%k + kNum;
+            num = num/k;
+        }
+        
+        return kNum;
+    }
+    
+    public int solution(int n, int k) {
+        int answer = 0;
+        
+        String kNum = makeKNum(n, k);
+        
+        String subNum = new String();
+        for(int i=0; i<kNum.length(); i++){
+            if(kNum.charAt(i) == '0') {
+                if(subNum.length()>0 && isPrime(Long.parseLong(subNum))){
+                    answer++;
+                }
+                subNum = new String();
+            }
+            else {
+                subNum = subNum + kNum.charAt(i);
+            }
+        }
+        if(subNum.length()>0){
+            if(subNum.length()>0 && isPrime(Long.parseLong(subNum))){
+                answer++;
+            }
+        }
+        
+        return answer;
+    }
+}
