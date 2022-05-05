@@ -1,0 +1,57 @@
+import java.util.*;
+
+class Solution {
+    
+    public String makeN(int n, int num){
+        String result = new String();
+        int subNum = num;
+        
+        if(subNum == 0){
+            return "0";
+        }
+        
+        while(subNum > 0){
+            if(subNum%n < 10){
+                result = subNum%n + result;
+            }
+            else if(subNum%n == 10){
+                result = "A" + result;
+            }
+            else if(subNum%n == 11){
+                result = "B" + result;
+            }
+            else if(subNum%n == 12){
+                result = "C" + result;
+            }
+            else if(subNum%n == 13){
+                result = "D" + result;
+            }
+            else if(subNum%n == 14){
+                result = "E" + result;
+            }
+            else if(subNum%n == 15){
+                result = "F" + result;
+            }
+            subNum /= n;
+        }
+        return result;
+    }
+    
+    public String solution(int n, int t, int m, int p) {
+        
+        String total = new String();
+        for(int i=0; i<=t*m; i++){
+            total = total + makeN(n, i);
+        }
+        
+        String answer = "";
+        for(int i=p-1; i<total.length(); i+=m){
+            answer = answer + total.charAt(i);
+            if(answer.length() == t){
+                break;
+            }
+        }
+        
+        return answer;
+    }
+}
